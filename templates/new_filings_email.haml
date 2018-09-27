@@ -1,0 +1,58 @@
+- filings.each do |f|
+  .filer
+    %p
+      %strong= f.filer_name
+      (#{f.title})
+
+    %ul
+      %li
+        %strong Filed At:
+        = f.filed_at
+
+      - if f.amended_filing_id
+        %li
+          %strong Amends:
+          %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.amended_filing_id}" } Filing ID##{f.amended_filing_id}
+
+      - if f.form_name == '460'
+        %li
+          %strong Total Contributions Received:
+          - contributions_row = f.contents.detect { |i| i["form_Type"] == "F460" && i["line_Item"] == "5" }
+          = format_money(contributions_row['amount_A'])
+        %li
+          %strong Total Expenditures Made:
+          - contributions_row = f.contents.detect { |i| i["form_Type"] == "F460" && i["line_Item"] == "11" }
+          = format_money(contributions_row['amount_A'])
+
+      - if f.form_name == '497 LCR'
+        - total_amount = f.contents.map { |i| i['calculated_Amount'] }.sum
+        %li
+          %strong Total Contributions Received:
+          = format_money(f.contents.map { |i| i['calculated_Amount'] }.sum)
+        %li
+          %strong Largest 3 Contributions Received:
+          %ul
+            - largest_three = f.contents.sort_by { |i| i['calculated_Amount'] }.reverse.first(3)
+            - largest_three_total_amount = largest_three.map { |i| i['calculated_Amount'] }.sum
+            - largest_three.each do |contribution|
+              %li #{format_money(contribution['calculated_Amount'])} – #{contribution['tran_NamL']} 
+            - if f.contents.length > 3
+              %li and #{format_money(total_amount - largest_three_total_amount)} from #{f.contents.length - 3} other contributors
+
+      - if f.form_name == '497 LCM'
+        - total_amount = f.contents.map { |i| i['calculated_Amount'] }.sum
+        %li
+          %strong Total Contributions Made:
+          = format_money(total_amount)
+        %li
+          %strong Largest 3 Contributions Made:
+          %ul
+            - largest_three = f.contents.sort_by { |i| i['calculated_Amount'] }.reverse.first(3)
+            - largest_three_total_amount = largest_three.map { |i| i['calculated_Amount'] }.sum
+            - largest_three.each do |contribution|
+              %li #{format_money(contribution['calculated_Amount'])} – #{contribution['tran_NamL']} 
+            - if f.contents.length > 3
+              %li and #{format_money(total_amount - largest_three_total_amount)} from #{f.contents.length - 3} other contributors
+
+      %li
+        %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.id}" } View Filing
