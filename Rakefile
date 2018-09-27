@@ -2,7 +2,7 @@ $LOAD_PATH << File.expand_path('../lib', __FILE__)
 require 'disclosure_alert'
 
 ActiveRecord::Base.configurations = {
-  'development' => { 'url' => 'postgresql:///disclosure-alert' }
+  (ENV['APP_ENV'] || 'development') => { 'url' => ENV['DATABASE_URL'] }
 }
 
 desc 'Download latest records and send email'
@@ -15,7 +15,7 @@ end
 namespace :db do
   task :environment do
     include ActiveRecord::Tasks
-    DatabaseTasks.env = 'development'
+    DatabaseTasks.env = ENV['APP_ENV'] || 'development'
     DatabaseTasks.db_dir = 'db'
   end
 
