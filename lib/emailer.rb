@@ -6,6 +6,7 @@ module DisclosureAlert
     RECIPIENTS = [
       { to: 'tomdooner@gmail.com' },
       { to: 'sdoran@oaklandca.gov', cc: 'ALaraFranco@oaklandca.gov' },
+      { to: 'elinaru@gmail.com' },
     ].freeze
 
     def initialize(date)
