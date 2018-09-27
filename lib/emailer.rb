@@ -3,6 +3,11 @@ require 'haml'
 
 module DisclosureAlert
   class Emailer
+    RECIPIENTS = [
+      { to: 'tomdooner@gmail.com' },
+      { to: 'sdoran@oaklandca.gov', cc: 'ALaraFranco@oaklandca.gov' },
+    ].freeze
+
     def initialize(date)
       @date = date
     end
@@ -15,14 +20,15 @@ module DisclosureAlert
       puts '==================================================================='
       return if filings_in_date_range.none?
 
-      Mailgun::Client
-        .new(ENV['MAILGUN_API_KEY'])
-        .send_message('tdooner.com',
+      mailgun = Mailgun::Client.new(ENV['MAILGUN_API_KEY'])
+
+      RECIPIENTS.each do |recipient_hash|
+        mailgun.send_message('tdooner.com', recipient_hash.merge(
           from: 'disclosure-alerts@tdooner.com',
-          to: 'tomdooner@gmail.com',
           subject: "New Campaign Disclosure filings on #{@date}",
           html: email_html
-        )
+        ))
+      end
     end
 
     private
