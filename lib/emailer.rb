@@ -5,7 +5,7 @@ module DisclosureAlert
   class Emailer
     RECIPIENTS = [
       { to: 'tomdooner@gmail.com' },
-      { to: 'sdoran@oaklandca.gov', cc: 'ALaraFranco@oaklandca.gov' },
+      { to: 'sdoran@oaklandca.gov', cc: 'ALaraFranco@oaklandca.gov, wbarazoto@oaklandca.gov' },
       { to: 'elinaru@gmail.com' },
     ].freeze
 
