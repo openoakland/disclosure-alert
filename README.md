@@ -21,5 +21,6 @@ heroku run rake db:migrate
 
 running:
 ```
+heroku run rake add_daily_subscriber
 heroku run rake download_and_email_daily
 ```

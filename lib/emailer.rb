@@ -27,12 +27,14 @@ module DisclosureAlert
 
       mailgun = Mailgun::Client.new(ENV['MAILGUN_API_KEY'])
 
-      RECIPIENTS.each do |recipient_hash|
-        mailgun.send_message('tdooner.com', recipient_hash.merge(
+      AlertSubscriber.find_each do |subscriber|
+        mailgun.send_message(
+          'tdooner.com',
+          to: subscriber.email,
           from: 'disclosure-alerts@tdooner.com',
           subject: "New Campaign Disclosure filings on #{@date}",
           html: email_html
-        ))
+        )
       end
     end
 

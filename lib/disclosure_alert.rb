@@ -11,4 +11,5 @@ module DisclosureAlert
   autoload :Netfile, 'netfile/client'
 
   autoload :Filing, 'models/filing'
+  autoload :AlertSubscriber, 'models/alert_subscriber'
 end
