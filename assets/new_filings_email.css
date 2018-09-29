@@ -1,0 +1,27 @@
+.filing {
+  margin-bottom: 40px;
+}
+
+.filing tr:not(:first-child) td {
+  padding-top: 20px;
+}
+
+.filing__form-number-container {
+  width: 70px;
+}
+
+.filing__form-number {
+  font-size: 24px;
+  background-color: #000;
+  color: #fff;
+  font-weight: bold;
+  display: inline-block;
+  padding: 4px 10px;
+}
+
+.filing__form-number sub {
+  font-size: 10px;
+    line-height: 1;
+    display: block;
+    text-align: center;
+}

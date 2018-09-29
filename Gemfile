@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'activerecord'
 gem 'haml'
+gem 'nokogiri'
 gem 'mailgun-ruby'
 gem 'rake'
 gem 'pg'

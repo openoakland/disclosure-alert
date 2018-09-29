@@ -1,5 +1,6 @@
 require 'mailgun-ruby'
 require 'haml'
+require 'premailer'
 
 module DisclosureAlert
   class Emailer
@@ -40,9 +41,10 @@ module DisclosureAlert
     def email_html
       template = File.read(File.expand_path('../templates/new_filings_email.haml', __dir__))
       engine = Haml::Engine.new(template)
-      engine.render(HamlHelpers.new,
+      html = engine.render(HamlHelpers.new,
         filings: filings_in_date_range
       )
+      Premailer.new(html, with_html_string: true).to_inline_css
     end
 
     def filings_in_date_range
