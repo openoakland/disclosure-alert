@@ -69,5 +69,6 @@
         %td
         %td
           %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.id}" } View Original Filing
-          %br
-          %a{ href: "https://www.opendisclosure.io/committee/#{f.filer_id}" } View Committee on Open Disclosure
+          - if f.filer_id
+            %br
+            %a{ href: "https://www.opendisclosure.io/committee/#{f.filer_id}" } View Committee on Open Disclosure
