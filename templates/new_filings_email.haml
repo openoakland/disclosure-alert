@@ -1,6 +1,8 @@
 %link{ rel: 'stylesheet', type: 'text/css', href: 'assets/new_filings_email.css' }
 
 - filings.each do |f|
+  - next if f.id == 174032415 # mislabeled as a 460 but it's a 470
+
   %table.filing
     %tbody
       %tr
