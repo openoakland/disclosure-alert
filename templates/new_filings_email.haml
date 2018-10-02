@@ -5,7 +5,13 @@
     %tbody
       %tr
         %td.filing__form-number-container
-          %span.filing__form-number #{f.form_name.gsub(/([[:alpha:]]+)/i, '<sub>\1</sub>')}
+          %span.filing__form-number
+            - if f.form_name
+              = f.form_name.gsub(/([[:alpha:]]+)/i, '<sub>\1</sub>')
+            - elsif f.title =~ /FPPC Form (\d+)/
+              = $~[1]
+            - else
+              ???
         %td
           %strong= f.filer_name
           %br
