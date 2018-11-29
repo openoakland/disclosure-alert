@@ -4,7 +4,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 
-module DisclosureAlert::Netfile
+module Netfile
   # Client to get responses from Netfile
   class Client
     BASE_URL = URI('https://netfile.com/Connect2/api/')
