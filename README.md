@@ -12,6 +12,7 @@ heroku git:remote --app disclosure-alert
 heroku addons:create heroku-postgresql:hobby-dev
 heroku addons:create scheduler:standard
 heroku config:set MAILGUN_API_KEY=key-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+heroku config:set APP_HOST=your-app-name.herokuapp.com
 heroku addons:open scheduler
 # create a scheduled task for:
 bin/rails disclosure_alert:download_and_email_daily

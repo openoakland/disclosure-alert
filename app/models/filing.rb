@@ -6,6 +6,7 @@ class Filing < ApplicationRecord
   FORM_IDS = {
     '460' => 30,
     'LOB' => 36,          # LOB = Oakland Lobbyist Quarterly Report
+    'LOB' => 236,         # LOB = Oakland Lobbyist Quarterly Report
     '497 LCR' => 39,      # LCR = Late Contributions Received
     '497 LCM' => 38       # LCM = Late Contributions Made
   }.freeze

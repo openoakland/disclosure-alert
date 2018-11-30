@@ -22,6 +22,10 @@ module DisclosureAlert
 
     config.assets.precompile << 'email.scss'
 
+    config.action_mailer.default_url_options = {
+      host: ENV['APP_HOST'],
+    }
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
