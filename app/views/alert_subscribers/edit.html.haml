@@ -1,0 +1,3 @@
+%h2 Edit Subscription for #{@alert_subscriber.email}
+
+= button_to 'Unsubscribe', alert_subscriber_path(params[:id], token: @alert_subscriber.token), method: :delete
