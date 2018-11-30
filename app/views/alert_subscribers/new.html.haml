@@ -1,0 +1,16 @@
+%h2 Oakland Disclosure Alert
+
+- if flash[:info]
+  = flash[:info]
+
+%h3 Register for Disclosure Alerts
+
+= form_for @alert_subscriber do |f|
+  - if @alert_subscriber.errors.any?
+    = @alert_subscriber.errors.full_messages.first
+
+  = f.label :email, 'Email Address'
+  = f.text_field :email
+
+  %div
+    = f.submit 'Subscribe'
