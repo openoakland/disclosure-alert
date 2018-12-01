@@ -26,6 +26,8 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Other disclosure-alert application dependencies:
+gem 'activeadmin'
+gem 'devise'
 gem 'haml'
 gem 'mailgun-ruby'
 gem 'pg'
