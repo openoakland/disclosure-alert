@@ -7,7 +7,7 @@ ActiveAdmin.register AlertSubscriber do
     actions
   end
 
-  action_item :send_yesterdays_email do
+  action_item :send_yesterdays_email, only: :show do
     link_to 'Send Yesterdays Email',
       send_yesterdays_email_admin_alert_subscriber_path(resource),
       method: :put
