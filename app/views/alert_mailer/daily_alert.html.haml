@@ -26,8 +26,8 @@
             = format_money(contributions_row['amount_A'])
             %br
             %strong Total Expenditures Made:
-            - contributions_row = f.contents.detect { |i| i["form_Type"] == "F460" && i["line_Item"] == "11" }
-            = format_money(contributions_row['amount_A'])
+            - expenditures_row = f.contents.detect { |i| i["form_Type"] == "F460" && i["line_Item"] == "11" }
+            = format_money(expenditures_row['amount_A'])
 
           - if f.form_name == '497 LCR'
             - total_amount = f.contents.map { |i| i['calculated_Amount'] }.sum
