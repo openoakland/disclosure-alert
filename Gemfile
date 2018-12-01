@@ -57,6 +57,7 @@ end
 
 group :test do
   gem 'rspec-rails'
+  gem 'spring-commands-rspec'
 
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'

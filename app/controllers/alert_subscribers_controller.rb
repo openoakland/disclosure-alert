@@ -33,7 +33,7 @@ class AlertSubscribersController < ApplicationController
 
     unless @alert_subscriber.token == params[:token]
       flash[:error] = 'Forbidden'
-      return redirect_to root_url
+      redirect_to root_url
     end
   end
 
