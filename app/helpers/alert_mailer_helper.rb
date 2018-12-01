@@ -6,7 +6,8 @@ module AlertMailerHelper
   def form_number_html(form)
     if form.form_name
       sanitize(form.form_name)
-        .gsub(/([[:alpha:]]+)/i, '<sub>\1</sub>')
+        .gsub(/(.{3}) ?([[:alpha:]]+)?/i, '\1 <sub>\2</sub>')
+        .gsub(' <sub></sub>', '')
         .html_safe
     elsif form.title =~ /FPPC Form (\d+)/
       $~[1]

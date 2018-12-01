@@ -25,5 +25,10 @@ RSpec.describe AlertMailerHelper do
       let(:form_title) { 'FPPC Form 123' }
       it { expect(subject).to eq('123') }
     end
+
+    describe 'with a lobbyist form' do
+      let(:form_id) { Filing::FORM_IDS['LOB'] }
+      it { expect(subject).to eq('LOB') }
+    end
   end
 end
