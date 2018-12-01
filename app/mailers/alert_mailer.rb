@@ -1,7 +1,10 @@
 class AlertMailer < ApplicationMailer
   layout 'mailer'
+  track open: true, click: true
 
   def daily_alert(alert_subscriber, date, filings_in_date_range)
+    track user: alert_subscriber
+
     @alert_subscriber = alert_subscriber
     @filings = filings_in_date_range
     @date = date

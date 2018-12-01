@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_01_202231) do
+ActiveRecord::Schema.define(version: 2018_12_01_205024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,19 @@ ActiveRecord::Schema.define(version: 2018_12_01_202231) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "ahoy_messages", force: :cascade do |t|
+    t.string "user_type"
+    t.bigint "user_id"
+    t.text "to"
+    t.string "mailer"
+    t.text "subject"
+    t.string "token"
+    t.datetime "sent_at"
+    t.datetime "opened_at"
+    t.datetime "clicked_at"
+    t.index ["user_type", "user_id"], name: "index_ahoy_messages_on_user_type_and_user_id"
   end
 
   create_table "alert_subscribers", force: :cascade do |t|
