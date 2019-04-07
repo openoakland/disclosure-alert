@@ -1,5 +1,6 @@
 class AlertMailer < ApplicationMailer
   layout 'mailer'
+
   track open: true, click: true, utm_params: true,
     user: -> { AlertSubscriber.find_by(email: message.to.first) }
 

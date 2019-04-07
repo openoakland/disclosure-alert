@@ -1,11 +1,42 @@
 ## local setup:
 ```bash
+# install and start PostgreSQL:
 brew install postgresql
 brew services start postgresql
+
+# create the postgresql database:
+createdb disclosure-alert
+
+# install ruby
+# We recommend doing it with rbenv, there are instructions here:
+# https://github.com/rbenv/rbenv#homebrew-on-macos
+# After installing rbenv:
+rbenv install         # <- this installs ruby
+
+# install ruby dependencies:
+gem install bundler
+bundle install
+
+# initialize the database
+bin/rails db:schema:load
+
+# run the server!!
+bin/rails server      # <- check it out at http://localhost:3000
+
+# view the email rendering in-browser:
+bin/rails disclosure_alert:download      # <- download the filings
+# then: go to http://localhost:3000/rails/mailers/alert_mailer/daily_alert
+
+
+# if you subscribe using the web interface, you can generate an email to
+# yourself. First, you will need to configure Mailgun. Get the value from Tom or
+# set up your own mailgun account. Then:
+cp .env.development .env.local
+# edit .env.local and put the API key value in there
+bin/rails disclosure_alert:download_and_email_daily
 ```
 
-## heroku commands:
-
+## deploying to Heroku:
 ```bash
 heroku create disclosure-alert
 heroku git:remote --app disclosure-alert
