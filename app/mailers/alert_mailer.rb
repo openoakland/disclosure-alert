@@ -6,7 +6,7 @@ class AlertMailer < ApplicationMailer
 
   def daily_alert(alert_subscriber, date, filings_in_date_range)
     @alert_subscriber = alert_subscriber
-    @filings = filings_in_date_range
+    @filings = Forms.from_filings(filings_in_date_range)
     @date = date
 
     mail(

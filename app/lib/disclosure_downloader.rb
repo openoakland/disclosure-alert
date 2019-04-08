@@ -35,7 +35,14 @@ class DisclosureDownloader
             .map { |row| row.slice('form_Type', 'tran_NamL', 'calculated_Amount') }
         end
 
-      filing.update_attribute(:contents, contents)
+      contents_xml =
+        case filing.form_name
+        when '700'
+          netfile
+            .fetch_calfile_xml(filing.id)
+        end
+
+      filing.update_attributes(contents: contents, contents_xml: contents_xml)
     end
 
     latest = Filing.order(filed_at: :desc).first

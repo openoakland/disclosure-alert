@@ -344,6 +344,7 @@ DEPENDENCIES
   rails (~> 5.2.1)
   rspec-rails
   rspec_junit_formatter
+  rubyzip
   sass-rails (~> 5.0)
   selenium-webdriver
   spring
