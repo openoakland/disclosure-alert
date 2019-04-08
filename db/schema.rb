@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_01_205024) do
+ActiveRecord::Schema.define(version: 2019_04_08_194353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2018_12_01_205024) do
     t.string "form"
     t.datetime "filed_at"
     t.json "contents"
+    t.xml "contents_xml"
   end
 
 end

@@ -1,6 +1,4 @@
 - @filings.each do |f|
-  - next if f.id == 174032415 # mislabeled as a 460 but it's a 470
-
   %table.filing
     %tbody
       %tr
@@ -22,12 +20,10 @@
         %td
           - if f.form_name == '460'
             %strong Total Contributions Received:
-            - contributions_row = f.contents.detect { |i| i["form_Type"] == "F460" && i["line_Item"] == "5" }
-            = format_money(contributions_row['amount_A'])
+            = format_money(f.total_contributions_received)
             %br
             %strong Total Expenditures Made:
-            - expenditures_row = f.contents.detect { |i| i["form_Type"] == "F460" && i["line_Item"] == "11" }
-            = format_money(expenditures_row['amount_A'])
+            = format_money(f.total_expenditures_made)
 
           - if f.form_name == '497 LCR'
             - total_amount = f.contents.map { |i| i['calculated_Amount'] }.sum
@@ -56,6 +52,46 @@
                 %li #{format_money(contribution['calculated_Amount'])} – #{contribution['tran_NamL']}
               - if f.contents.length > 3
                 %li and #{format_money(total_amount - largest_three_total_amount)} from #{f.contents.length - 3} other contributors
+
+          - if f.form_name == '700'
+            - if f.offices.any?
+              Positions:
+              %ul
+                - f.offices.each do |office|
+                  %li #{office['position']}, #{office['agency']}
+            - if f.schedule_a1.any?
+              Investments (Schedule A1):
+              %ul
+                - f.schedule_a1.each do |investment|
+                  %li #{investment['name_of_business_entity']} - #{investment['fair_market_value']}
+            - if f.schedule_b.any?
+              Real Property (Schedule B):
+              %ul
+                - f.schedule_b.each do |property|
+                  %li #{property['parcel_or_address']}, #{property['city']} - #{property['fair_market_value']}
+            - if f.schedule_c1.any?
+              Income, Loans, and Business Positions (Schedule C):
+              %ul
+                - f.schedule_c1.each do |income|
+                  %li
+                    #{income['business_position']}, #{income['business_activity']}, #{income['name_of_income_source']} -
+                    #{income['gross_income_received_schedule_c_1']}
+            - if f.schedule_d.any?
+              Gifts (Schedule D):
+              %ul
+                - f.schedule_d.each do |gift|
+                  - if gift['gifts'].length > 1
+                    - gifts_string = "#{pluralize(gift['gifts'].length, 'gift')} totaling #{format_money(gift['gifts'].sum { |g| g['amount'] })}"
+                  - else
+                    - gifts_string = "#{gift['gifts'][0]['description']} - #{format_money(gift['gifts'][0]['amount'])}"
+                  %li #{gift['name_of_source']} - #{gifts_string}
+
+            - if f.schedule_e.any?
+              Gifts - Travel Payments (Schedule E):
+              %ul
+                - f.schedule_e.each do |travel|
+                  %li #{travel['name_of_source']} (#{travel['travel_description']}) - #{format_money(travel['amount'].to_f)}
+
 
       %tr
         %td

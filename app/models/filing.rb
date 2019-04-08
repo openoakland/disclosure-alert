@@ -8,7 +8,8 @@ class Filing < ApplicationRecord
     'LOB' => 36,          # LOB = Oakland Lobbyist Quarterly Report
     'LOB' => 236,         # LOB = Oakland Lobbyist Quarterly Report
     '497 LCR' => 39,      # LCR = Late Contributions Received
-    '497 LCM' => 38       # LCM = Late Contributions Made
+    '497 LCM' => 38,      # LCM = Late Contributions Made
+    '700' => 254,
   }.freeze
 
   scope :filed_on_date, ->(date) { where("date_trunc('day', filed_at) = ?", date) }

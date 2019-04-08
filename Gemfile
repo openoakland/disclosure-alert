@@ -34,6 +34,7 @@ gem 'haml'
 gem 'mailgun-ruby'
 gem 'pg'
 gem 'premailer-rails'
+gem 'rubyzip'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
