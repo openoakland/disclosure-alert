@@ -38,7 +38,7 @@ RSpec.describe AlertMailer do
     subject { described_class.daily_alert(alert_subscriber, date, filings_in_date_range) }
 
     it 'renders' do
-      expect(subject.body).to include(filings_in_date_range.first.filer_name)
+      expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
     end
   end
 end
