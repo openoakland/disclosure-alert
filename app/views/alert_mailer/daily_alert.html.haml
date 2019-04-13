@@ -64,6 +64,11 @@
               %ul
                 - f.schedule_a1.each do |investment|
                   %li #{investment['name_of_business_entity']} - #{investment['fair_market_value']}
+            - if f.schedule_a2.any?
+              Trusts/Business Entities (Schedule A2):
+              %ul
+                - f.schedule_a2.each do |entity|
+                  %li #{entity['entity_name']} (#{entity['business_type']}) - Valued #{entity['fair_market_value_schedule_a_2']}
             - if f.schedule_b.any?
               Real Property (Schedule B):
               %ul
