@@ -39,6 +39,9 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  # Provide sign_in helper in Request specs
+  config.include Devise::Test::IntegrationHelpers, type: :request
+
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.

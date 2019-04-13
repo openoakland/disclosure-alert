@@ -3,7 +3,9 @@ ActiveAdmin.register AlertSubscriber do
     selectable_column
     id_column
     column :email
-    column :created_at
+    column :subscribed_at, :created_at
+    column :open_rate
+    column :click_rate
     actions
   end
 
