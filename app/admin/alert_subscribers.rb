@@ -4,8 +4,8 @@ ActiveAdmin.register AlertSubscriber do
     id_column
     column :email
     column :subscribed_at, :created_at
-    column :open_rate
-    column :click_rate
+    column(:open_rate) { |as| format('%.1f%%', as.open_rate) }
+    column(:click_rate) { |as| format('%.1f%%', as.click_rate) }
     actions
   end
 
