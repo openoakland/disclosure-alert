@@ -9,7 +9,7 @@
           %br
           = f.title
           %br
-          Filed At: #{f.filed_at}
+          Filed #{f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")}
           - if f.amended_filing_id
             %br
               Amends:
