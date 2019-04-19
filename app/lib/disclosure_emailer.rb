@@ -15,7 +15,7 @@ class DisclosureEmailer
     puts '==================================================================='
     return if filings_in_date_range.none?
 
-    AlertSubscriber.find_each do |subscriber|
+    AlertSubscriber.active.find_each do |subscriber|
       AlertMailer
         .daily_alert(subscriber, @date, filings_in_date_range)
         .deliver_now

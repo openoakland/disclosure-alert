@@ -20,7 +20,7 @@ class AlertSubscribersController < ApplicationController
   def edit; end
 
   def destroy
-    if @alert_subscriber.destroy
+    if @alert_subscriber.unsubscribe!
       flash[:info] = 'You have been successfully unsubscribed!'
       return redirect_to :root
     end

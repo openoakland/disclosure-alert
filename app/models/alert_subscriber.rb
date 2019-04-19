@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class AlertSubscriber < ApplicationRecord
+  scope :active, -> { where(unsubscribed_at: nil) }
+  scope :unsubscribed, -> { where.not(unsubscribed_at: nil) }
+
   has_many :ahoy_messages, foreign_key: :user_id
 
   validates :email, format: /\A[^@]+@[^\.]+\.[\w]+\z/i
@@ -21,5 +24,9 @@ class AlertSubscriber < ApplicationRecord
   def click_rate
     ahoy_messages.where('clicked_at is not null').last(30).count.to_f /
       ahoy_messages.last(30).count
+  end
+
+  def unsubscribe!
+    update_attribute(:unsubscribed_at, Time.now)
   end
 end

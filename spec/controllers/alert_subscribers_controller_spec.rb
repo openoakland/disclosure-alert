@@ -72,14 +72,19 @@ RSpec.describe AlertSubscribersController do
     describe 'with a valid token' do
       let(:request_token) { alert_subscriber.token }
       it { expect(subject).to redirect_to(root_url) }
-      it { expect { subject }.to change { AlertSubscriber.count }.by(-1) }
+
+      it 'marks the object as unsubscribed' do
+        subject
+        expect(alert_subscriber.reload.unsubscribed_at)
+          .not_to be_nil
+      end
     end
 
     describe 'with an invalid token' do
       let(:request_token) { 'foo bar baz' }
 
       it { expect(subject).to be_redirect }
-      it { expect { subject }.not_to change { AlertSubscriber.count } }
+      it { expect { subject }.not_to change { AlertSubscriber.active.count } }
     end
   end
 end
