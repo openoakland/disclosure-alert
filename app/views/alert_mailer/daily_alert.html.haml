@@ -22,12 +22,11 @@
             %span.filing__form-number= form_number_html(f)
           %td
             %strong= f.filer_name
-            %br
             - if f.filer_title
+              %br
               = format_position_title(f.filer_title)
             %br
             = f.title
-            %br
             - if f.amended_filing_id
               %br
                 Amends:
