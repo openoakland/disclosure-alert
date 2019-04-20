@@ -12,7 +12,6 @@
           %br
           = f.title
           %br
-          #{f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")}
           - if f.amended_filing_id
             %br
               Amends:
@@ -104,8 +103,10 @@
       %tr
         %td
         %td
-          %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.id}" } View Original Filing
-          - if f.filer_id
+          Filed
+          %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.id}", target: '_blank' }
+            #{f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")}
+          - if f.filer_id.present?
             %br
             %a{ href: "https://www.opendisclosure.io/committee/#{f.filer_id}" } View Committee on Open Disclosure
 
