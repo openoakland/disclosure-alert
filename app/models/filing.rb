@@ -4,12 +4,12 @@ require 'date'
 
 class Filing < ApplicationRecord
   FORM_IDS = {
-    '460' => 30,
-    'LOB' => 36,          # LOB = Oakland Lobbyist Quarterly Report
-    'LOB' => 236,         # LOB = Oakland Lobbyist Quarterly Report
-    '497 LCR' => 39,      # LCR = Late Contributions Received
-    '497 LCM' => 38,      # LCM = Late Contributions Made
-    '700' => 254,
+    30 => '460',
+    36 => 'LOB',          # LOB = Oakland Lobbyist Quarterly Report
+    236 => 'LOB',         # LOB = Oakland Lobbyist Quarterly Report
+    39 => '497 LCR',      # LCR = Late Contributions Received
+    38 => '497 LCM',      # LCM = Late Contributions Made
+    254 => '700',
   }.freeze
 
   scope :filed_on_date, ->(date) { where("date_trunc('day', filed_at) = ?", date) }
@@ -27,6 +27,6 @@ class Filing < ApplicationRecord
   end
 
   def form_name
-    FORM_IDS.invert[form.to_i]
+    FORM_IDS[form.to_i]
   end
 end
