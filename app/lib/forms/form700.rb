@@ -156,5 +156,19 @@ module Forms
         end
       end
     end
+
+    def no_reportable_interests?
+      return unless @xml.present?
+
+      [
+        @xml.xpath('//schedule_a_1s/@count'),
+        @xml.xpath('//schedule_a_2s/@count'),
+        @xml.xpath('//schedule_bs/@count'),
+        @xml.xpath('//schedule_c_1s/@count'),
+        @xml.xpath('//schedule_c_2s/@count'),
+        @xml.xpath('//schedule_ds/@count'),
+        @xml.xpath('//schedule_es/@count'),
+      ].map(&:first).map(&:value).map(&:to_i).sum == 0
+    end
   end
 end
