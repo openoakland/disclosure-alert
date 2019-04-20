@@ -26,6 +26,15 @@ ActiveAdmin.register AlertSubscriber do
     f.actions
   end
 
+  csv do
+    column :email
+    column(:subscribed_at, &:created_at)
+    column :unsubscribed_at
+    column :open_rate
+    column :click_rate
+    column(:total_emails) { |as| as.ahoy_messages.count }
+  end
+
   action_item :send_yesterdays_email, only: :show do
     link_to 'Send Yesterdays Email',
       send_yesterdays_email_admin_alert_subscriber_path(resource),
