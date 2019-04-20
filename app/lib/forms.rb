@@ -13,14 +13,23 @@ module Forms
   end
 
   class BaseForm
-    delegate :id, :filer_id, :filer_name, :title, :filed_at,
-             :amendment_sequence_number, :amended_filing_id, :form, :form_name,
-             :contents, :contents_xml,
+    delegate :id, :filer_id, :title, :filed_at, :amendment_sequence_number,
+             :amended_filing_id, :form, :form_name, :contents, :contents_xml,
              to: :@filing
 
     def initialize(filing)
       @filing = filing
     end
+
+    # Override in a subclass if a better name can be presented to the user.
+    def filer_name
+      @filing.filer_name
+    end
+
+    # Override in a subclass
+    # @retun {Hash?} Returns a hash with keys position, agency, and
+    # division_board_district.
+    def filer_title; end
   end
 
   class BaseXMLForm < BaseForm

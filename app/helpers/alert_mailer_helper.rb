@@ -15,4 +15,19 @@ module AlertMailerHelper
       '???'
     end
   end
+
+  # @param title {Hash} Return value from Form#filer_title
+  def format_position_title(title)
+    second_part =
+      if title[:position].match(/(commissioner|\bmember\b)/i)
+        title[:division_board_district] || title[:agency]
+      else
+        title[:agency].try(:titleize)
+      end
+
+    [
+      title[:position],
+      second_part,
+    ].compact.join(', ')
+  end
 end

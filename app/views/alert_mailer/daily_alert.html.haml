@@ -7,9 +7,12 @@
         %td
           %strong= f.filer_name
           %br
+          - if f.filer_title
+            = format_position_title(f.filer_title)
+          %br
           = f.title
           %br
-          Filed #{f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")}
+          #{f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")}
           - if f.amended_filing_id
             %br
               Amends:
@@ -54,11 +57,11 @@
                 %li and #{format_money(total_amount - largest_three_total_amount)} from #{f.contents.length - 3} other contributors
 
           - if f.form_name == '700'
-            - if f.offices.any?
-              Positions:
+            - if f.offices.length > 1
+              Other Positions:
               %ul
-                - f.offices.each do |office|
-                  %li #{office['position']}, #{office['agency']}
+                - f.offices[1..-1].each do |office|
+                  %li= format_position_title(Forms::Form700.title_from_office(office))
             - if f.schedule_a1.any?
               Investments (Schedule A1):
               %ul

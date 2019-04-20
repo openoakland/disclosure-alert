@@ -31,4 +31,25 @@ RSpec.describe AlertMailerHelper do
       it { expect(subject).to eq('LOB') }
     end
   end
+
+  describe '#format_position_title' do
+    let(:title_position) { 'Some Position' }
+    let(:title_agency) { 'Some Agency' }
+    let(:title_object) do
+      {
+        position: title_position,
+        agency: title_agency,
+        division_board_district: 'Some Board or District',
+      }
+    end
+
+    subject { format_position_title(title_object) }
+
+    it { is_expected.to eq('Some Position, Some Agency') }
+
+    context 'with a Commissioner position' do
+      let(:title_position) { 'Commissioner' }
+      it { is_expected.to eq('Commissioner, Some Board Or District') }
+    end
+  end
 end

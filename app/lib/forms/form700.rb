@@ -31,6 +31,14 @@ module Forms
       ].freeze,
     }.with_indifferent_access.freeze
 
+    def self.title_from_office(office)
+      {
+        position: office['position'],
+        agency: office['agency'],
+        division_board_district: office['division_board_district'],
+      }
+    end
+
     def not_efiled?
       @xml.blank?
     end
@@ -39,6 +47,12 @@ module Forms
       return super unless @xml.present?
 
       [@xml.xpath('//disclosure/cover/first_name'), @xml.xpath('//disclosure/cover/last_name')].join(' ')
+    end
+
+    def filer_title
+      return super unless @xml.present? && offices.any?
+
+      Forms::Form700.title_from_office(offices[0])
     end
 
     def offices
