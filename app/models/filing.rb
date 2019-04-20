@@ -11,7 +11,7 @@ class Filing < ApplicationRecord
     254 => '700',
   }.freeze
 
-  scope :filed_on_date, ->(date) { where("date_trunc('day', filed_at) = ?", date) }
+  scope :filed_on_date, ->(date) { where(filed_at: date.all_day) }
 
   def self.from_json(json)
     find_or_initialize_by(id: json['id']) do |record|
