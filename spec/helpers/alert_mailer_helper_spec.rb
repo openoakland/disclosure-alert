@@ -31,8 +31,8 @@ RSpec.describe AlertMailerHelper do
     end
 
     describe 'with a lobbyist form' do
-      let(:form_id) { form_id_for_name('LOB') }
-      it { expect(subject).to eq('LOB') }
+      let(:form_id) { form_id_for_name('LBQ') }
+      it { expect(subject).to eq('LBQ') }
     end
   end
 

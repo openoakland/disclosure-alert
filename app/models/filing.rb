@@ -5,7 +5,8 @@ require 'date'
 class Filing < ApplicationRecord
   FORM_IDS = {
     30 => '460',
-    236 => 'LOB',         # LOB = Oakland Lobbyist Quarterly Report
+    235 => 'LBR',         # LBR = Oakland Lobbyist Registration
+    236 => 'LBQ',         # LBQ = Oakland Lobbyist Quarterly Report
     39 => '497 LCR',      # LCR = Late Contributions Received
     38 => '497 LCM',      # LCM = Late Contributions Made
     254 => '700',
