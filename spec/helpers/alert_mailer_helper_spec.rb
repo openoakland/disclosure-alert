@@ -56,4 +56,24 @@ RSpec.describe AlertMailerHelper do
       it { is_expected.to eq('Commissioner, Some Board or District') }
     end
   end
+
+  describe '#sort_filing_groups' do
+    let(:filing_groups) do
+      {
+        'Some form' => [],
+        'Other forms' => [],
+        'Foo forms' => [],
+      }
+    end
+
+    subject { helper.sort_filing_groups(filing_groups) }
+
+    it 'sorts "Other" at the end' do
+      expect(subject).to eq([
+        ['Foo forms', []],
+        ['Some form', []],
+        ['Other forms', []],
+      ])
+    end
+  end
 end

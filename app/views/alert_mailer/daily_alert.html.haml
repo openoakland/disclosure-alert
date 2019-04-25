@@ -1,5 +1,5 @@
 %h3 In Today's Alert Email:
-- grouped_filings = @filings.group_by { |f| f.i18n_key }
+- grouped_filings = sort_filing_groups(@filings.group_by { |f| f.i18n_key })
 
 %ul
 - grouped_filings.each do |i18n_key, filings|

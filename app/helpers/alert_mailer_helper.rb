@@ -30,4 +30,13 @@ module AlertMailerHelper
       second_part,
     ].compact.join(', ')
   end
+
+  def sort_filing_groups(filing_groups)
+    filing_groups.sort do |(k1, _), (k2, _)|
+      next 1 if k1.match?(/\bother\b/i)
+      next -1 if k2.match?(/\bother\b/i)
+
+      k1 <=> k2
+    end
+  end
 end
