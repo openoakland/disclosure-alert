@@ -71,6 +71,18 @@ module Netfile
       end
     end
 
+    def get_filing(filing_id)
+      Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
+        request = Net::HTTP::Get.new(BASE_URL + "public/filing/info/#{filing_id}")
+        request['Accept'] = 'application/json'
+
+        response = http.request(request)
+        raise 'Error: ' + response.inspect unless response.code.to_i < 300
+
+        return JSON.parse(response.body)
+      end
+    end
+
     def each_filing(form: nil, &block)
       return to_enum(:each_filing) unless block_given?
 

@@ -3,7 +3,7 @@ class AlertMailerPreview < ActionMailer::Preview
     AlertMailer.daily_alert(
       AlertSubscriber.first,
       Date.yesterday,
-      Filing.last(30)
+      Filing.order(filed_at: :desc).last(30)
     )
   end
 end
