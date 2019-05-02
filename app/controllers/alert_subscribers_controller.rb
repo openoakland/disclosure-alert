@@ -9,10 +9,12 @@ class AlertSubscribersController < ApplicationController
     @alert_subscriber = AlertSubscriber.new(alert_subscriber_params)
 
     if @alert_subscriber.save
-      flash[:info] = 'Subscribed!'
+      flash[:info] = 'Subscribed! You will receive your first alert after the next filing comes in.'
 
       redirect_to :root
     else
+      flash.now[:error] = "We weren't able to subscribe you: " +
+        @alert_subscriber.errors.full_messages.first
       render :new
     end
   end

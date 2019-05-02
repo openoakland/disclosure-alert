@@ -1,0 +1,69 @@
+@import "odca-jekyll/vendor/normalize";
+@import "odca-jekyll/vendor/neat";
+
+@import "odca-jekyll/base";
+@import "odca-jekyll/layout";
+@import "odca-jekyll/module";
+@import "odca-jekyll/theme";
+
+body {
+  min-width: 400px;
+}
+
+.header__pretitle-link {
+  color: #fff;
+  display: none;
+  font-weight: 100;
+
+  @include grid-media($neat-grid--medium) {
+    display: block;
+  }
+}
+
+.hero--photo {
+  // overridden by necessity for sprockets:
+  background-image: image_url('open-disclosure-splash.png') !important;
+}
+
+.hero__cta {
+  display: flex;
+  margin-bottom: $spacing-base * 2;
+
+  @include grid-media($neat-grid--small) {
+    @include grid-column(8);
+  }
+}
+
+.hero__cta .btn {
+  width: auto;
+  cursor: pointer;
+}
+
+.hero__input-field {
+  flex-grow: 1;
+  height: 4rem;
+  margin-right: 1rem;
+  padding: 0 1rem;
+}
+
+.hero .field_with_errors {
+  display: flex;
+  flex-grow: 1;
+}
+
+// Site message is a banner at the top of the page
+.site-message {
+  width: 100%;
+  font-size: 2rem;
+  padding: 2rem $gutter--small;
+}
+
+.site-message--error {
+  background-color: $color-cherry-red;
+  color: #fff;
+}
+
+.site-message--info {
+  background-color: $color-evergreen;
+  color: #fff;
+}

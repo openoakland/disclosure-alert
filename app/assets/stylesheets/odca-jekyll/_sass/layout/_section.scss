@@ -1,0 +1,23 @@
+.l-section {
+  @include grid-container;
+
+  + .l-section {
+    @extend %section-border;
+  }
+}
+
+.l-section__content {
+  @include grid-column(12);
+  padding-bottom: $spacing-base;
+  padding-top: $spacing-base;
+
+  @include grid-media($neat-grid--medium) {
+    @include grid-column(12);
+  }
+}
+
+.l-section__content--half {
+  @include grid-media($neat-grid--medium) {
+    @include grid-column(6);
+  }
+}
