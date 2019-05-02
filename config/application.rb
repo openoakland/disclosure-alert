@@ -17,7 +17,7 @@ module DisclosureAlert
     config.action_mailer.delivery_method = :mailgun
     config.action_mailer.mailgun_settings = {
       api_key: ENV['MAILGUN_API_KEY'],
-      domain: 'tdooner.com',
+      domain: 'mailgun.opendisclosure.io',
     }
 
     config.assets.precompile << 'email.scss'
