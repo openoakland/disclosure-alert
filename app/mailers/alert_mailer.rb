@@ -11,7 +11,7 @@ class AlertMailer < ApplicationMailer
 
     mail(
       to: @alert_subscriber.email,
-      from: 'disclosure-alerts@tdooner.com',
+      from: 'Open Disclosure Alert <alert@opendisclosure.io>',
       subject: "New Campaign Disclosure filings on #{@date}",
     )
   end
