@@ -5,9 +5,9 @@
     %meta{charset: "utf-8"}/
     %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}/
     %meta{content: "width=device-width, initial-scale=1", name: "viewport"}/
-    %title Open Disclosure California Alerts | We provide transparent, non-partisan campaign contribution and expenditure data in an accessible and easy to understand format. We hope this site will engage the voting public and raise awareness and accountability. Ultimately, this is one step toward shifting politics into a movement of civic engagement and ultimate citizen action.
+    %title Open Disclosure Alerts
     %meta{content: "Jekyll v3.8.3", name: "generator"}/
-    %meta{content: "Open Disclosure California", property: "og:title"}/
+    %meta{content: "Open Disclosure Alerts", property: "og:title"}/
     %meta{content: "en_US", property: "og:locale"}/
     %meta{content: "We provide transparent, non-partisan campaign contribution and expenditure data in an accessible and easy to understand format. We hope this site will engage the voting public and raise awareness and accountability. Ultimately, this is one step toward shifting politics into a movement of civic engagement and ultimate citizen action.", name: "description"}/
     %meta{content: "We provide transparent, non-partisan campaign contribution and expenditure data in an accessible and easy to understand format. We hope this site will engage the voting public and raise awareness and accountability. Ultimately, this is one step toward shifting politics into a movement of civic engagement and ultimate citizen action.", property: "og:description"}/
@@ -38,7 +38,9 @@
   %body
     %header.header.grid{role: "banner"}
       .header__wrapper.grid-col-12
-        %a.header__title.header__title--md{href: "/", rel: "author", tabindex: "1"} Open Disclosure Oakland
+        = link_to '&larr; Back to Open Disclosure'.html_safe, 'https://www.opendisclosure.io', class: 'header__pretitle-link'
+
+        %a.header__title.header__title--md{href: "/", rel: "author", tabindex: "1"} Open Disclosure Alerts
         %nav.header-nav
           %input#header-nav-trigger.header-nav__trigger{type: "checkbox"}/
           %label{for: "header-nav-trigger"}
@@ -48,15 +50,17 @@
                 %path{d: "M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z", fill: "#FFFFFF"}
                 %path{d: "M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z", fill: "#FFFFFF"}
           .header-nav__items
-            %a.header-nav__link-item{href: "/press/"} Press
-            %a.header-nav__link-item{href: "/about/"} About
-            %a.header-nav__link-item{href: "/faq/"} FAQ
-        %a.header__title{href: "/", rel: "author"} ODOAK
+            %a.header-nav__link-item{href: "https://www.opendisclosure.io/press/"} Press
+            %a.header-nav__link-item{href: "https://www.opendisclosure.io/about/"} About
+            %a.header-nav__link-item{href: "https://www.opendisclosure.io/faq/"} FAQ
+        %a.header__title{href: "/", rel: "author"} OD Alerts
 
     - if flash[:error]
-      = flash[:error]
+      .site-message.site-message--error
+        = flash[:error]
     - if flash[:info]
-      = flash[:info]
+      .site-message.site-message--info
+        = flash[:info]
 
     = yield
 

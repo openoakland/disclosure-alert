@@ -1,10 +1,30 @@
 %main.main{"aria-label" => "Content"}
   .main__wrapper
-    %h3 Register for Disclosure Alerts
+    .landing__description
+      %h3.landing__description__header Every day, Oakland's lobbyists, candidates, and decisionmakers are required to disclose their finances. Open Disclosure Alerts help you stay on top of the influence of money on your local politics.
 
-    = form_for @alert_subscriber do |f|
-      - if @alert_subscriber.errors.any?
-        = @alert_subscriber.errors.full_messages.first
-
-      = f.label :email, 'Email Address'
-      = f.text_field :email
+  .hero.hero--photo.hero--landing
+    .hero__content
+      .hero__main
+        .hero__section.grid--full
+          .grid-col-12
+            .hero__lede
+              %p Sign up for daily alerts
+            .hero__cta-container
+              = form_for @alert_subscriber do |f|
+                .hero__cta
+                  = f.text_field :email, class: 'hero__input-field', placeholder: 'Email Address'
+                  = f.submit 'Subscribe', class: 'btn'
+    .hero__attribution
+      %span
+        Modified from source by
+        %a{href: "https://www.flickr.com/photos/danramarch/4411629379/"} Daniel Ramirez
+        %a{href: "https://creativecommons.org/licenses/by/2.0/"} (CC BY 2.0)
+    .hero__content.hero__content--s1
+      .hero__header
+        %h1.hero__hed Sign up for daily alerts
+      = form_for @alert_subscriber do |f|
+        .hero__cta-container
+          .hero__cta
+            = f.text_field :email, class: 'hero__input-field', placeholder: 'Email Address'
+            = f.submit 'Subscribe', class: 'btn'
