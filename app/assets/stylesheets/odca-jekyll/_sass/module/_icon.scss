@@ -1,0 +1,24 @@
+$svg-fill-color: #828282;
+
+.svg-icon {
+  width: 21px;
+  height: 16px;
+  display: inline-block;
+  fill: $svg-fill-color;
+  padding-right: 0.5rem;
+  vertical-align: text-top;
+}
+
+// Inline svg icon that matches text with size and color
+.icon {
+  display: inline-block;
+  height: 0.9em;
+  width: 0.9em;
+
+  svg {
+    fill: currentColor;
+    height: 100%;
+    stroke: currentColor;
+    width: 100%;
+  }
+}

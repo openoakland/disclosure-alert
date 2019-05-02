@@ -1,0 +1,22 @@
+.l-ballot__main {
+  header {
+    border-bottom: 2px $color-gold solid;
+    padding-bottom: $spacing-base;
+  }
+}
+
+.referendum__summary {
+  h3 {
+    margin-top: $spacing-base * 2;
+  }
+
+  p {
+    color: $color-grey-2;
+  }
+}
+
+.contribution__support_oppose {
+  div {
+    font-weight: $font-weight-normal;
+  }
+}

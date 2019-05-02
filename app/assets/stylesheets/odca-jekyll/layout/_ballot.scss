@@ -1,0 +1,26 @@
+// Layout for all the ballot pages (the data pages of the site).
+.l-ballot {
+  @include grid-container;
+  background-color: $color-white;
+}
+
+.l-ballot__nav {
+  @include grid-column(12);
+  border-top: 2px $color-gold solid;
+
+  @include grid-media($neat-grid--medium) {
+    @include grid-column(4);
+    @include grid-shift(-8);
+    border-top: none;
+  }
+}
+
+.l-ballot__main {
+  @include grid-column(12);
+  padding-bottom: $spacing-base * 2;
+
+  @include grid-media($neat-grid--medium) {
+    @include grid-column(8);
+    @include grid-shift(4);
+  }
+}

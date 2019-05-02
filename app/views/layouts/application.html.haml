@@ -1,15 +1,57 @@
 !!!
-%html
+%html{lang: "en"}
   %head
-    %title Disclosure Alert
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{charset: "utf-8"}/
+    %meta{content: "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{content: "width=device-width, initial-scale=1", name: "viewport"}/
+    %title Open Disclosure California Alerts | We provide transparent, non-partisan campaign contribution and expenditure data in an accessible and easy to understand format. We hope this site will engage the voting public and raise awareness and accountability. Ultimately, this is one step toward shifting politics into a movement of civic engagement and ultimate citizen action.
+    %meta{content: "Jekyll v3.8.3", name: "generator"}/
+    %meta{content: "Open Disclosure California", property: "og:title"}/
+    %meta{content: "en_US", property: "og:locale"}/
+    %meta{content: "We provide transparent, non-partisan campaign contribution and expenditure data in an accessible and easy to understand format. We hope this site will engage the voting public and raise awareness and accountability. Ultimately, this is one step toward shifting politics into a movement of civic engagement and ultimate citizen action.", name: "description"}/
+    %meta{content: "We provide transparent, non-partisan campaign contribution and expenditure data in an accessible and easy to understand format. We hope this site will engage the voting public and raise awareness and accountability. Ultimately, this is one step toward shifting politics into a movement of civic engagement and ultimate citizen action.", property: "og:description"}/
+    %link{href: "https://www.opendisclosure.io/", rel: "canonical"}/
+    %meta{content: "https://www.opendisclosure.io/", property: "og:url"}/
+    %meta{content: "Open Disclosure California", property: "og:site_name"}/
     = csrf_meta_tags
     = csp_meta_tag
-
+    %script{type: "application/ld+json"}
+      :cdata
+        {"name":"Open Disclosure California","description":"We provide transparent, non-partisan campaign contribution and expenditure data in an accessible and easy to understand format. We hope this site will engage the voting public and raise awareness and accountability. Ultimately, this is one step toward shifting politics into a movement of civic engagement and ultimate citizen action.","@type":"WebSite","url":"https://www.opendisclosure.io/","headline":"Open Disclosure California","@context":"http://schema.org"}
+    / End Jekyll SEO tag
+    %link{href: image_path('open-disclosure-favicon.ico'), rel: "icon", type: "images/x-icon"}/
+    %link{href: "https://www.opendisclosure.io/feed.xml", rel: "alternate", title: "Open Disclosure California", type: "application/atom+xml"}/
+    :javascript
+      if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      
+        ga('create', 'UA-50973042-1', 'auto');
+        ga('send', 'pageview');
+      }
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 
   %body
-    %h1 Oakland Disclosure Alert
+    %header.header.grid{role: "banner"}
+      .header__wrapper.grid-col-12
+        %a.header__title.header__title--md{href: "/", rel: "author", tabindex: "1"} Open Disclosure Oakland
+        %nav.header-nav
+          %input#header-nav-trigger.header-nav__trigger{type: "checkbox"}/
+          %label{for: "header-nav-trigger"}
+            %span.header-nav__menu-icon
+              %svg{height: "15px", viewbox: "0 0 18 15", width: "18px"}
+                %path{d: "M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z", fill: "#FFFFFF"}
+                %path{d: "M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z", fill: "#FFFFFF"}
+                %path{d: "M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z", fill: "#FFFFFF"}
+          .header-nav__items
+            %a.header-nav__link-item{href: "/press/"} Press
+            %a.header-nav__link-item{href: "/about/"} About
+            %a.header-nav__link-item{href: "/faq/"} FAQ
+        %a.header__title{href: "/", rel: "author"} ODOAK
 
     - if flash[:error]
       = flash[:error]
@@ -17,3 +59,42 @@
       = flash[:info]
 
     = yield
+
+    %footer.footer.grid
+      .footer__wrapper.grid-col-12
+        .footer__content.grid--full
+          .footer__col.footer__left-col.grid-col-8
+            .footer__top-content
+              %h2.footer__heading
+                %a.brand{href: "/"}
+                  Open
+                  %span.brand__em Disclosure
+                  %span.brand__light Oakland
+              %ul.footer__nav
+                %li.footer__nav-item
+                  %a{href: "/about/"} About
+                %li.footer__nav-item
+                  %a{href: "/press/"} Press
+                %li.footer__nav-item
+                  %a{href: "/faq/"} FAQ
+                %li.footer__nav-item
+                  %a{href: "https://caciviclab.org/opendisclosure/"} Join us
+                %li.footer__nav-item
+                  %a{href: "https://github.com/caciviclab/odca-jekyll#license"} Open source
+                %li.footer__nav-item
+                  %a{href: "https://registertovote.ca.gov/"} Register to vote
+            .footer__bottom-content
+              %h5.tagline
+                Brought to you by
+                %span.tagline__em
+                  %a{href: "https://openoakland.org/"} Open Oakland
+                and
+                %span.tagline__em
+                  %a{href: "https://www.oaklandca.gov/boards-and-commissions/public-ethics-commission"} Oakland’s Public Ethics Commission
+              %h6.footer__stipulation
+                Campaign finance data provided by the City of Oakland Public Ethics Commission
+                = succeed "." do
+                  %a{href: "http://nf4.netfile.com/pub2/Default.aspx?aid=COAK"} Public Portal for Campaign Finance and Lobbyist Disclosure
+          .footer__col.grid-col-4
+            .footer__voters-edge-widget
+              %iframe{frameborder: "0", scrolling: "no", src: "https://votersedge.org/en/address-widget", style: "width:240px;height:198px;", title: "Enter your address for personalized voting information"}

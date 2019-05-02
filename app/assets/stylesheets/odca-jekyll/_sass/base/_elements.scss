@@ -1,0 +1,55 @@
+$spacing-base: 0.9rem; // Half of the base font
+
+html {
+  box-sizing: border-box;
+  font-size: 10px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: $spacing-base;
+  margin-bottom: ($spacing-base / 2);
+}
+
+p + p {
+  margin-top: $spacing-base;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  max-width: 80rem;
+}
+
+nav {
+  ul {
+    list-style: none;
+    margin: 0;
+  }
+}
+
+table {
+  border-collapse: collapse;
+}
+
+tr {
+  border-bottom: 1px $color-grey-5 solid;
+}

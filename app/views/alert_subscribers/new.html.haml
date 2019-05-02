@@ -1,11 +1,10 @@
-%h3 Register for Disclosure Alerts
+%main.main{"aria-label" => "Content"}
+  .main__wrapper
+    %h3 Register for Disclosure Alerts
 
-= form_for @alert_subscriber do |f|
-  - if @alert_subscriber.errors.any?
-    = @alert_subscriber.errors.full_messages.first
+    = form_for @alert_subscriber do |f|
+      - if @alert_subscriber.errors.any?
+        = @alert_subscriber.errors.full_messages.first
 
-  = f.label :email, 'Email Address'
-  = f.text_field :email
-
-  %div
-    = f.submit 'Subscribe'
+      = f.label :email, 'Email Address'
+      = f.text_field :email
