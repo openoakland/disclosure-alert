@@ -17,13 +17,15 @@ class AlertSubscriber < ApplicationRecord
   end
 
   def open_rate
-    ahoy_messages.where('opened_at is not null').last(30).count.to_f /
-      ahoy_messages.last(30).count
+    recent_messages = ahoy_messages.last(30)
+    recent_messages.count { |m| m.opened_at.present? }.to_f /
+      recent_messages.count
   end
 
   def click_rate
-    ahoy_messages.where('clicked_at is not null').last(30).count.to_f /
-      ahoy_messages.last(30).count
+    recent_messages = ahoy_messages.last(30)
+    recent_messages.count { |m| m.clicked_at.present? }.to_f /
+      recent_messages.count
   end
 
   def unsubscribe!
