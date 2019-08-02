@@ -27,6 +27,12 @@ RSpec.describe AlertSubscribersController do
         expect(subscriber.email).to eq(email)
         expect(subscriber.token).to be_present
       end
+
+      it 'sends a AlertSubscriberMailer.subscription_created email' do
+        subject
+        expect(ActionMailer::Base.deliveries).not_to be_empty
+        expect(ActionMailer::Base.deliveries.last.to).to eq([email])
+      end
     end
 
     describe 'with an invalid email' do
