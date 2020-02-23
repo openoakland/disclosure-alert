@@ -1,0 +1,28 @@
+Performance/Casecmp:
+  # Allow `"FOO".downcase == "foo"` since it's more clear than the alternative.
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+
+Layout/AlignHash:
+  # Ignore alignment of implicit hashes on last arguments.
+  EnforcedLastArgumentHashStyle: ignore_implicit
