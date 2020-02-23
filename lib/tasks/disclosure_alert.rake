@@ -29,8 +29,7 @@ namespace :disclosure_alert do
     $stdout.write 'Email Address: '
     email = $stdin.gets.chomp
 
-    if DisclosureAlert::AlertSubscriber.create(email: email)
-      puts 'Subscribed!'
-    end
+    return unless DisclosureAlert::AlertSubscriber.create(email: email)
+    puts 'Subscribed!'
   end
 end

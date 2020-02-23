@@ -19,7 +19,8 @@ RSpec.describe Election do
     let(:deadlines) do
       {
         'election_name' => 'oakland-2020',
-        'Semi-Annual' => '2020-07-31',
+        'Semi-Annual (Pre Pre)' => '2020-01-31',
+        'Semi-Annual (Pre)' => '2020-07-31',
         '24-hour Filing Begins' => '2020-08-05',
         '1st Pre-Election' => '2020-09-24',
         '2nd Pre-Election' => '2020-10-22',

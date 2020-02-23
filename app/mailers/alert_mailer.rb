@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Mailer for the daily alerts
 class AlertMailer < ApplicationMailer
   layout 'mailer'
 

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Emails built around the process of subscribing to alerts.
 class AlertSubscriberMailer < ApplicationMailer
   layout 'mailer'
 
