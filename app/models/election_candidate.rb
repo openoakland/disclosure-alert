@@ -10,18 +10,20 @@ class ElectionCandidate < ApplicationRecord
     candidates = CSV.parse(candidate_csv, headers: :first_row)
     elections = Election.where(slug: candidates.map { |c| c['election_name'] }).index_by(&:slug)
 
-    destroy_all
-    candidates.each do |candidate|
-      election = elections[candidate['election_name']]
-      next unless election
+    transaction do
+      destroy_all
+      candidates.each do |candidate|
+        election = elections[candidate['election_name']]
+        next unless election
 
-      create(
-        election_name: candidate['election_name'],
-        name: candidate['Candidate'],
-        fppc_id: candidate['FPPC#'],
-        office_name: candidate['Office'],
-        incumbent: candidate['Incumbent']&.downcase == 'true',
-      )
+        create(
+          election_name: candidate['election_name'],
+          name: candidate['Candidate'],
+          fppc_id: candidate['FPPC#'],
+          office_name: candidate['Office'],
+          incumbent: candidate['Incumbent']&.downcase == 'true',
+        )
+      end
     end
   end
 end
