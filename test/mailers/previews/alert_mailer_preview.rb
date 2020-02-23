@@ -1,9 +1,19 @@
+# frozen_string_literal: true
+
 class AlertMailerPreview < ActionMailer::Preview
   def daily_alert
     AlertMailer.daily_alert(
-      AlertSubscriber.first,
+      find_or_create_subscriber,
       Date.yesterday,
-      Filing.order(filed_at: :desc).last(30)
+      Filing.order(filed_at: :desc).last(30),
     )
+  end
+
+  private
+
+  def find_or_create_subscriber
+    AlertSubscriber
+      .where(email: 'test+preview@example.com')
+      .first_or_create
   end
 end
