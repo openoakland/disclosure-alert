@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_19_031106) do
+ActiveRecord::Schema.define(version: 2020_02_23_005208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,35 @@ ActiveRecord::Schema.define(version: 2019_04_19_031106) do
     t.string "token"
     t.datetime "unsubscribed_at"
     t.index ["token"], name: "index_alert_subscribers_on_token"
+  end
+
+  create_table "election_candidates", force: :cascade do |t|
+    t.string "election_name", null: false
+    t.string "name", null: false
+    t.string "fppc_id"
+    t.string "office_name"
+    t.boolean "incumbent"
+  end
+
+  create_table "election_referendums", force: :cascade do |t|
+    t.string "election_name", null: false
+    t.string "measure_number"
+    t.string "title"
+    t.string "full_title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "elections", force: :cascade do |t|
+    t.string "slug", null: false
+    t.string "location", null: false
+    t.date "date", null: false
+    t.string "title", null: false
+    t.date "deadline_semi_annual_pre_pre"
+    t.date "deadline_semi_annual_pre"
+    t.date "deadline_1st_pre_election"
+    t.date "deadline_2nd_pre_election"
+    t.date "deadline_semi_annual_post"
   end
 
   create_table "filings", force: :cascade do |t|
