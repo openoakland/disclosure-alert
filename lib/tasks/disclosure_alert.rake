@@ -23,6 +23,24 @@ namespace :disclosure_alert do
     DisclosureEmailer.new(today - 1).send_email
   end
 
+  desc 'Resends the last email to Tom for testing purposes'
+  task resend_last_to_tom: :with_configuration do
+    today = TZInfo::Timezone.get('America/Los_Angeles').now.to_date
+    days_ago = 1
+    tom = AlertSubscriber.find_by(email: 'tomdooner@gmail.com')
+
+    loop do
+      filings = Filing.filed_on_date(today - days_ago)
+      break if filings.any?
+      days_ago += 1
+    end
+
+    AlertMailer
+      .daily_alert(tom, today - days_ago, filings)
+      .deliver_now
+  end
+
+
   desc 'Add subscriber to the daily email'
   task add_daily_subscriber: :with_configuration do
     puts 'Add subscriber to daily email?'
