@@ -16,6 +16,7 @@ jobs:
         environment:
           POSTGRES_USER: disclosure-alert
           POSTGRES_DB: disclosure_alert-test
+          POSTGRES_PASSWORD: disclosure-test-password
 
     working_directory: ~/repo
 
@@ -47,6 +48,7 @@ jobs:
             RAILS_ENV: test
             PGUSER: disclosure-alert
             PGHOST: localhost
+            PGPASSWORD: disclosure-test-password
 
       # run tests!
       - run:
