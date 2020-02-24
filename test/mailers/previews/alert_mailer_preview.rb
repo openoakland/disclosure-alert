@@ -5,7 +5,7 @@ class AlertMailerPreview < ActionMailer::Preview
     AlertMailer.daily_alert(
       find_or_create_subscriber,
       Date.yesterday,
-      Filing.order(filed_at: :desc).last(30),
+      Filing.order(filed_at: :desc).first(30),
     )
   end
 

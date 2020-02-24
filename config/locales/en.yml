@@ -39,38 +39,32 @@ en:
         These are other forms that have been filed recently. You may be able to find more information about them on
         <a href="http://www.fppc.ca.gov/forms.html">the FPPC's website</a> or the <a href="https://www.oaklandca.gov/boards-commissions/public-ethics-commission">Oakland Public Ethics Commission's website</a>.
     LBR:
-      name:
-        one: Oakland Lobbyist Registration
-        other: Oakland Lobbyist Registrations
+      label: Registration
+      name: Oakland Lobbyist Registration
       description_html:
         The <a href="https://cao-94612.s3.amazonaws.com/documents/oak069038.pdf">Oakland Lobbyist Registration Act</a> requires lobbyists (most people whose job includes communicating with public officials to influence City action) to register yearly or before beginning lobbying activity.
     LBQ:
-      name:
-        one: Oakland Lobbyist Quarterly Report
-        other: Oakland Lobbyist Quarterly Reports
+      label: Quarterly Report
+      name: Oakland Lobbyist Quarterly Report
       description_html:
         The <a href="https://cao-94612.s3.amazonaws.com/documents/oak069038.pdf">Oakland Lobbyist Registration Act</a> requires lobbyists (most people whose job includes communicating with public officials to influence City action) to report quarterly on lobbying activity.
     700:
-      name:
-        one: Statement of Economic Interest (Form 700)
-        other: Statements of Economic Interest (Form 700)
+      label: Form 700
+      name: Statement of Economic Interest (Form 700)
       description_html:
         Every elected official and public employee who makes or influences governmental decisions is required to submit a Statement of Economic Interest. <a href="http://www.fppc.ca.gov/Form700.html" target="_blank">Learn more from the California FPPC</a>.
     460:
-      name:
-        one: Campaign Statement (Form 460)
-        other: Campaign Statements (Form 460)
+      label: Form 460
+      name: Campaign Statement
       description_html:
         The California Political Reform Act requires candidates and committees to file campaign statements by specified deadlines disclosing contributions received and expenditures made.
     497LCR:
-      name:
-        one: Late Contributions Received Report (Form 497)
-        other: Late Contributions Received Reports (Form 497)
+      label: Form 497 LCR
+      name: Late Contributions Received Report
       description_html:
         Local candidates receiving contributions totaling more than $1000 in the 90 days before an election are required to file a Form 497 within 24 hours.
     497LCM:
-      name:
-        one: Late Contributions Made Report (Form 497)
-        other: Late Contributions Made Reports (Form 497)
+      label: Form 497 LCM
+      name: Late Contributions Made Report
       description_html:
         Local committees making contributions totaling more than $1000 in the 90 days before an election are required to file a Form 497 within 24 hours.

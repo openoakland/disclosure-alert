@@ -13,6 +13,7 @@ class Filing < ApplicationRecord
   }.freeze
 
   scope :filed_on_date, ->(date) { where(filed_at: date.all_day) }
+  scope :form_number, ->(form) { where(form: FORM_IDS.key(form)) }
 
   def self.from_json(json)
     find_or_initialize_by(id: json['id']) do |record|
