@@ -28,6 +28,7 @@ namespace :disclosure_alert do
     today = TZInfo::Timezone.get('America/Los_Angeles').now.to_date
     days_ago = 1
     tom = AlertSubscriber.find_by(email: 'tomdooner@gmail.com')
+    filings = []
 
     loop do
       filings = Filing.filed_on_date(today - days_ago)
