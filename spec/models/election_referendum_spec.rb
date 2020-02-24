@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ElectionReferendum do
   describe '.replace_all_from_csv' do
-    let(:election) { Election.create(slug: 'oakland-march-2020', location: 'foo', title: 'bar', date: '2020-11-03') }
+    let!(:election) { Election.create(slug: 'oakland-march-2020', location: 'foo', title: 'bar', date: '2020-11-03') }
 
     let(:referendum) do
       {
