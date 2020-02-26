@@ -2,6 +2,8 @@ module Forms
   def self.from_filings(filing_array)
     filing_array.map do |filing|
       case filing.form_name
+      when '410'
+        Forms::Form410.new(filing)
       when '460'
         Forms::Form460.new(filing)
       when '700'

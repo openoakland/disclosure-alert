@@ -32,9 +32,8 @@
 en:
   forms:
     unknown:
-      name:
-        one: Other Form
-        other: Other Forms
+      label: Other
+      name: Other Form
       description_html: |
         These are other forms that have been filed recently. You may be able to find more information about them on
         <a href="http://www.fppc.ca.gov/forms.html">the FPPC's website</a> or the <a href="https://www.oaklandca.gov/boards-commissions/public-ethics-commission">Oakland Public Ethics Commission's website</a>.
@@ -68,3 +67,8 @@ en:
       name: Late Contributions Made Report
       description_html:
         Local committees making contributions totaling more than $1000 in the 90 days before an election are required to file a Form 497 within 24 hours.
+    410:
+      label: Form 410
+      name: Statement of Organization
+      description_html:
+        This form registers a new recipient committee and is required for people or organizations spending more than $2,000 in a calendar year on elections.
