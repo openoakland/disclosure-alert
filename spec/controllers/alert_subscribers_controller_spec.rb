@@ -90,7 +90,7 @@ RSpec.describe AlertSubscribersController do
       let(:request_token) { 'foo bar baz' }
 
       it { expect(subject).to be_redirect }
-      it { expect { subject }.not_to change { AlertSubscriber.active.count } }
+      it { expect { subject }.not_to(change { AlertSubscriber.subscribed.count }) }
     end
   end
 end

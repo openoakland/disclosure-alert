@@ -1,7 +1,17 @@
 # frozen_string_literal: true
 
 class AlertSubscriber < ApplicationRecord
-  scope :active, -> { where(unsubscribed_at: nil) }
+  scope :active, (lambda do
+    subscribed.where([<<~SQL, 30.days.ago])
+      id IN (SELECT DISTINCT(user_id) FROM ahoy_messages WHERE opened_at > ?)
+    SQL
+  end)
+  scope :inactive, (lambda do
+    subscribed.where([<<~SQL, 30.days.ago])
+      id NOT IN (SELECT DISTINCT(user_id) FROM ahoy_messages WHERE opened_at > ?)
+    SQL
+  end)
+  scope :subscribed, -> { where(unsubscribed_at: nil) }
   scope :unsubscribed, -> { where.not(unsubscribed_at: nil) }
 
   has_many :ahoy_messages, foreign_key: :user_id

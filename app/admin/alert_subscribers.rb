@@ -3,6 +3,7 @@ ActiveAdmin.register AlertSubscriber do
 
   scope :all
   scope :active, default: true
+  scope :inactive
   scope :unsubscribed
 
   index do
