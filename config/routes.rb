@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   ActiveAdmin.routes(self)
 
+  post '/webhooks/mailgun', to: 'webhooks#mailgun'
+
   resources :alert_subscribers, only: %i[new create edit destroy] do
     collection do
       get '/', action: :new
