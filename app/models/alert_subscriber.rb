@@ -28,6 +28,10 @@ class AlertSubscriber < ApplicationRecord
       recent_messages.count
   end
 
+  def last_opened_at
+    ahoy_messages.opened.last&.opened_at
+  end
+
   def unsubscribe!
     update_attribute(:unsubscribed_at, Time.now)
   end

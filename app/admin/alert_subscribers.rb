@@ -11,6 +11,7 @@ ActiveAdmin.register AlertSubscriber do
     column :email
     column :subscribed_at, :created_at
     column :unsubscribed_at
+    column(:last_opened_at) { |as| as.last_opened_at ? time_ago_in_words(as.last_opened_at) : 'never' }
     column(:open_rate) { |as| format('%.1f%%', as.open_rate * 100) }
     column(:click_rate) { |as| format('%.1f%%', as.click_rate * 100) }
     column(:total_emails) { |as| as.ahoy_messages.count }
@@ -30,6 +31,7 @@ ActiveAdmin.register AlertSubscriber do
     column :email
     column(:subscribed_at, &:created_at)
     column :unsubscribed_at
+    column :last_opened_at
     column :open_rate
     column :click_rate
     column(:total_emails) { |as| as.ahoy_messages.count }
