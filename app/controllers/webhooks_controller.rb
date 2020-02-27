@@ -11,11 +11,10 @@ class WebhooksController < ApplicationController
        event == 'complained' ||
        (event == 'failed' && data[:severity] == 'permanent')
       # Unsubscribe the user
-      subscribers = AlertSubscriber.where(email: recipient)
-      subscribers.update_all(unsubscribed_at: Time.now)
+      subscribers = AlertSubscriber.subscribed.where(email: recipient)
       # Leave a note in the admin interface
       subscribers.find_each do |subscriber|
-        ActiveAdmin::Comment.create(
+        comment = ActiveAdmin::Comment.create(
           resource: subscriber,
           author: AdminUser.first,
           namespace: 'admin',
@@ -24,6 +23,7 @@ class WebhooksController < ApplicationController
           BODY
         )
       end
+      subscribers.update_all(unsubscribed_at: Time.now)
     end
   end
 

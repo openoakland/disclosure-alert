@@ -1,6 +1,11 @@
 ActiveAdmin.register AlertSubscriber do
   permit_params :unsubscribed_at, :email
 
+  filter :email
+  filter :created_at
+  filter :updated_at
+  filter :unsubscribed_at
+
   scope :all
   scope :active, default: true
   scope :inactive
