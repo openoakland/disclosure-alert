@@ -7,6 +7,7 @@ RSpec.describe WebhooksController do
     subject { post :mailgun, params: params }
 
     let(:subscriber) { AlertSubscriber.create(email: 'test@example.com') }
+    let!(:admin_user) { AdminUser.create(email: 'admin@example.com', password: 'secretpassword') }
     let(:params) do
       {
         'event-data' => {
