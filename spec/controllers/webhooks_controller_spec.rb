@@ -4,6 +4,8 @@ require 'rails_helper'
 
 RSpec.describe WebhooksController do
   describe '#mailgun' do
+    subject { post :mailgun, params: params }
+
     let(:subscriber) { AlertSubscriber.create(email: 'test@example.com') }
     let(:params) do
       {
@@ -28,12 +30,14 @@ RSpec.describe WebhooksController do
           [timestamp, token].join,
         ),
         timestamp: timestamp,
-        token: token
+        token: token,
       }
     end
     let(:severity) { nil }
 
-    subject { post :mailgun, params: params }
+    before do
+      ENV['MAILGUN_SIGNING_KEY'] ||= SecureRandom.hex
+    end
 
     shared_examples_for 'unsubscribing the user' do
       it 'unsubscribes the user' do
