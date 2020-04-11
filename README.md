@@ -6,6 +6,7 @@ brew services start postgresql
 
 # create the postgresql database:
 createdb disclosure-alert
+createdb disclosure-alert_test
 
 # install ruby
 # We recommend doing it with rbenv, there are instructions here:
