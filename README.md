@@ -26,7 +26,8 @@ bin/rails server      # <- check it out at http://localhost:3000
 
 # view the email rendering in-browser:
 bin/rails disclosure_alert:download      # <- download the filings
-# then: go to http://localhost:3000/rails/mailers/alert_mailer/daily_alert
+# then: go to this URL:
+open http://localhost:3000/rails/mailers/alert_mailer/daily_alert
 
 
 # if you subscribe using the web interface, you can generate an email to

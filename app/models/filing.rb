@@ -3,18 +3,7 @@
 require 'date'
 
 class Filing < ApplicationRecord
-  FORM_IDS = {
-    23 => '410',
-    30 => '460',
-    235 => 'LBR',         # LBR = Oakland Lobbyist Registration
-    236 => 'LBQ',         # LBQ = Oakland Lobbyist Quarterly Report
-    39 => '497 LCR',      # LCR = Late Contributions Received
-    38 => '497 LCM',      # LCM = Late Contributions Made
-    254 => '700',
-  }.freeze
-
   scope :filed_on_date, ->(date) { where(filed_at: date.all_day) }
-  scope :form_number, ->(form) { where(form: FORM_IDS.key(form)) }
 
   def self.from_json(json)
     find_or_initialize_by(id: json['id']) do |record|
@@ -29,6 +18,6 @@ class Filing < ApplicationRecord
   end
 
   def form_name
-    FORM_IDS[form.to_i]
+    Forms.from_filings([self]).first.form_name
   end
 end

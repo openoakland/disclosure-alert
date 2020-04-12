@@ -11,8 +11,6 @@ module AlertMailerHelper
         .gsub(/(.{3}) ?([[:alpha:]]+)?/i, '\1 <sub>\2</sub>')
         .gsub(' <sub></sub>', '')
         .html_safe
-    elsif form.title =~ /FPPC Form (\d+)/
-      $~[1]
     else
       '???'
     end
@@ -21,7 +19,7 @@ module AlertMailerHelper
   # @param title {Hash} Return value from Form#filer_title
   def format_position_title(title)
     second_part =
-      if title[:position].match(/(commissioner|\bmember\b)/i)
+      if title[:position].match?(/(commissioner|\bmember\b)/i)
         title[:division_board_district] || title[:agency]
       else
         title[:agency].try(:titleize)

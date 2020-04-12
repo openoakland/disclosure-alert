@@ -8,19 +8,15 @@ RSpec.describe AlertMailerHelper do
     let(:form_title) { '' }
     let(:form) { Filing.new(form: form_id, title: form_title) }
 
-    def form_id_for_name(name)
-      Filing::FORM_IDS.detect { |k, v| v == name }[0]
-    end
-
     subject { helper.form_number_html(form) }
 
     describe 'with form type = 460' do
-      let(:form_id) { form_id_for_name('460') }
+      let(:form_id) { 30 }
       it { expect(subject).to eq('460') }
     end
 
     describe 'with form type = 497 LCR' do
-      let(:form_id) { form_id_for_name('497 LCR') }
+      let(:form_id) { 39 }
       it { expect(subject).to eq('497 <sub>LCR</sub>') }
       it { expect(subject).to be_html_safe }
     end
@@ -31,7 +27,7 @@ RSpec.describe AlertMailerHelper do
     end
 
     describe 'with a lobbyist form' do
-      let(:form_id) { form_id_for_name('LBQ') }
+      let(:form_id) { 236 }
       it { expect(subject).to eq('LBQ') }
     end
   end
