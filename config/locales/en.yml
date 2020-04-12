@@ -67,6 +67,17 @@ en:
       name: Late Contributions Made Report
       description_html:
         Local committees making contributions totaling more than $1000 in the 90 days before an election are required to file a Form 497 within 24 hours.
+    496:
+      label: Form 496
+      name: Independent Expenditure Report
+      description_html:
+        Independent expenditures totaling over $1000 in support (or
+        opposition) of a candidate or ballot measure must generally be reported
+        using this form. Within 90 days of an election, these expenditures must
+        be reported within 24 hours. For more information on reporting
+        requirements, consult the <a
+        href="http://www.fppc.ca.gov/content/dam/fppc/NS-Documents/TAD/Campaign%20Forms/496.pdf"
+        target="_blank">official California FPPC instructions</a>.
     410:
       label: Form 410
       name: Statement of Organization

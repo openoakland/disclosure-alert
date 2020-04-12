@@ -1,23 +1,23 @@
 %h3 In Today's Alert Email:
-- grouped_filings = sort_filing_groups(@filings.group_by { |f| f.i18n_key })
+- grouped_forms = sort_filing_groups(@forms.group_by { |f| f.i18n_key })
 
 %ul
-- grouped_filings.each do |i18n_key, filings|
+- grouped_forms.each do |i18n_key, forms|
   %li
-    %b= filings.count
-    =t(i18n_key + '.name', count: filings.count)
+    %b= forms.count
+    =t(i18n_key + '.name', count: forms.count)
 
 %p
 
 %hr
-- grouped_filings.each do |i18n_key, filing_group|
+- grouped_forms.each do |i18n_key, form_group|
   %h2
     %span.filing-group__form-number
       = t(i18n_key + '.label')
     = t(i18n_key + '.name')
     %p= t(i18n_key + '.description_html')
 
-  - filing_group.each do |f|
+  - form_group.each do |f|
     %table.filing
       %tbody
         %tr
