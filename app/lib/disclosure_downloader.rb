@@ -68,6 +68,10 @@ class DisclosureDownloader
         @netfile
           .fetch_transaction_contents(filing.id)
           .map { |row| row.slice('form_Type', 'tran_NamL', 'calculated_Amount') }
+      when '496'
+        @netfile
+          .fetch_transaction_contents(filing.id)
+          .map { |row| row.slice('tran_Dscr', 'tran_Date', 'calculated_Amount', 'cand_NamL', 'sup_Opp_Cd', 'bal_Name', 'bal_Num') }
       end
 
     contents_xml =
