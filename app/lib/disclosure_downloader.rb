@@ -71,7 +71,13 @@ class DisclosureDownloader
       when '496'
         @netfile
           .fetch_transaction_contents(filing.id)
-          .map { |row| row.slice('tran_Dscr', 'tran_Date', 'calculated_Amount', 'cand_NamL', 'sup_Opp_Cd', 'bal_Name', 'bal_Num') }
+          .map do |row|
+            row.slice(*%w[
+              form_Type tran_Dscr tran_Date calculated_Amount cand_NamL
+              sup_Opp_Cd bal_Name bal_Num tran_NamL tran_NamF tran_City tran_Zip4 tran_Emp tran_Occ
+              tran_Amt1 tran_Amt2 entity_Cd cmte_Id
+            ])
+        end
       end
 
     contents_xml =
