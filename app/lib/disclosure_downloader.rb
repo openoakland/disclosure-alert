@@ -82,5 +82,9 @@ class DisclosureDownloader
       end
 
     filing.update_attributes(contents: contents, contents_xml: contents_xml)
+  rescue StandardError => ex
+    raise FilingDownloadError, "Error downloading filing #{filing.id}: #{ex.message}"
   end
+
+  class FilingDownloadError < StandardError; end
 end
