@@ -41,7 +41,6 @@ namespace :disclosure_alert do
       .deliver_now
   end
 
-
   desc 'Add subscriber to the daily email'
   task add_daily_subscriber: :with_configuration do
     puts 'Add subscriber to daily email?'
@@ -50,5 +49,10 @@ namespace :disclosure_alert do
 
     return unless DisclosureAlert::AlertSubscriber.create(email: email)
     puts 'Subscribed!'
+  end
+
+  desc 'Backfill missing filing contents from already-downloaded filings'
+  task backfill: :with_configuration do
+    DisclosureDownloader.new.backfill_contents
   end
 end

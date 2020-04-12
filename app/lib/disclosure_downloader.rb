@@ -55,6 +55,31 @@ class DisclosureDownloader
     puts '==================================================================='
   end
 
+  # Goes through old Filings and downloads the contents if missing.
+  def backfill_contents
+    puts '==================================================================='
+    puts 'Backfilling Filings:'
+    puts
+    puts "Filings: #{Filing.count}"
+    puts '==================================================================='
+
+    num_backfilled_by_name = Hash.new(0)
+    Filing.find_each do |filing|
+      next unless ['460', '497 LCR', '497 LCM', '496', '700'].include?(filing.form_name)
+      next if filing.contents.present?
+      next if filing.form_name == '700' && filing.contents_xml.present?
+
+      download_filing(filing)
+      num_backfilled_by_name[filing.form_name] += 1
+    end
+
+    puts '==================================================================='
+    puts 'Backfill Completed:'
+    puts
+    puts "Backfilled: #{num_backfilled_by_name.map { |k, v| "Form #{k}: #{v}" }.join(', ')}"
+    puts '==================================================================='
+  end
+
   private
 
   def download_filing(filing)
