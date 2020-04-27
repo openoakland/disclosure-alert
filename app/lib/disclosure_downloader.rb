@@ -65,9 +65,8 @@ class DisclosureDownloader
 
     num_backfilled_by_name = Hash.new(0)
     Filing.find_each do |filing|
-      next unless ['460', '497 LCR', '497 LCM', '496', '700'].include?(filing.form_name)
+      next unless ['410'].include?(filing.form_name)
       next if filing.contents.present?
-      next if filing.form_name == '700' && filing.contents_xml.present?
 
       download_filing(filing)
       num_backfilled_by_name[filing.form_name] += 1
@@ -85,6 +84,8 @@ class DisclosureDownloader
   def download_filing(filing)
     contents =
       case filing.form_name
+      when '410'
+        @netfile.fetch_calfile(filing.id).lines
       when '460'
         @netfile
           .fetch_summary_contents(filing.id)
@@ -109,7 +110,7 @@ class DisclosureDownloader
       case filing.form_name
       when '700'
         @netfile
-          .fetch_calfile_xml(filing.id)
+          .fetch_calfile(filing.id)
       end
 
     filing.update_attributes(contents: contents, contents_xml: contents_xml)
