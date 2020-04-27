@@ -4,5 +4,6 @@ namespace :disclosure_alert do
     Election.replace_all_from_csv
     ElectionCandidate.replace_all_from_csv
     ElectionReferendum.replace_all_from_csv
+    ElectionCommittee.replace_all_from_csv
   end
 end

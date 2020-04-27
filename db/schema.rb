@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_005208) do
+ActiveRecord::Schema.define(version: 2020_04_27_034305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,15 @@ ActiveRecord::Schema.define(version: 2020_02_23_005208) do
     t.string "fppc_id"
     t.string "office_name"
     t.boolean "incumbent"
+  end
+
+  create_table "election_committees", force: :cascade do |t|
+    t.string "name"
+    t.string "fppc_id"
+    t.string "candidate_controlled_id"
+    t.string "support_or_oppose"
+    t.string "ballot_measure"
+    t.string "ballot_measure_election"
   end
 
   create_table "election_referendums", force: :cascade do |t|
