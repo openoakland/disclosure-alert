@@ -1,14 +1,10 @@
-- total_amount = f.contents.map { |i| i['calculated_Amount'] }.sum
 %strong Total Contributions Received:
-= format_money(f.contents.map { |i| i['calculated_Amount'] }.sum)
+= amended_value_if_different(f, :total_amount)
 %br
-%strong Largest 3 Contributions Received:
+- if f.contribution_count > 3
+  %strong Largest 3 Contributions Received:
 %ul
-  - largest_three = f.contents.sort_by { |i| i['calculated_Amount'] }.reverse.first(3)
-  - largest_three_total_amount = largest_three.map { |i| i['calculated_Amount'] }.sum
-  - largest_three.each do |contribution|
+  - f.largest_three.each do |contribution|
     %li #{format_money(contribution['calculated_Amount'])} – #{contribution['tran_NamL']}
-  - if f.contents.length > 3
-    %li and #{format_money(total_amount - largest_three_total_amount)} from #{f.contents.length - 3} other contributors
-
-
+  - if f.contribution_count > 3
+    %li and #{format_money(f.total_amount - f.largest_three_total_amount)} from #{f.contribution_count - 3} other contributions

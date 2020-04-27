@@ -49,7 +49,7 @@ module Netfile
       end
     end
 
-    def fetch_calfile_xml(filing_id)
+    def fetch_calfile(filing_id)
       Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
         request = Net::HTTP::Get.new(BASE_URL + "public/efile/#{filing_id}")
         request['Accept'] = 'application/zip'

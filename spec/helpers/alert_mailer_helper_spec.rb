@@ -72,4 +72,37 @@ RSpec.describe AlertMailerHelper do
       ])
     end
   end
+
+  describe '#amended_value_if_different' do
+    let(:filing_contents) do
+      [
+        { 'form_Type' => 'F460', 'line_Item' => '5', 'amount_A' => 1000 }, # total contributions received
+      ]
+    end
+    let(:filing) { Filing.create(filer_id: 123, form: 30, contents: filing_contents) }
+    let(:form) { Forms.from_filings([filing]).first }
+
+    it 'returns the value when there is no amended form' do
+      expect(helper.amended_value_if_different(form, :total_contributions_received)).to eq('$1,000')
+    end
+
+    context 'with an amended form' do
+      let(:amended_filing_contents) { filing_contents.dup.tap { |c| c[0]['amount_A'] = 2000 } }
+      let(:filing_amendment) { Filing.create(form: 30, amended_filing_id: filing.id, contents: amended_filing_contents) }
+      let(:form_amendment) { Forms.from_filings([filing_amendment]).first }
+
+      it 'returns an amended value' do
+        expect(helper.amended_value_if_different(form_amendment, :total_contributions_received))
+          .to eq('$2,000 (amended from $1,000)')
+      end
+
+      context 'when the amended value is the same' do
+        let(:amended_filing_contents) { filing_contents }
+
+        it 'returns the unamended value' do
+          expect(helper.amended_value_if_different(form, :total_contributions_received)).to eq('$1,000')
+        end
+      end
+    end
+  end
 end

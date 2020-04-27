@@ -1,5 +1,5 @@
 %strong Total Contributions Received:
-= format_money(f.total_contributions_received)
+= amended_value_if_different(f, :total_contributions_received)
 %br
 %strong Total Expenditures Made:
-= format_money(f.total_expenditures_made)
+= amended_value_if_different(f, :total_expenditures_made)

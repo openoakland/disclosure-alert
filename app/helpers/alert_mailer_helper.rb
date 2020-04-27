@@ -39,4 +39,14 @@ module AlertMailerHelper
       k1 <=> k2
     end
   end
+
+  def amended_value_if_different(form, method_name)
+    current_value = format_money(form.send(method_name))
+    return current_value unless form.amended_filing.present?
+
+    previous_value = format_money(form.amended_filing.send(method_name))
+    return previous_value if current_value == previous_value
+
+    "#{current_value} (amended from #{previous_value})"
+  end
 end

@@ -9,9 +9,9 @@ module Forms
       when 30
         Forms::Form460.new(filing, name: '460')
       when 38 # LCM = Late Contributions Made
-        Forms::BaseForm.new(filing, name: '497 LCM')
+        Forms::Form497.new(filing, name: '497 LCM')
       when 39 # LCR = Late Contributions Received
-        Forms::BaseForm.new(filing, name: '497 LCR')
+        Forms::Form497.new(filing, name: '497 LCR')
       when 199, 215, 220, 228, 254
         Forms::Form700.new(filing, name: '700')
       when 236 # LBQ = Oakland Lobbyist Quartery Report
@@ -31,9 +31,8 @@ module Forms
   end
 
   class BaseForm
-    delegate :id, :filer_id, :title, :filed_at, :amendment_sequence_number,
-             :amended_filing_id, :form, :contents, :contents_xml,
-             to: :@filing
+    delegate :id, :filer_id, :title, :filed_at, :amended_filing_id, :form,
+      :contents, :contents_xml, to: :@filing
     attr_reader :form_name
 
     def initialize(filing, name: nil)
@@ -58,6 +57,12 @@ module Forms
       return 'forms.unknown' unless I18n.exists?(key)
 
       key
+    end
+
+    def amended_filing
+      return unless @filing.amended_filing
+
+      self.class.new(@filing.amended_filing, name: @filing.form_name)
     end
 
     def spreadsheet_candidate

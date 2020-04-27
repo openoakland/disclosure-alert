@@ -4,13 +4,12 @@ require 'date'
 
 class Filing < ApplicationRecord
   scope :filed_on_date, ->(date) { where(filed_at: date.all_day) }
-  scope :for_email, -> { includes(:election_candidates, :election_committees) }
+  scope :for_email, -> { includes(:amended_filing, :election_candidates, :election_committee) }
 
   # Find spreadsheet entries related to these entities
   has_many :election_candidates, foreign_key: :fppc_id, primary_key: :filer_id
   has_one :election_committee, foreign_key: :fppc_id, primary_key: :filer_id
-  has_one :election_referendum, (lambda do
-  end)
+  has_one :amended_filing, class_name: 'Filing', primary_key: :amended_filing_id, foreign_key: :id
 
   def election_referendum
     ElectionReferendum
