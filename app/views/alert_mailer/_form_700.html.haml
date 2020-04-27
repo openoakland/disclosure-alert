@@ -25,8 +25,14 @@
   %ul
     - f.schedule_c1.each do |income|
       %li
-        #{income['business_position']}, #{income['business_activity']}, #{income['name_of_income_source']} -
-        #{income['gross_income_received_schedule_c_1']}
+        = income['name_of_income_source']
+        - if income['business_position'].present? || income['business_activity'].present?
+          = surround '(', ')' do
+            %span<>= income['business_position']
+            - if income['business_activity']
+              = precede ', ' do
+                = income['business_activity'].strip
+        \- #{income['gross_income_received_schedule_c_1']}
 - if f.schedule_d.any?
   Gifts (Schedule D):
   %ul
