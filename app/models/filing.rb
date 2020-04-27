@@ -4,6 +4,24 @@ require 'date'
 
 class Filing < ApplicationRecord
   scope :filed_on_date, ->(date) { where(filed_at: date.all_day) }
+  scope :for_email, -> { includes(:election_candidates, :election_committees) }
+
+  # Find spreadsheet entries related to these entities
+  has_many :election_candidates, foreign_key: :fppc_id, primary_key: :filer_id
+  has_one :election_committee, foreign_key: :fppc_id, primary_key: :filer_id
+  has_one :election_referendum, (lambda do
+  end)
+
+  def election_referendum
+    ElectionReferendum
+      .where(election_committees: { fppc_id: filer_id })
+      .joins(<<~SQL)
+        INNER JOIN election_committees
+          ON election_committees.ballot_measure_election = election_referendums.election_name
+          AND election_committees.ballot_measure = election_referendums.measure_number
+        SQL
+      .first
+  end
 
   def self.from_json(json)
     find_or_initialize_by(id: json['id']) do |record|

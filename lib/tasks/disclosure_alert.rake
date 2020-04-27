@@ -31,7 +31,7 @@ namespace :disclosure_alert do
     filings = []
 
     loop do
-      filings = Filing.filed_on_date(today - days_ago)
+      filings = Filing.filed_on_date(today - days_ago).for_email
       break if filings.any?
       days_ago += 1
     end
