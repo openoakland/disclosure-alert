@@ -31,9 +31,8 @@ module Forms
   end
 
   class BaseForm
-    delegate :id, :filer_id, :title, :filed_at, :amendment_sequence_number,
-             :amended_filing_id, :form, :contents, :contents_xml,
-             to: :@filing
+    delegate :id, :filer_id, :title, :filed_at, :amended_filing_id, :form,
+      :contents, :contents_xml, to: :@filing
     attr_reader :form_name
 
     def initialize(filing, name: nil)
@@ -58,6 +57,12 @@ module Forms
       return 'forms.unknown' unless I18n.exists?(key)
 
       key
+    end
+
+    def amended_filing
+      return unless @filing.amended_filing
+
+      self.class.new(@filing.amended_filing, name: @filing.form_name)
     end
 
     def spreadsheet_candidate
