@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Forms
   def self.from_filings(filing_array)
     filing_array.map do |filing|
@@ -51,9 +53,11 @@ module Forms
 
     # I18n key to describe the Form
     def i18n_key
-      return "forms.unknown" unless @filing.form_name.present?
+      return 'forms.unknown' unless @filing.form_name.present?
+      key = "forms.#{@filing.form_name.delete(' ')}"
+      return 'forms.unknown' unless I18n.exists?(key)
 
-      "forms.#{@filing.form_name.delete(' ')}"
+      key
     end
   end
 
