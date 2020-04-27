@@ -8,6 +8,8 @@ module Forms
         Forms::Form410.new(filing, name: '410')
       when 30
         Forms::Form460.new(filing, name: '460')
+      when 36
+        Forms::Form496.new(filing, name: '496')
       when 38 # LCM = Late Contributions Made
         Forms::Form497.new(filing, name: '497 LCM')
       when 39 # LCR = Late Contributions Received
