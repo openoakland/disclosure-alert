@@ -42,4 +42,8 @@ class Election < ApplicationRecord
       end
     end
   end
+
+  def locality
+    slug.split('-', 2).first
+  end
 end
