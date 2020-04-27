@@ -59,6 +59,18 @@ module Forms
 
       key
     end
+
+    def spreadsheet_candidate
+      @filing.election_candidates.last
+    end
+
+    def spreadsheet_committee
+      @filing.election_committee
+    end
+
+    def spreadsheet_referendum
+      @filing.election_referendum
+    end
   end
 
   class BaseXMLForm < BaseForm

@@ -5,6 +5,8 @@
 class ElectionCandidate < ApplicationRecord
   CANDIDATE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNbqOzI3TlelO3OSh7QGC1Y4rofoRPs0TefWDLJvleFkaXq_6CSWgX89HfxLYrHhy0lr4QqUEryuc/pub?gid=0&single=true&output=csv'
 
+  belongs_to :election, foreign_key: :election_name, primary_key: :slug
+
   def self.replace_all_from_csv(candidate_csv: CANDIDATE_CSV_URL)
     candidate_csv = Net::HTTP.get(URI(candidate_csv)) if candidate_csv.start_with?('http')
     candidates = CSV.parse(candidate_csv, headers: :first_row)
@@ -25,5 +27,9 @@ class ElectionCandidate < ApplicationRecord
         )
       end
     end
+  end
+
+  def opendisclosure_url
+    "https://www.opendisclosure.io/candidate/#{election.locality}/#{election.date}/#{Slugify.slug(name)}"
   end
 end

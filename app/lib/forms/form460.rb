@@ -29,18 +29,6 @@ module Forms
       Date.new(match[:end_year].to_i, match[:end_month].to_i, match[:end_day].to_i)
     end
 
-    def spreadsheet_candidate
-      @filing.election_candidates.last
-    end
-
-    def spreadsheet_committee
-      @filing.election_committee
-    end
-
-    def spreadsheet_referendum
-      @filing.election_referendum
-    end
-
     private
 
     def contents_row(form_type, line_item)
