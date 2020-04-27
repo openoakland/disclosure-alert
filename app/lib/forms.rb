@@ -9,9 +9,9 @@ module Forms
       when 30
         Forms::Form460.new(filing, name: '460')
       when 38 # LCM = Late Contributions Made
-        Forms::BaseForm.new(filing, name: '497 LCM')
+        Forms::Form497.new(filing, name: '497 LCM')
       when 39 # LCR = Late Contributions Received
-        Forms::BaseForm.new(filing, name: '497 LCR')
+        Forms::Form497.new(filing, name: '497 LCR')
       when 199, 215, 220, 228, 254
         Forms::Form700.new(filing, name: '700')
       when 236 # LBQ = Oakland Lobbyist Quartery Report
