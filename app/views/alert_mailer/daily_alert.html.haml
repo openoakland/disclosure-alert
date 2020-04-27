@@ -36,6 +36,8 @@
               = format_position_title(f.filer_title)
             - if f.form_name == '460'
               = render 'form_460', f: f
+            - if f.form_name == '496'
+              = render 'form_496', f: f
             - if f.form_name == '497 LCR'
               = render 'form_497_lcr', f: f
             - if f.form_name == '497 LCM'
