@@ -1,5 +1,5 @@
 %strong Total Contributions Made:
-= format_money(f.total_amount)
+= amended_value_if_different(f, :total_amount)
 %br
 - if f.contribution_count > 3
   %strong Largest 3 Contributions Made:
