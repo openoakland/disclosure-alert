@@ -85,7 +85,8 @@ class DisclosureDownloader
     contents =
       case filing.form_name
       when '410'
-        @netfile.fetch_calfile(filing.id).lines
+        raw = @netfile.fetch_calfile(filing.id)
+        raw.present? ? raw.lines : nil
       when '460'
         @netfile
           .fetch_summary_contents(filing.id)
