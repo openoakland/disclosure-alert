@@ -5,7 +5,7 @@ class AlertMailer < ApplicationMailer
   layout 'mailer'
 
   track open: true, click: true, utm_params: true,
-    user: -> { AlertSubscriber.find_by(email: message.to.first) }
+    user: -> { AlertSubscriber.subscribed.find_by(email: message.to.first) }
 
   def daily_alert(alert_subscriber, date, filings_in_date_range)
     @alert_subscriber = alert_subscriber
