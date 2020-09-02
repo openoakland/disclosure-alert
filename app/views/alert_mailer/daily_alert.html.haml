@@ -51,7 +51,7 @@
               %a.btn{ href: candidate.opendisclosure_url, target: "_blank" } View Candidate on Open Disclosure
             - elsif (referendum = f.spreadsheet_referendum)
               %a.btn{ href: referendum.opendisclosure_url, target: "_blank" } View Ballot Measure on Open Disclosure
-            - if f.filer_id.present?
+            - if (committee = f.spreadsheet_committee)
               %a.btn{ href: "https://www.opendisclosure.io/committee/#{f.filer_id}", target: "_blank" } View Contributions to this Committee
 
             %a.btn{ href: "https://netfile.com/Connect2/api/public/image/#{f.id}", target: '_blank' }
