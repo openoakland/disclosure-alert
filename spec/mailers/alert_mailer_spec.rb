@@ -21,7 +21,12 @@ RSpec.describe AlertMailer do
       amended_filing_id: nil,
       form: 30, # FPPC 460
       contents: contents,
-    )
+    ).tap do |filing|
+      ElectionCommittee.create(
+        name: 'Foo Bar for City Council 2010',
+        fppc_id: filing.filer_id,
+      )
+    end
   end
 
   describe '#daily_alert' do
@@ -39,6 +44,7 @@ RSpec.describe AlertMailer do
 
     it 'renders' do
       expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
+      expect(subject.body.encoded).to include('View Contributions')
     end
   end
 end
