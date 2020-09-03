@@ -1,3 +1,7 @@
+Security/Open:
+  # Allow "open" to permit open-uri
+  Enabled: false
+
 Performance/Casecmp:
   # Allow `"FOO".downcase == "foo"` since it's more clear than the alternative.
   Enabled: false

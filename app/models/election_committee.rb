@@ -2,7 +2,7 @@ class ElectionCommittee < ApplicationRecord
   COMMITTEE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNbqOzI3TlelO3OSh7QGC1Y4rofoRPs0TefWDLJvleFkaXq_6CSWgX89HfxLYrHhy0lr4QqUEryuc/pub?gid=1015408103&single=true&output=csv'
 
   def self.replace_all_from_csv(committee_csv: COMMITTEE_CSV_URL)
-    committee_csv = Net::HTTP.get(URI(committee_csv)) if committee_csv.start_with?('http')
+    committee_csv = open(URI(committee_csv)).read if committee_csv.start_with?('http')
     committees = CSV.parse(committee_csv, headers: :first_row)
     elections = Election.where(slug: committees.map { |c| c['Ballot Measure Election'] }).index_by(&:slug)
 

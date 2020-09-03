@@ -4,7 +4,7 @@ class ElectionReferendum < ApplicationRecord
   belongs_to :election, foreign_key: :election_name, primary_key: :slug
 
   def self.replace_all_from_csv(referendum_csv: REFERENDUM_CSV_URL)
-    referendum_csv = Net::HTTP.get(URI(referendum_csv)) if referendum_csv.start_with?('http')
+    referendum_csv = open(URI(referendum_csv)).read if referendum_csv.start_with?('http')
 
     referendums = CSV.parse(referendum_csv, headers: :first_row)
     elections = Election.where(slug: referendums.map { |c| c['election_name'] }).index_by(&:slug)
