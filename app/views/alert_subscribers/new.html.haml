@@ -1,30 +1,24 @@
 %main.main{"aria-label" => "Content"}
-  .main__wrapper
-    .landing__description
-      %h3.landing__description__header Every day, Oakland's lobbyists, candidates, and decisionmakers are required to disclose their finances. Open Disclosure Alerts help you stay on top of the influence of money on your local politics.
-
   .hero.hero--photo.hero--landing
     .hero__content
-      .hero__main
-        .hero__section.grid--full
-          .grid-col-12
-            .hero__lede
-              %p Sign up for daily alerts
-            .hero__cta-container
-              = form_for @alert_subscriber do |f|
-                .hero__cta
-                  = f.text_field :email, class: 'hero__input-field', placeholder: 'Email Address'
-                  = f.submit 'Subscribe', class: 'btn'
-    .hero__attribution
-      %span
-        Modified from source by
-        %a{href: "https://www.flickr.com/photos/danramarch/4411629379/"} Daniel Ramirez
-        %a{href: "https://creativecommons.org/licenses/by/2.0/"} (CC BY 2.0)
-    .hero__content.hero__content--s1
-      .hero__header
-        %h1.hero__hed Sign up for daily alerts
-      = form_for @alert_subscriber do |f|
-        .hero__cta-container
+      .grid-col-12
+        %h2.hero__hed Sign up for daily alerts
+        %p
+          Oakland's lobbyists, candidates, and office-holders are
+          required to disclose their finances. Open Disclosure Alerts help you
+          stay on top of the influence of money on your local politics.
+
+      .grid-col-10
+        = form_for @alert_subscriber do |f|
           .hero__cta
             = f.text_field :email, class: 'hero__input-field', placeholder: 'Email Address'
             = f.submit 'Subscribe', class: 'btn'
+
+      .grid-col-12
+        %p
+          Subscribe to receive alerts on activity, such as:
+
+          %ul
+            %li Donations to campaign committees and lobbyists' activity
+            %li Spending by Political Action Committees (PACs) and third-parties (Independent Expenditures)
+            %li Economic interests of, and requests to contribute to charities by city officials

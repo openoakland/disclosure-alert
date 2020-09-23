@@ -11,13 +11,14 @@ body {
 }
 
 .hero--photo {
-  // overridden by necessity for sprockets:
-  background-image: image_url('open-disclosure-splash.png') !important;
+  background-image: url('https://www.opendisclosure.io/assets/images/oakland-city-hall.png') !important;
 }
 
 .hero__cta {
   display: flex;
-  margin-bottom: $spacing-base * 2;
+  margin-left: 0 !important;
+  margin-top: $spacing-base;
+  margin-bottom: $spacing-base * 4;
 
   @include grid-media($neat-grid--small) {
     @include grid-column(8);
