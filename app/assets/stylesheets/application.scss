@@ -25,7 +25,7 @@ body {
   margin-top: $spacing-base;
   margin-bottom: $spacing-base * 4;
 
-  @include grid-media($neat-grid--small) {
+  @include media($grid--medium) {
     @include grid-column(8);
     flex-direction: row;
   }
@@ -43,7 +43,7 @@ body {
   margin-bottom: 1rem;
   margin-right: 0;
 
-  @include media($grid--small) {
+  @include media($grid--medium) {
     margin-bottom: 0;
     margin-right: 1rem;
   }
