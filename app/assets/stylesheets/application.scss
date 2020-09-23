@@ -10,16 +10,6 @@ body {
   min-width: 400px;
 }
 
-.header__pretitle-link {
-  color: #fff;
-  display: none;
-  font-weight: 100;
-
-  @include grid-media($neat-grid--medium) {
-    display: block;
-  }
-}
-
 .hero--photo {
   // overridden by necessity for sprockets:
   background-image: image_url('open-disclosure-splash.png') !important;
