@@ -10,6 +10,10 @@ body {
   min-width: 400px;
 }
 
+.hero {
+  padding-bottom: $spacing-base * 8;
+}
+
 .hero--photo {
   background-image: url('https://www.opendisclosure.io/assets/images/oakland-city-hall.png') !important;
 }
