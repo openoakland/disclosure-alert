@@ -31,7 +31,7 @@ RSpec.describe AlertMailer do
 
   describe '#daily_alert' do
     let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
-    let(:date) { Date.yesterday }
+    let(:date) { Date.new(2020, 9, 1) }
     let(:filings_in_date_range) do
       [
         create_filing(id: 1),
@@ -43,8 +43,26 @@ RSpec.describe AlertMailer do
     subject { described_class.daily_alert(alert_subscriber, date, filings_in_date_range) }
 
     it 'renders' do
+      expect(subject.subject).to include('filings on 2020-09-01')
       expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
       expect(subject.body.encoded).to include('View Contributions')
+    end
+
+    context 'when giving a date range instead of a single date' do
+      let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
+      let(:date) { Date.new(2020, 9, 1)..Date.new(2020, 9, 20) }
+      let(:filings_in_date_range) do
+        [
+          create_filing(id: 1),
+          create_filing(id: 2),
+          create_filing(id: 3),
+        ]
+      end
+
+      it 'renders' do
+        expect(subject.subject).to include('between 2020-09-01 and 2020-09-20')
+        expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
+      end
     end
   end
 end

@@ -11,6 +11,13 @@
           .container
             Open Disclosure Alerts
 
+      - if @email_notice
+        %tr
+          %td
+            .container.container--notice
+              %strong Notice:
+              = @email_notice
+
       %tr
         %td
           .container.container--main

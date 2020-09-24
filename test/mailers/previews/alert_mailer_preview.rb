@@ -6,6 +6,7 @@ class AlertMailerPreview < ActionMailer::Preview
       find_or_create_subscriber,
       Date.yesterday,
       Filing.order(filed_at: :desc).first(30),
+      notice: 'A notice to the user would appear here.',
     )
   end
 
