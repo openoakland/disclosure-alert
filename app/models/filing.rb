@@ -4,6 +4,7 @@ require 'date'
 
 class Filing < ApplicationRecord
   scope :filed_on_date, ->(date) { where(filed_at: date.all_day) }
+  scope :filed_in_date_range, ->(range) { where(filed_at: range) }
   scope :for_email, -> { includes(:amended_filing, :election_candidates, :election_committee) }
 
   # Find spreadsheet entries related to these entities
