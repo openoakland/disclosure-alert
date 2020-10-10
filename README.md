@@ -63,3 +63,10 @@ heroku run bin/rails db:migrate
 heroku run bin/rails disclosure_alert:add_daily_subscriber
 heroku run bin/rails disclosure_alert:download_and_email_daily
 ```
+
+## getting production data onto your local machine:
+```
+dropdb disclosure-alert && heroku pg:pull DATABASE_URL $DATABASE_URL
+echo "update alert_subscribers set email = concat('tomdooner+', id, '@gmail.com')" | psql disclosure-alert
+echo "update ahoy_messages set \"to\" = concat('tomdooner+', user_id, '@gmail.com')" | psql disclosure-alert
+```
