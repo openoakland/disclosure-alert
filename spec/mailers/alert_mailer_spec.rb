@@ -10,6 +10,15 @@ RSpec.describe AlertMailer do
     ]
   end
 
+  def fppc_496_contents(candidate_name)
+    [
+      { 'form_Type' => 'F496P3', 'calculated_Amount' => 25_000.0, 'sup_Opp_Cd' => nil, 'tran_NamL' => 'Contributor',
+        'tran_Amt1' => 25_000.0, 'cmte_Id' => '1234567', },
+      { 'form_Type' => 'F496', 'tran_Dscr' => 'PHONE CALLS', 'calculated_Amount' => 5_830.5,
+        'cand_NamL' => candidate_name, 'sup_Opp_Cd' => 'S', 'tran_Amt1' => 5_830.5, 'cmte_Id' => nil, },
+    ]
+  end
+
   def create_filing(id: 123_123, filer_id: 222_222, contents: fppc_460_contents)
     Filing.create(
       id: id,
@@ -29,6 +38,33 @@ RSpec.describe AlertMailer do
     end
   end
 
+  def create_filings_to_combine(id: 333_333)
+    [
+      Filing.create(
+        id: id,
+        filer_id: 333_333,
+        filer_name: 'Oakland for better Oaklanders',
+        title: 'FPPC Form 496',
+        filed_at: 1.day.ago,
+        amendment_sequence_number: '0',
+        amended_filing_id: nil,
+        form: 36, # FPPC 496
+        contents: fppc_496_contents('Candidate A'),
+      ),
+      Filing.create(
+        id: id + 1,
+        filer_id: 333_333,
+        filer_name: 'Oakland for better Oaklanders',
+        title: 'FPPC Form 496',
+        filed_at: 1.day.ago,
+        amendment_sequence_number: '0',
+        amended_filing_id: nil,
+        form: 36, # FPPC 496
+        contents: fppc_496_contents('Candidate B'),
+      ),
+    ]
+  end
+
   describe '#daily_alert' do
     let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
     let(:date) { Date.new(2020, 9, 1) }
@@ -37,7 +73,7 @@ RSpec.describe AlertMailer do
         create_filing(id: 1),
         create_filing(id: 2),
         create_filing(id: 3),
-      ]
+      ] + create_filings_to_combine
     end
     let(:notice) { nil }
 
@@ -47,6 +83,10 @@ RSpec.describe AlertMailer do
       expect(subject.subject).to include('filings on 2020-09-01')
       expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
       expect(subject.body.encoded).to include('View Contributions')
+    end
+
+    it 'combines similar filings' do
+      expect(subject.body.encoded).to include('Combination of 2 FPPC Form 496')
     end
 
     context 'when giving a date range instead of a single date' do

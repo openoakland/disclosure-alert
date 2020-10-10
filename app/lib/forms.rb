@@ -2,7 +2,7 @@
 
 module Forms
   def self.from_filings(filing_array)
-    filing_array.map do |filing|
+    combine_forms(filing_array.map do |filing|
       case filing.form.to_i
       when 23
         Forms::Form410.new(filing, name: '410')
@@ -29,13 +29,33 @@ module Forms
           Forms::BaseForm.new(filing, name: guessed_form_name)
         end
       end
+    end)
+  end
+
+  def self.combine_forms(forms)
+    [].tap do |combined|
+      while forms.any?
+        current_form = forms.shift
+        can_combine_forms = forms.find_all { |f| current_form.can_combine_with?(f) }
+        combined << if can_combine_forms.any?
+                      Forms::Form496Combined.new(
+                        [current_form.filing] + can_combine_forms.map(&:filing),
+                        name: '496 Combined',
+                      )
+                    else
+                      current_form
+                    end
+        can_combine_forms.each do |combined_form|
+          forms.delete(combined_form)
+        end
+      end
     end
   end
 
   class BaseForm
     delegate :id, :filer_id, :title, :filed_at, :amended_filing_id, :form,
       :contents, :contents_xml, to: :@filing
-    attr_reader :form_name
+    attr_reader :form_name, :filing
 
     def initialize(filing, name: nil)
       @filing = filing
@@ -77,6 +97,14 @@ module Forms
 
     def spreadsheet_referendum
       @filing.election_referendum
+    end
+
+    def uncombined_filing_ids
+      []
+    end
+
+    def can_combine_with?(_other_form)
+      false
     end
   end
 
