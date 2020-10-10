@@ -19,12 +19,13 @@ module DisclosureAlert
       api_key: ENV['MAILGUN_API_KEY'],
       domain: 'mailgun.opendisclosure.io',
     }
-
-    config.assets.precompile << 'email.scss'
-
     config.action_mailer.default_url_options = {
       host: ENV['APP_HOST'],
     }
+    config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
+
+    config.assets.precompile << 'email.scss'
+
 
     config.time_zone = 'Pacific Time (US & Canada)'
 
