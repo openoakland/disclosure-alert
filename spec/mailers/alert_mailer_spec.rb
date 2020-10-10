@@ -39,8 +39,9 @@ RSpec.describe AlertMailer do
         create_filing(id: 3),
       ]
     end
+    let(:notice) { nil }
 
-    subject { described_class.daily_alert(alert_subscriber, date, filings_in_date_range) }
+    subject { described_class.daily_alert(alert_subscriber, date, filings_in_date_range, notice) }
 
     it 'renders' do
       expect(subject.subject).to include('filings on 2020-09-01')
@@ -62,6 +63,16 @@ RSpec.describe AlertMailer do
       it 'renders' do
         expect(subject.subject).to include('between 2020-09-01 and 2020-09-20')
         expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
+      end
+    end
+
+    context 'when a notice is in effect for the email' do
+      let(:notice_creator) { AdminUser.create(email: 'tomdooner@example.com') }
+      let(:notice) { Notice.create(creator: notice_creator, body: notice_body, date: date) }
+      let(:notice_body) { 'Eat your <strong>fruits</strong> and vegetables!' }
+
+      it 'renders the notice in the email' do
+        expect(subject.body.encoded).to include(notice_body)
       end
     end
   end

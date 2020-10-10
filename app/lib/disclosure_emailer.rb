@@ -17,7 +17,7 @@ class DisclosureEmailer
 
     AlertSubscriber.subscribed.find_each do |subscriber|
       AlertMailer
-        .daily_alert(subscriber, @date, filings_in_date_range)
+        .daily_alert(subscriber, @date, filings_in_date_range, notices_in_date_range)
         .deliver_now
     end
   end
@@ -26,5 +26,9 @@ class DisclosureEmailer
 
   def filings_in_date_range
     Filing.filed_on_date(@date)
+  end
+
+  def notices_in_date_range
+    Notice.for_date(@date)
   end
 end

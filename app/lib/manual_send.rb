@@ -12,7 +12,7 @@
 class ManualSend
   def initialize(date_from:, date_to:, notice: nil, tom_only: false)
     @range = date_from..date_to
-    @notice = notice
+    @notice_text = notice
     @tom_only = tom_only
   end
 
@@ -29,13 +29,13 @@ class ManualSend
     end
 
     puts
-    puts "Sending with notice: #{@notice}" if @notice
+    puts "Sending with notice: #{@notice.body}" if @notice_text
   end
 
   def execute!
     subscribers.each do |subscriber|
       AlertMailer
-        .daily_alert(subscriber, @range, filings, notice: @notice)
+        .daily_alert(subscriber, @range, filings, @notice)
         .deliver_now
     end
   end
@@ -52,5 +52,15 @@ class ManualSend
 
   def filings
     @filings ||= Filing.filed_in_date_range(@range).order(filed_at: :asc).to_a
+  end
+
+  def notice
+    return nil unless @notice_text.present?
+
+    @notice ||= Notice.new(
+      date: @range.max,
+      creator: AdminUser.find_by(email: 'tomdooner@gmail.com'),
+      body: @notice_text,
+    )
   end
 end

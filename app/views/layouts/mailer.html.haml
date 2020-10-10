@@ -11,12 +11,12 @@
           .container
             Open Disclosure Alerts
 
-      - if @email_notice
+      - if @email_notice.present?
         %tr
           %td
             .container.container--notice
               %strong Notice:
-              = @email_notice
+              = raw(@email_notice.body)
 
       %tr
         %td

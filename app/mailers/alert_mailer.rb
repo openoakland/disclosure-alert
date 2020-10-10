@@ -7,7 +7,7 @@ class AlertMailer < ApplicationMailer
   track open: true, click: true, utm_params: true,
     user: -> { AlertSubscriber.subscribed.find_by(email: message.to.first) }
 
-  def daily_alert(alert_subscriber, date_or_date_range, filings_in_date_range, notice: nil)
+  def daily_alert(alert_subscriber, date_or_date_range, filings_in_date_range, notice)
     @alert_subscriber = alert_subscriber
     @forms = Forms.from_filings(filings_in_date_range)
     @email_notice = notice

@@ -5,6 +5,10 @@ class Notice < ApplicationRecord
   # will receive.
   belongs_to :creator, class_name: 'AdminUser'
 
+  validates :date, uniqueness: true
+
+  scope :for_date, ->(date) { find_by(date: date) }
+
   before_save :sanitize
   def sanitize
     self.body = ActionController::Base.helpers.sanitize(body)
