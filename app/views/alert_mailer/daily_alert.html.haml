@@ -29,6 +29,11 @@
               - if f.amended_filing_id
                 &middot;
                 %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.amended_filing_id}" } View Previous Filing
+              - if f.uncombined_filing_ids.present?
+                &middot;
+                View Originals:
+                - f.uncombined_filing_ids.each do |filing_id|
+                  %a{ href: "https://netfile.com/Connect2/api/public/image/#{filing_id}" } ##{filing_id}
 
             %h3.filing__filer-name= f.filer_name
             - if f.filer_title
@@ -36,7 +41,7 @@
               = format_position_title(f.filer_title)
             - if f.form_name == '460'
               = render 'form_460', f: f
-            - if f.form_name == '496'
+            - if f.form_name == '496' || f.form_name == '496 Combined'
               = render 'form_496', f: f
             - if f.form_name == '497 LCR'
               = render 'form_497_lcr', f: f
