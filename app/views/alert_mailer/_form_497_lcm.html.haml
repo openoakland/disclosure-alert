@@ -1,11 +1,10 @@
 %strong Total Contributions Made:
 = amended_value_if_different(f, :total_amount)
 %br
-- if f.contribution_count > 3
-  %strong Largest 3 Contributions Made:
-%ul
-  - f.largest_three.each do |contribution|
-    %li #{format_money(contribution['calculated_Amount'])} – #{contribution['tran_NamL']}
-  - if f.contribution_count > 3
-    %li and #{format_money(f.total_amount - f.largest_three_total_amount)} in #{f.contribution_count - 3} other contributions
-
+- if f.total_amount > 250
+  %strong Largest Contributions Made:
+  %ul
+    = format_money_list(f.contributions,
+      key: 'calculated_Amount',
+      extra: '%{count} other contributions') do |contribution|
+      #{format_money(contribution['calculated_Amount'])} – #{contribution['tran_NamL']}

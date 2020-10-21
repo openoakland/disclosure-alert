@@ -3,12 +3,10 @@
 - if f.total_contributions_received > 250
   %br
   %ul
-    - f.largest_contributions.each do |contribution|
-      %li #{format_money(contribution['calculated_Amount'])} – #{contribution['tran_NamF']} #{contribution['tran_NamL']}
-    - if f.contribution_count > f.largest_contributions.length
-      - remaining_contributions = f.contribution_count - f.largest_contributions.length
-      - remaining_contribution_amount = f.total_contributions_received - f.largest_contributions_amount
-      %li and #{format_money(remaining_contribution_amount)} in #{remaining_contributions} other contributions
+    = format_money_list(f.contributions,
+      key: 'calculated_Amount',
+      extra: '%{count} other contributions') do |contribution|
+      #{contribution['tran_NamF']} #{contribution['tran_NamL']}
 
 %br
 %strong Total Independent Expenditures Made:
@@ -17,14 +15,11 @@
 - if f.total_expenditures_made > 250
   %br
   %ul
-    - f.largest_expenditures.each do |expenditure|
-      %li
-        #{format_money(expenditure['tran_Amt1'])} – #{expenditure['tran_Dscr'].truncate(30)}
-        - if expenditure['sup_Opp_Cd'].present? && expenditure['cand_NamL'].present?
-          (in #{expenditure['sup_Opp_Cd'] == 'S' ? 'support of' : 'opposition to'} #{expenditure['cand_NamL']})
-        - if expenditure['sup_Opp_Cd'].present? && expenditure['bal_Num'].present?
-          (in #{expenditure['sup_Opp_Cd'] == 'S' ? 'support of' : 'opposition to'} Measure #{expenditure['bal_Num']})
-    - if f.expenditure_count > f.largest_expenditures.length
-      - remaining_expenditures = f.expenditure_count - f.largest_expenditures.length
-      - remaining_expenditure_amount = f.total_expenditures_made - f.largest_expenditures_amount
-      %li and #{format_money(remaining_expenditure_amount)} in #{remaining_expenditures} other expenditures
+    = format_money_list(f.expenditures,
+      key: 'tran_Amt1',
+      extra: '%{count} other expenditures') do |expenditure|
+      #{expenditure['tran_Dscr'].truncate(30)}
+      - if expenditure['sup_Opp_Cd'].present? && expenditure['cand_NamL'].present?
+        (in #{expenditure['sup_Opp_Cd'] == 'S' ? 'support of' : 'opposition to'} #{expenditure['cand_NamL']})
+      - if expenditure['sup_Opp_Cd'].present? && expenditure['bal_Num'].present?
+        (in #{expenditure['sup_Opp_Cd'] == 'S' ? 'support of' : 'opposition to'} Measure #{expenditure['bal_Num']})
