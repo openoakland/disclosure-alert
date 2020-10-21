@@ -41,17 +41,27 @@ en:
       label: Registration
       name: Oakland Lobbyist Registration
       description_html:
-        The <a href="https://cao-94612.s3.amazonaws.com/documents/oak069038.pdf">Oakland Lobbyist Registration Act</a> requires lobbyists (most people whose job includes communicating with public officials to influence City action) to register yearly or before beginning lobbying activity.
+        The <a href="https://cao-94612.s3.amazonaws.com/documents/oak069038.pdf">Oakland Lobbyist Registration Act</a> requires lobbyists (most people whose job includes communicating with public officials to influence City action) to register before beginning lobbying activity and reregister annually thereafter.
     LBQ:
       label: Quarterly Report
       name: Oakland Lobbyist Quarterly Report
       description_html:
-        The <a href="https://cao-94612.s3.amazonaws.com/documents/oak069038.pdf">Oakland Lobbyist Registration Act</a> requires lobbyists (most people whose job includes communicating with public officials to influence City action) to report quarterly on lobbying activity.
+        The <a href="https://cao-94612.s3.amazonaws.com/documents/oak069038.pdf">Oakland Lobbyist Registration Act</a> requires lobbyists (most people whose job includes communicating with public officials to influence City actions) to report their lobbying activity each quarter.
+    803:
+      label: Form 803
+      name: Behested Payment Report
+      description_html:
+        Elected officials must disclose payments made at their behest (request) principally for legislative, governmental, or charitable purposes on Form 803 when the payment meets or exceeds $5,000 in total from a single source in a calendar year.
+    303:
+      label: OCRA Form 303
+      name: Solicited Contribution Report
+      description_html:
+        Any Oakland public servant required to file a Statement of Economic Interests (Form 700) who successfully solicits a political contribution of $5,000 or more from any person or entity that contracts or proposes to contract with the official’s department must disclose the solicitation on OCRA Form 303.
     700:
       label: Form 700
-      name: Statement of Economic Interest (Form 700)
+      name: Statement of Economic Interest
       description_html:
-        Every elected official and public employee who makes or influences governmental decisions is required to submit a Statement of Economic Interest. <a href="http://www.fppc.ca.gov/Form700.html" target="_blank">Learn more from the California FPPC</a>.
+        Most elected officials and public employees who make or influence governmental decisions are required to submit a Statement of Economic Interest. Oakland's Conflict of Interest Code contains a list of positions required to file Form 700. <a href="http://www.fppc.ca.gov/Form700.html" target="_blank">Learn more from the California FPPC</a>.
     460:
       label: Form 460
       name: Campaign Statement
@@ -61,23 +71,17 @@ en:
       label: Form 497 LCR
       name: Late Contributions Received Report
       description_html:
-        Local candidates receiving contributions totaling more than $1000 in the 90 days before an election are required to file a Form 497 within 24 hours.
+        Local candidates receiving contributions totaling $1,000 or more in the 90 days before an election are required to file a Form 497 within 24 hours.
     497LCM:
       label: Form 497 LCM
       name: Late Contributions Made Report
       description_html:
-        Local committees making contributions totaling more than $1000 in the 90 days before an election are required to file a Form 497 within 24 hours.
+        Local committees making contributions totaling $1,000 or more in the 90 days before an election are required to file a Form 497 within 24 hours.
     496:
       label: Form 496
-      name: Independent Expenditure Report
+      name: Late Independent Expenditure Report
       description_html:
-        Independent expenditures totaling over $1000 in support (or
-        opposition) of a candidate or ballot measure must generally be reported
-        using this form. Within 90 days of an election, these expenditures must
-        be reported within 24 hours. For more information on reporting
-        requirements, consult the <a
-        href="http://www.fppc.ca.gov/content/dam/fppc/NS-Documents/TAD/Campaign%20Forms/496.pdf"
-        target="_blank">official California FPPC instructions</a>.
+        Independent expenditures totaling $1,000 or more in support (or opposition) of a candidate or ballot measure within 90 days of an election must be reported within 24 hours using this form. For more information on reporting requirements, consult the <a href="http://www.fppc.ca.gov/content/dam/fppc/NS-Documents/TAD/Campaign%20Forms/496.pdf" target="_blank">official California FPPC instructions</a>.
     410:
       label: Form 410
       name: Statement of Organization
