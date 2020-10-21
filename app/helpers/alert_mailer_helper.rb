@@ -7,7 +7,22 @@ module AlertMailerHelper
 
   def format_money_list(items, key:, extra: '', &block)
     sorted_items = items.sort_by { |item| item[key] }.reverse
-    listed_items = safe_join(sorted_items[0..2].map do |item|
+
+    # Take the top 3 items always, and any additional items until the item is
+    # 20% the magnitude of the 3rd item. If there is only one item left (the
+    # 4th), take it because it doesn't make any sense to say "and 1 other
+    # contribution".  This is highly arbitrary and just designed to take a crude
+    # stab at hiding some of the more irrelevant entries.
+    top_items = sorted_items.each_with_index.take_while do |item, i|
+      i < 3 ||
+        i == (sorted_items.length - 1) ||
+        (
+          item[key] > 250 &&
+          sorted_items.length >= 3 &&
+          item[key] > sorted_items[2][key] * 0.2
+        )
+    end
+    top_items_html = safe_join(top_items.map do |item, _i|
       content_tag('li') do
         money = item[key]
         raise "Key #{key} not found in money list item" unless money.present?
@@ -15,12 +30,22 @@ module AlertMailerHelper
       end
     end, "\n")
 
-    remaining_item_count = sorted_items.length >= 3 ? sorted_items[3..-1].count : 0
-    if remaining_item_count > 0
-      remaining_item_amount = sorted_items[3..-1].sum { |item| item['tran_Amt1'] || item['calculated_Amount'] }
-      listed_items + content_tag('li', "and #{format_money(remaining_item_amount)} in #{format(extra, count: remaining_item_count)}")
+    remaining_items = if sorted_items.length > top_items.length
+                        sorted_items[(top_items.last[1] + 1)..-1]
+                      else
+                        []
+                      end
+    remaining_item_count = remaining_items.count
+
+    if remaining_item_count.positive?
+      remaining_item_amount = remaining_items.sum { |item| item[key] }
+      top_items_html + content_tag(
+        'li',
+        "and #{format_money(remaining_item_amount)} in " +
+        format(extra, count: remaining_item_count),
+      )
     else
-      listed_items
+      top_items_html
     end
   end
 
