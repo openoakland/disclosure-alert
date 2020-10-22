@@ -7,8 +7,6 @@ class Notice < ApplicationRecord
 
   validates :date, uniqueness: true
 
-  scope :for_date, ->(date) { find_by(date: date) }
-
   before_save :sanitize
   def sanitize
     self.body = ActionController::Base.helpers.sanitize(body)

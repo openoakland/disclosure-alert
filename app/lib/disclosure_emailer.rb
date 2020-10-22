@@ -29,6 +29,6 @@ class DisclosureEmailer
   end
 
   def notices_in_date_range
-    Notice.for_date(@date)
+    Notice.find_by(date: @date)
   end
 end
