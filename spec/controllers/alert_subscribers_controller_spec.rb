@@ -107,7 +107,7 @@ RSpec.describe AlertSubscribersController do
     describe 'with a valid token' do
       let(:request_token) { alert_subscriber.token }
 
-      it { expect(subject).to be_success }
+      it { expect(subject).to be_successful }
 
       it 'marks the object as confirmed' do
         expect { subject }.to change { AlertSubscriber.unconfirmed.count }.by(-1)
