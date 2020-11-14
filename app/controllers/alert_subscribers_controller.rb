@@ -1,5 +1,5 @@
 class AlertSubscribersController < ApplicationController
-  before_action :set_alert_subscriber, only: %i[edit destroy]
+  before_action :set_alert_subscriber, only: %i[edit destroy confirm]
 
   def new
     @alert_subscriber = AlertSubscriber.new
@@ -9,9 +9,11 @@ class AlertSubscribersController < ApplicationController
     @alert_subscriber = AlertSubscriber.new(alert_subscriber_params)
 
     if @alert_subscriber.save
-      flash[:info] = 'Subscribed! You will receive your first alert after the next filing comes in.'
+      flash[:info] = 'Got it! We sent you a confirmation link to confirm your subscription.'
 
-      AlertSubscriberMailer.subscription_created(@alert_subscriber).deliver_now
+      AlertSubscriberMailer
+        .confirm(@alert_subscriber)
+        .deliver_now
 
       redirect_to :root
     else
@@ -28,6 +30,23 @@ class AlertSubscribersController < ApplicationController
       flash[:info] = 'You have been successfully unsubscribed!'
       return redirect_to :root
     end
+  end
+
+  def confirm
+    if @alert_subscriber.blank?
+      flash[:error] = "We couldn't confirm your subscription. " \
+        'Please check the link you clicked and try subscribing again.'
+      return redirect_to :root
+    elsif @alert_subscriber.confirmed_at.present?
+      flash[:info] = "You've already confirmed your subscription!"
+      return redirect_to :root
+    end
+
+    @alert_subscriber.confirm!
+
+    AlertSubscriberMailer
+      .subscription_confirmed(@alert_subscriber)
+      .deliver_now
   end
 
   private

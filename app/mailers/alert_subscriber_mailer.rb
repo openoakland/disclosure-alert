@@ -7,7 +7,18 @@ class AlertSubscriberMailer < ApplicationMailer
   track open: true, click: true, utm_params: true,
     user: -> { AlertSubscriber.find_by(email: message.to.first) }
 
-  def subscription_created(alert_subscriber)
+  def confirm(alert_subscriber)
+    @alert_subscriber = alert_subscriber
+
+    mail(
+      to: @alert_subscriber.email,
+      bcc: 'tomdooner@gmail.com',
+      from: 'Open Disclosure Team <tom@opendisclosure.io>',
+      subject: 'Confirm your subscription to Open Disclosure Alerts',
+    )
+  end
+
+  def subscription_confirmed(alert_subscriber)
     @alert_subscriber = alert_subscriber
 
     mail(

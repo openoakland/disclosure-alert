@@ -6,7 +6,12 @@ RSpec.describe WebhooksController do
   describe '#mailgun' do
     subject { post :mailgun, params: params }
 
-    let(:subscriber) { AlertSubscriber.create(email: 'test@example.com') }
+    let(:subscriber) do
+      AlertSubscriber.create(
+        email: 'test@example.com',
+        confirmed_at: Time.now
+      )
+    end
     let!(:admin_user) { AdminUser.create(email: 'admin@example.com', password: 'secretpassword') }
     let(:params) do
       {

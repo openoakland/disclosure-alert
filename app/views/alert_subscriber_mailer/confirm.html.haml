@@ -1,0 +1,13 @@
+%p Hello!
+
+%p We received a request to subscribe to Open Disclosure Alerts with this email address. Please click this link to confirm your membership:
+
+%p
+  = link_to 'Confirm Subscription',
+  confirm_alert_subscriber_url(@alert_subscriber, token: @alert_subscriber.token)
+
+%p
+  Best,
+  %br
+  Tom and the Open Disclosure Team at
+  = link_to 'OpenOakland', 'https://openoakland.org'

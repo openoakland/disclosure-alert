@@ -10,6 +10,7 @@ ActiveAdmin.register AlertSubscriber do
   scope :active, default: true
   scope :inactive
   scope :unsubscribed
+  scope :unconfirmed
 
   index do
     selectable_column

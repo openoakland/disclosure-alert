@@ -13,7 +13,8 @@ class AlertSubscriber < ApplicationRecord
       AND created_at < ?
     SQL
   end)
-  scope :subscribed, -> { where(unsubscribed_at: nil) }
+  scope :subscribed, -> { where(unsubscribed_at: nil).where.not(confirmed_at: nil) }
+  scope :unconfirmed, -> { where(confirmed_at: nil) }
   scope :unsubscribed, -> { where.not(unsubscribed_at: nil) }
 
   has_many :ahoy_messages, foreign_key: :user_id
@@ -46,5 +47,9 @@ class AlertSubscriber < ApplicationRecord
 
   def unsubscribe!
     update_attribute(:unsubscribed_at, Time.now)
+  end
+
+  def confirm!
+    touch(:confirmed_at)
   end
 end
