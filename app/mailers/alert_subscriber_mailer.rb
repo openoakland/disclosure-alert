@@ -12,7 +12,6 @@ class AlertSubscriberMailer < ApplicationMailer
 
     mail(
       to: @alert_subscriber.email,
-      bcc: 'tomdooner@gmail.com',
       from: 'Open Disclosure Team <tom@opendisclosure.io>',
       subject: 'Confirm your subscription to Open Disclosure Alerts',
     )
