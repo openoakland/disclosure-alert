@@ -26,9 +26,11 @@ RSpec.describe AlertSubscribersController do
         subscriber = AlertSubscriber.last
         expect(subscriber.email).to eq(email)
         expect(subscriber.token).to be_present
+        expect(subscriber.confirmed_at).to be_nil
+        expect(subscriber.unsubscribed_at).to be_nil
       end
 
-      it 'sends a AlertSubscriberMailer.subscription_created email' do
+      it 'sends a AlertSubscriberMailer.confirm email' do
         subject
         expect(ActionMailer::Base.deliveries).not_to be_empty
         expect(ActionMailer::Base.deliveries.last.to).to eq([email])
@@ -91,6 +93,34 @@ RSpec.describe AlertSubscribersController do
 
       it { expect(subject).to be_redirect }
       it { expect { subject }.not_to(change { AlertSubscriber.subscribed.count }) }
+    end
+  end
+
+  describe '#confirm' do
+    render_views
+
+    let!(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
+    let(:request_token) { nil }
+
+    subject { post :confirm, params: { id: alert_subscriber.id, token: request_token } }
+
+    describe 'with a valid token' do
+      let(:request_token) { alert_subscriber.token }
+
+      it { expect(subject).to be_success }
+
+      it 'marks the object as confirmed' do
+        expect { subject }.to change { AlertSubscriber.unconfirmed.count }.by(-1)
+        expect(alert_subscriber.reload.confirmed_at)
+          .not_to be_nil
+      end
+    end
+
+    describe 'with an invalid token' do
+      let(:request_token) { 'foo bar baz' }
+
+      it { expect(subject).to be_redirect }
+      it { expect { subject }.not_to(change { AlertSubscriber.unconfirmed.count }) }
     end
   end
 end

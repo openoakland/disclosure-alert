@@ -4,7 +4,12 @@ require 'rails_helper'
 
 RSpec.describe 'Admin AlertSubscribers Page', type: :request do
   let(:admin) { AdminUser.create!(email: 'test@example.com', password: 'superSecur3') }
-  let!(:alert_subscriber) { AlertSubscriber.create!(email: 'subscriber@example.com') }
+  let!(:alert_subscriber) do
+    AlertSubscriber.create!(
+      email: 'subscriber@example.com',
+      confirmed_at: Time.now
+    )
+  end
 
   before do
     sign_in admin
