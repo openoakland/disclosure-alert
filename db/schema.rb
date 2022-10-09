@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_09_205354) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_10_09_211246) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,8 +21,8 @@ ActiveRecord::Schema.define(version: 2022_10_09_205354) do
     t.bigint "resource_id"
     t.string "author_type"
     t.bigint "author_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id"
     t.index ["namespace"], name: "index_active_admin_comments_on_namespace"
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
@@ -33,10 +32,10 @@ ActiveRecord::Schema.define(version: 2022_10_09_205354) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
@@ -48,19 +47,19 @@ ActiveRecord::Schema.define(version: 2022_10_09_205354) do
     t.string "mailer"
     t.text "subject"
     t.string "token"
-    t.datetime "sent_at"
-    t.datetime "opened_at"
-    t.datetime "clicked_at"
+    t.datetime "sent_at", precision: nil
+    t.datetime "opened_at", precision: nil
+    t.datetime "clicked_at", precision: nil
     t.index ["user_type", "user_id"], name: "index_ahoy_messages_on_user_type_and_user_id"
   end
 
   create_table "alert_subscribers", force: :cascade do |t|
     t.string "email", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "token"
-    t.datetime "unsubscribed_at"
-    t.datetime "confirmed_at"
+    t.datetime "unsubscribed_at", precision: nil
+    t.datetime "confirmed_at", precision: nil
     t.index ["token"], name: "index_alert_subscribers_on_token"
   end
 
@@ -86,8 +85,8 @@ ActiveRecord::Schema.define(version: 2022_10_09_205354) do
     t.string "measure_number"
     t.string "title"
     t.string "full_title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "elections", force: :cascade do |t|
@@ -109,7 +108,7 @@ ActiveRecord::Schema.define(version: 2022_10_09_205354) do
     t.string "amendment_sequence_number"
     t.string "amended_filing_id"
     t.string "form"
-    t.datetime "filed_at"
+    t.datetime "filed_at", precision: nil
     t.json "contents"
     t.xml "contents_xml"
   end
@@ -118,8 +117,8 @@ ActiveRecord::Schema.define(version: 2022_10_09_205354) do
     t.date "date"
     t.text "body"
     t.bigint "creator_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["creator_id"], name: "index_notices_on_creator_id"
   end
 
