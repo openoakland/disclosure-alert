@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'open-uri'
+
 # A human candidate running in an election. Imports from the Open Disclosure
 # Candidates spreadsheet.
 class ElectionCandidate < ApplicationRecord
@@ -8,7 +10,7 @@ class ElectionCandidate < ApplicationRecord
   belongs_to :election, foreign_key: :election_name, primary_key: :slug
 
   def self.replace_all_from_csv(candidate_csv: CANDIDATE_CSV_URL)
-    candidate_csv = open(URI(candidate_csv)).read if candidate_csv.start_with?('http')
+    candidate_csv = URI.open(candidate_csv).read if candidate_csv.start_with?('http')
     candidates = CSV.parse(candidate_csv, headers: :first_row)
     elections = Election.where(slug: candidates.map { |c| c['election_name'] }).index_by(&:slug)
 
