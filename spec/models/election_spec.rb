@@ -46,5 +46,30 @@ RSpec.describe Election do
       expect(created_election.date).to eq(Date.new(2020, 11, 3))
       expect(created_election.deadline_semi_annual_pre).to eq(Date.new(2020, 7, 31))
     end
+
+    describe 'when the election_csv is a URL' do
+      let(:election_csv_url) { 'http://example.com/example.csv' }
+
+      subject do
+        described_class.replace_all_from_csv(
+          election_csv: election_csv_url,
+          election_deadlines_csv: deadlines_csv,
+        )
+      end
+
+      before do
+        allow(URI).to receive(:open).with(election_csv_url)
+          .and_return(StringIO.new(election_csv))
+      end
+
+      it 'downloads the election_csv' do
+        Election.destroy_all
+        expect { subject }.to change(Election, :count).by(1)
+        created_election = Election.last
+        expect(created_election.slug).to eq('oakland-2020')
+        expect(created_election.date).to eq(Date.new(2020, 11, 3))
+        expect(created_election.deadline_semi_annual_pre).to eq(Date.new(2020, 7, 31))
+      end
+    end
   end
 end
