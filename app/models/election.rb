@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'open-uri'
+
 # An election including its deadlines. Imports from the Open Disclosure
 # Candidates spreadsheet.
 class Election < ApplicationRecord
@@ -16,8 +18,8 @@ class Election < ApplicationRecord
 
   def self.replace_all_from_csv(election_csv: ELECTION_CSV_URL,
                                 election_deadlines_csv: ELECTION_DEADLINES_CSV_URL)
-    election_csv = open(URI(election_csv)).read if election_csv.start_with?('http')
-    election_deadlines_csv = open(URI(election_deadlines_csv)).read if election_deadlines_csv.start_with?('http')
+    election_csv = URI.open(election_csv).read if election_csv.start_with?('http')
+    election_deadlines_csv = URI.open(election_deadlines_csv).read if election_deadlines_csv.start_with?('http')
 
     elections = CSV.parse(election_csv, headers: :first_row)
     deadlines = CSV.parse(election_deadlines_csv, headers: :first_row).index_by { |r| r['election_name'] }
