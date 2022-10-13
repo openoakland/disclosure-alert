@@ -5,7 +5,8 @@ class Notice < ApplicationRecord
   # will receive.
   belongs_to :creator, class_name: 'AdminUser'
 
-  validates :date, uniqueness: true
+  validates :date, uniqueness: true, presence: true
+  validates :body, presence: true
 
   before_save :sanitize
   def sanitize

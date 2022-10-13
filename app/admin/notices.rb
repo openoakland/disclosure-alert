@@ -10,7 +10,7 @@ ActiveAdmin.register Notice do
   end
 
   form do |f|
-    f.semantic_errors(*f.object.errors.keys)
+    f.semantic_errors
     f.inputs do
       f.input :date, as: :datepicker, datepicker_options: {
         min_date: Date.today,
