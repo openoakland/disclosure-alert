@@ -114,7 +114,7 @@ class DisclosureDownloader
           .fetch_calfile(filing.id)
       end
 
-    filing.update_attributes(contents: contents, contents_xml: contents_xml)
+    filing.update(contents: contents, contents_xml: contents_xml)
   rescue StandardError => ex
     raise FilingDownloadError, "Error downloading filing #{filing.id}: #{ex.message}"
   end
