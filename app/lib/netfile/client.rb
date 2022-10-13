@@ -103,7 +103,7 @@ module Netfile
 
           filings.each(&block)
 
-          [nil, num_pages]
+          [[], num_pages]
         end
       end
     end
