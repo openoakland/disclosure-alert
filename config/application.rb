@@ -30,6 +30,8 @@ module DisclosureAlert
     }
     config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
 
+    config.action_controller.raise_on_open_redirects = false
+
     config.assets.precompile << 'email.scss'
   end
 end
