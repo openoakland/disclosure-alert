@@ -13,13 +13,17 @@ namespace :disclosure_alert do
 
   desc 'Download latest records'
   task download: :environment do
-    DisclosureDownloader.new.download
+    NetfileAgency.each_supported_agency do |agency|
+      DisclosureDownloader.new(agency).download
+    end
   end
 
   desc 'Download latest records and send email'
   task download_and_email_daily: :with_configuration do
     today = TZInfo::Timezone.get('America/Los_Angeles').now.to_date
-    DisclosureDownloader.new.download
+    NetfileAgency.each_supported_agency do |agency|
+      DisclosureDownloader.new(agency).download
+    end
     DisclosureEmailer.new(today - 1).send_email
   end
 
