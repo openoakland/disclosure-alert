@@ -5,6 +5,7 @@ ActiveAdmin.register AlertSubscriber do
   filter :created_at
   filter :updated_at
   filter :unsubscribed_at
+  filter :netfile_agency
 
   scope :all
   scope :active, default: true
@@ -29,7 +30,7 @@ ActiveAdmin.register AlertSubscriber do
     f.semantic_errors
     f.inputs do
       f.input :email
-      f.input :unsubscribed_at, as: :datetime_picker
+      f.input :netfile_agency
     end
     f.actions
   end
@@ -50,14 +51,58 @@ ActiveAdmin.register AlertSubscriber do
       method: :put
   end
 
+  action_item :unsubscribe_or_resubscribe, only: :show do
+    if resource.unsubscribed_at?
+      link_to(
+        'Resubscribe',
+        resubscribe_admin_alert_subscriber_path(resource),
+        method: :put
+      )
+    else
+      link_to(
+        'Unsubscribe',
+        unsubscribe_admin_alert_subscriber_path(resource),
+        method: :put
+      )
+    end
+  end
+
+  action_item :confirm, only: :show do
+    unless resource.confirmed_at?
+      link_to(
+        'Confirm Subscription',
+        confirm_admin_alert_subscriber_path(resource),
+        method: :put
+      )
+    end
+  end
+
   member_action :send_yesterdays_email, method: :put do
     yesterday = Date.yesterday
 
     AlertMailer
-      .daily_alert(resource, yesterday, Filing.filed_on_date(yesterday))
+      .daily_alert(resource, yesterday, Filing.where(netfile_agency: resource.netfile_agency).filed_on_date(yesterday), Notice.find_by(date: yesterday))
       .deliver_now
 
     redirect_to resource_path, notice: 'Email Sent!'
+  end
+
+  member_action :unsubscribe, method: :put do
+    resource.unsubscribe!
+
+    redirect_to resource_path, notice: 'Unsubscribed!'
+  end
+
+  member_action :resubscribe, method: :put do
+    resource.update(unsubscribed_at: nil)
+
+    redirect_to resource_path, notice: 'Resubscribed!'
+  end
+
+  member_action :confirm, method: :put do
+    resource.confirm!
+
+    redirect_to resource_path, notice: 'Subscription Confirmed!'
   end
 
   batch_action :unsubscribe do |ids|
