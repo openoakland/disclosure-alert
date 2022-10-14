@@ -87,3 +87,8 @@ en:
       name: Statement of Organization
       description_html:
         This form registers a new recipient committee and is required for people or organizations spending more than $2,000 in a calendar year on elections.
+    SFEC161:
+      label: SFEC 161
+      name: Itemized Disclosure Statement for Mass Mailings
+      description_html:
+        Candidates must file SFEC 161 forms when sending 200+ "substantially similar" mailers supporting their candidacy.
