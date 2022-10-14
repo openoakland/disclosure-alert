@@ -11,6 +11,7 @@ class Filing < ApplicationRecord
   has_many :election_candidates, foreign_key: :fppc_id, primary_key: :filer_id
   has_one :election_committee, foreign_key: :fppc_id, primary_key: :filer_id
   has_one :amended_filing, class_name: 'Filing', primary_key: :amended_filing_id, foreign_key: :id
+  belongs_to :netfile_agency
 
   def election_referendum
     ElectionReferendum
@@ -28,6 +29,7 @@ class Filing < ApplicationRecord
       record.filer_id = json['filerStateId']
       record.filer_name = json['filerName']
       record.title = json['title']
+      record.netfile_agency = NetfileAgency.by_netfile_id(json['agency'])
       record.filed_at = DateTime.parse(json['filingDate'])
       record.amendment_sequence_number = json['amendmentSequenceNumber']
       record.amended_filing_id = json['amendedFilingId']

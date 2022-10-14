@@ -28,6 +28,7 @@ RSpec.describe AlertSubscribersController do
         expect(subscriber.token).to be_present
         expect(subscriber.confirmed_at).to be_nil
         expect(subscriber.unsubscribed_at).to be_nil
+        expect(subscriber.netfile_agency).to eq(NetfileAgency.coak)
       end
 
       it 'sends a AlertSubscriberMailer.confirm email' do
@@ -53,7 +54,7 @@ RSpec.describe AlertSubscribersController do
   end
 
   describe '#edit' do
-    let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
+    let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
     let(:request_token) { nil }
 
     subject { get :edit, params: { id: alert_subscriber.id, token: request_token } }
@@ -72,7 +73,7 @@ RSpec.describe AlertSubscribersController do
   end
 
   describe '#destroy' do
-    let!(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
+    let!(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
     let(:request_token) { nil }
 
     subject { post :destroy, params: { id: alert_subscriber.id, token: request_token } }
@@ -99,7 +100,7 @@ RSpec.describe AlertSubscribersController do
   describe '#confirm' do
     render_views
 
-    let!(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
+    let!(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
     let(:request_token) { nil }
 
     subject { post :confirm, params: { id: alert_subscriber.id, token: request_token } }

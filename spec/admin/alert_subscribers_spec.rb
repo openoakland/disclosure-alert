@@ -7,7 +7,8 @@ RSpec.describe 'Admin AlertSubscribers Page', type: :request do
   let!(:alert_subscriber) do
     AlertSubscriber.create!(
       email: 'subscriber@example.com',
-      confirmed_at: Time.now
+      confirmed_at: Time.now,
+      netfile_agency: NetfileAgency.coak
     )
   end
 

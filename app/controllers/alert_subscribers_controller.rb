@@ -61,6 +61,6 @@ class AlertSubscribersController < ApplicationController
   end
 
   def alert_subscriber_params
-    params.fetch(:alert_subscriber).permit(:email)
+    params.fetch(:alert_subscriber).permit(:email).merge(netfile_agency: NetfileAgency.coak)
   end
 end
