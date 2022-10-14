@@ -1,8 +1,6 @@
 - if f.offices.length > 1
-  Other Positions:
-  %ul
-    - f.offices[1..-1].each do |office|
-      %li= format_position_title(Forms::Form700.title_from_office(office))
+  - f.offices[1..-1].each do |office|
+    %p.filing__filer-position= format_position_title(Forms::Form700.title_from_office(office))
 - if f.no_reportable_interests?
   %em No reportable interests on any schedule.
 - if f.schedule_a1.any?
