@@ -59,12 +59,8 @@ module Forms
     def can_combine_with?(other_form)
       return false unless other_form.is_a?(Forms::Form496)
       return false unless id.nil? || id != other_form.id
-      return false unless filer_id == other_form.filer_id
 
-      has_overlapping_contributions = (other_form.contributions & contributions).present?
-      has_no_contributions = (other_form.contributions.empty? && contributions.empty?)
-
-      (has_overlapping_contributions || has_no_contributions)
+      filer_id == other_form.filer_id
     end
   end
 end
