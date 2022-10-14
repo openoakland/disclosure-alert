@@ -7,11 +7,11 @@ class DisclosureDownloader
   end
 
   def download
-    latest = Filing.order(filed_at: :desc).first
+    latest = Filing.where(netfile_agency: @agency).order(filed_at: :desc).first
     puts '==================================================================='
-    puts 'Beginning State:'
+    puts "Beginning State for Netfile agency #{@agency.shortcut}:"
     puts
-    puts "Filings: #{Filing.count}"
+    puts "Filings: #{Filing.where(netfile_agency: @agency).count}"
     puts "Latest: #{latest&.filed_at}"
     puts '==================================================================='
 
@@ -47,11 +47,11 @@ class DisclosureDownloader
       end
     end
 
-    latest = Filing.order(filed_at: :desc).first
+    latest = Filing.where(netfile_agency: @agency).order(filed_at: :desc).first
     puts '==================================================================='
     puts 'Ending State:'
     puts
-    puts "Filings: #{Filing.count}"
+    puts "Filings: #{Filing.where(netfile_agency: @agency).count}"
     puts "Latest: #{latest&.filed_at}"
     puts '==================================================================='
   end
