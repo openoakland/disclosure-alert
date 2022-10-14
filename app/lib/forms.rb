@@ -16,6 +16,8 @@ module Forms
         Forms::Form497.new(filing, name: '497 LCR')
       when 54 # Behested Payment Report
         Forms::BaseForm.new(filing, name: '803')
+      when 115
+        Forms::BaseForm.new(filing, name: 'SFEC 161')
       when 199, 215, 220, 228, 254
         Forms::Form700.new(filing, name: '700')
       when 236 # LBQ = Oakland Lobbyist Quartery Report
