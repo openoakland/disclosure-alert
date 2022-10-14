@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_09_211246) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_14_195907) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,6 +60,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_09_211246) do
     t.string "token"
     t.datetime "unsubscribed_at", precision: nil
     t.datetime "confirmed_at", precision: nil
+    t.bigint "netfile_agency_id", default: 1
+    t.index ["netfile_agency_id"], name: "index_alert_subscribers_on_netfile_agency_id"
     t.index ["token"], name: "index_alert_subscribers_on_token"
   end
 
@@ -111,6 +113,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_09_211246) do
     t.datetime "filed_at", precision: nil
     t.json "contents"
     t.xml "contents_xml"
+    t.bigint "netfile_agency_id", default: 1
+    t.index ["netfile_agency_id"], name: "index_filings_on_netfile_agency_id"
+  end
+
+  create_table "netfile_agencies", force: :cascade do |t|
+    t.integer "netfile_id"
+    t.string "shortcut"
+    t.string "name"
+    t.index ["netfile_id"], name: "index_netfile_agencies_on_netfile_id", unique: true
+    t.index ["shortcut"], name: "index_netfile_agencies_on_shortcut", unique: true
   end
 
   create_table "notices", force: :cascade do |t|

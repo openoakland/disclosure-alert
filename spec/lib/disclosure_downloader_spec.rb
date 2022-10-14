@@ -6,7 +6,7 @@ RSpec.describe DisclosureDownloader do
       @filings = Array(fake_filings)
     end
 
-    def each_filing(&block)
+    def each_filing(agency:, &block)
       @filings.each { |filing| block.call(filing.metadata) }
     end
 
@@ -31,7 +31,8 @@ RSpec.describe DisclosureDownloader do
         filingDate: "2022-10-12T17:50:07.0000000-07:00",
         amendmentSequenceNumber: 0,
         amendedFilingId: nil,
-        form: 36 # FPPC Form 496
+        form: 36, # FPPC Form 496
+        agency: NetfileAgency.coak.netfile_id,
       }.stringify_keys
     end
     let(:fake_filing_data) do
@@ -70,6 +71,7 @@ RSpec.describe DisclosureDownloader do
 
       last_filing = Filing.last
       expect(last_filing.title).to eq(fake_filing.metadata['title'])
+      expect(last_filing.netfile_agency).to eq(NetfileAgency.coak)
     end
   end
 end

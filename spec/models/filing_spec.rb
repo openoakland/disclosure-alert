@@ -7,7 +7,7 @@ RSpec.describe Filing do
     context 'with filings late in the day' do
       let(:filing_date) { Date.yesterday }
       let(:filed_at) { filing_date.end_of_day }
-      let!(:filing) { Filing.create(filed_at: filed_at) }
+      let!(:filing) { Filing.create(filed_at: filed_at, netfile_agency: NetfileAgency.coak) }
 
       it 'returns those filings' do
         expect(Filing.filed_on_date(filing_date)).to include(filing)

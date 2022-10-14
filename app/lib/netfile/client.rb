@@ -82,15 +82,15 @@ module Netfile
       end
     end
 
-    def each_filing(form: nil, &block)
-      return to_enum(:each_filing) unless block_given?
+    def each_filing(form: nil, agency:, &block)
+      return to_enum(:each_filing, form: form, agency: agency) unless block_given?
 
       Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
         with_pagination do |current_page|
           request = Net::HTTP::Post.new(BASE_URL + 'public/list/filing')
           request['Accept'] = 'application/json'
           request.body = URI.encode_www_form(
-            AID: 'COAK',
+            AID: agency.shortcut,
             CurrentPageIndex: current_page,
             Form: form,
           )

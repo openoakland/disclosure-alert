@@ -7,7 +7,8 @@ RSpec.describe Ahoy::MessagesController do
     let(:subscriber) do
       AlertSubscriber.create(
         email: 'test@example.com',
-        confirmed_at: Time.now
+        confirmed_at: Time.now,
+        netfile_agency: NetfileAgency.coak,
       )
     end
     let(:date) { Date.new(2020, 9, 1) }
@@ -36,6 +37,7 @@ RSpec.describe Ahoy::MessagesController do
         filed_at: 1.day.ago,
         amendment_sequence_number: '0',
         amended_filing_id: nil,
+        netfile_agency: NetfileAgency.coak,
         form: 30, # FPPC 460
         contents: contents,
       ).tap do |filing|

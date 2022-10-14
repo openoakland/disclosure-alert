@@ -9,7 +9,8 @@ RSpec.describe WebhooksController do
     let(:subscriber) do
       AlertSubscriber.create(
         email: 'test@example.com',
-        confirmed_at: Time.now
+        confirmed_at: Time.now,
+        netfile_agency: NetfileAgency.coak,
       )
     end
     let!(:admin_user) { AdminUser.create(email: 'admin@example.com', password: 'secretpassword') }

@@ -28,6 +28,7 @@ RSpec.describe AlertMailer do
       filed_at: 1.day.ago,
       amendment_sequence_number: '0',
       amended_filing_id: nil,
+      netfile_agency: NetfileAgency.coak,
       form: 30, # FPPC 460
       contents: contents,
     ).tap do |filing|
@@ -48,6 +49,7 @@ RSpec.describe AlertMailer do
         filed_at: 1.day.ago,
         amendment_sequence_number: '0',
         amended_filing_id: nil,
+        netfile_agency: NetfileAgency.coak,
         form: 36, # FPPC 496
         contents: fppc_496_contents('Candidate A'),
       ),
@@ -59,6 +61,7 @@ RSpec.describe AlertMailer do
         filed_at: 1.day.ago,
         amendment_sequence_number: '0',
         amended_filing_id: nil,
+        netfile_agency: NetfileAgency.coak,
         form: 36, # FPPC 496
         contents: fppc_496_contents('Candidate B'),
       ),
@@ -66,7 +69,7 @@ RSpec.describe AlertMailer do
   end
 
   describe '#daily_alert' do
-    let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
+    let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
     let(:date) { Date.new(2020, 9, 1) }
     let(:filings_in_date_range) do
       [
@@ -90,7 +93,7 @@ RSpec.describe AlertMailer do
     end
 
     context 'when giving a date range instead of a single date' do
-      let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com') }
+      let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
       let(:date) { Date.new(2020, 9, 1)..Date.new(2020, 9, 20) }
       let(:filings_in_date_range) do
         [

@@ -18,6 +18,7 @@ class AlertSubscriber < ApplicationRecord
   scope :unsubscribed, -> { where.not(unsubscribed_at: nil) }
 
   has_many :ahoy_messages, foreign_key: :user_id
+  belongs_to :netfile_agency
 
   validates :email, format: /\A[^@]+@[^\.]+\.[\w]+\z/i
 

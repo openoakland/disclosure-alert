@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class DisclosureDownloader
-  def initialize
+  def initialize(agency = NetfileAgency.coak)
     @netfile = Netfile::Client.new
+    @agency = agency
   end
 
   def download
@@ -14,7 +15,7 @@ class DisclosureDownloader
     puts "Latest: #{latest&.filed_at}"
     puts '==================================================================='
 
-    @netfile.each_filing do |json|
+    @netfile.each_filing(agency: @agency) do |json|
       filing = Filing.from_json(json)
 
       if filing.new_record?
