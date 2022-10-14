@@ -1,5 +1,5 @@
 ActiveAdmin.register AlertSubscriber do
-  permit_params :unsubscribed_at, :email
+  permit_params :unsubscribed_at, :email, :netfile_agency_id
 
   filter :email
   filter :created_at
