@@ -36,6 +36,18 @@ module Forms
 
   def self.combine_forms(forms)
     [].tap do |combined|
+      # remove any forms that were later amended on the same day
+      forms.delete_if do |form|
+        forms.any? do |other_form|
+          next if other_form.id == form.id
+
+          other_form.amended_filing_id.to_i == form.id ||
+            (other_form.amended_filing_id.to_i == form.amended_filing_id.to_i &&
+             other_form.amendment_sequence_number.to_i > form.amendment_sequence_number.to_i)
+        end
+      end
+
+      # combine 496's from the same filer on the same day
       while forms.any?
         current_form = forms.shift
         can_combine_forms = forms.find_all { |f| current_form.can_combine_with?(f) }
@@ -55,8 +67,8 @@ module Forms
   end
 
   class BaseForm
-    delegate :id, :filer_id, :title, :filed_at, :amended_filing_id, :form,
-      :contents, :contents_xml, to: :@filing
+    delegate :id, :filer_id, :title, :filed_at, :amendment_sequence_number,
+      :amended_filing_id, :form, :contents, :contents_xml, to: :@filing
     attr_reader :form_name, :filing
 
     def initialize(filing, name: nil)
@@ -83,8 +95,12 @@ module Forms
       key
     end
 
+    def amendment?
+      @filing.amended_filing_id?
+    end
+
     def amended_filing
-      return unless @filing.amended_filing
+      return unless amendment?
 
       self.class.new(@filing.amended_filing, name: @filing.form_name)
     end
