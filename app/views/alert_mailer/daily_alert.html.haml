@@ -37,8 +37,7 @@
 
             %h3.filing__filer-name= f.filer_name
             - if f.filer_title
-              %br
-              = format_position_title(f.filer_title)
+              %p.filing__filer-position= format_position_title(f.filer_title)
             - if f.form_name == '460'
               = render 'form_460', f: f
             - if f.form_name == '496' || f.form_name == '496 Combined'
