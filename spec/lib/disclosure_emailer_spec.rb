@@ -51,6 +51,9 @@ describe DisclosureEmailer do
         expect(AlertMailer)
           .to have_received(:daily_alert)
           .with(subscriber, today, exclude(filing), anything)
+        expect(AlertMailer)
+          .not_to have_received(:daily_alert)
+          .with(subscriber, today, include(filing), anything)
       end
     end
   end
