@@ -13,28 +13,49 @@ RSpec.describe AlertSubscribersController do
     let(:valid_email) { 'tomdooner+valid@gmail.com' }
     let(:invalid_email) { 'tomdooner+invalid' }
     let(:params) { { alert_subscriber: { email: email } } }
+    let(:email) { valid_email }
 
     subject { post :create, params: params }
 
-    describe 'with a valid email' do
-      let(:email) { valid_email }
+    it 'creates an AlertSubscriber' do
+      expect { subject }
+        .to(change { AlertSubscriber.count }.by(1))
 
-      it 'creates an AlertSubscriber' do
-        expect { subject }
-          .to(change { AlertSubscriber.count }.by(1))
+      subscriber = AlertSubscriber.last
+      expect(subscriber.email).to eq(email)
+      expect(subscriber.token).to be_present
+      expect(subscriber.confirmed_at).to be_nil
+      expect(subscriber.unsubscribed_at).to be_nil
+      expect(subscriber.netfile_agency).to eq(NetfileAgency.coak)
+    end
 
-        subscriber = AlertSubscriber.last
-        expect(subscriber.email).to eq(email)
-        expect(subscriber.token).to be_present
-        expect(subscriber.confirmed_at).to be_nil
-        expect(subscriber.unsubscribed_at).to be_nil
-        expect(subscriber.netfile_agency).to eq(NetfileAgency.coak)
+    it 'sends a AlertSubscriberMailer.confirm email' do
+      subject
+      expect(ActionMailer::Base.deliveries).not_to be_empty
+      expect(ActionMailer::Base.deliveries.last.to).to eq([email])
+    end
+
+    describe 'when the user had previously unsubscribed' do
+      let!(:previous_subscriber) do
+        AlertSubscriber.create(
+          email: email,
+          netfile_agency: NetfileAgency.coak,
+          unsubscribed_at: unsubscribe_date
+        )
       end
+      let!(:admin) { AdminUser.create!(email: 'test@example.com', password: 'superSecur3') }
+      let(:unsubscribe_date) { 10.days.ago }
 
-      it 'sends a AlertSubscriberMailer.confirm email' do
-        subject
-        expect(ActionMailer::Base.deliveries).not_to be_empty
-        expect(ActionMailer::Base.deliveries.last.to).to eq([email])
+      it 're-subscribes them by clearing the unsubscribe timestamp' do
+        expect { subject }
+          .to change { previous_subscriber.reload.unsubscribed_at }
+          .from(within(1.second).of(unsubscribe_date))
+          .to(nil)
+
+        new_comment = ActiveAdmin::Comment.last
+        expect(new_comment).to have_attributes(
+          body: /Resubscribed/
+        )
       end
     end
 

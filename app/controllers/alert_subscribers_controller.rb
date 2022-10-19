@@ -6,7 +6,19 @@ class AlertSubscribersController < ApplicationController
   end
 
   def create
-    @alert_subscriber = AlertSubscriber.new(alert_subscriber_params)
+    @alert_subscriber = AlertSubscriber.find_or_initialize_by(alert_subscriber_params)
+
+    if @alert_subscriber.unsubscribed_at?
+      @alert_subscriber.unsubscribed_at = nil
+      ActiveAdmin::Comment.create(
+        resource: @alert_subscriber,
+        author: AdminUser.first,
+        namespace: 'admin',
+        body: <<~BODY
+          Resubscribed via new signup.
+        BODY
+      )
+    end
 
     if @alert_subscriber.save
       flash[:info] = 'Got it! We sent you a confirmation link to confirm your subscription.'
