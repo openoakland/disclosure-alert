@@ -22,6 +22,11 @@ RSpec.describe WebhooksController do
           'timestamp' => Date.new(2020, 2, 1).to_time.to_f,
           'id' => SecureRandom.hex,
           'severity' => severity,
+          'message' => {
+            'headers' => {
+              'message-id' => message_id,
+            },
+          },
         }.compact,
         'signature' => valid_signature,
       }
@@ -41,6 +46,7 @@ RSpec.describe WebhooksController do
       }
     end
     let(:severity) { nil }
+    let(:message_id) { SecureRandom.hex }
 
     before do
       ENV['MAILGUN_SIGNING_KEY'] ||= SecureRandom.hex
@@ -97,6 +103,40 @@ RSpec.describe WebhooksController do
       let(:event) { 'failed' }
       let(:severity) { 'permanent' }
       it_behaves_like 'unsubscribing the user'
+    end
+
+    context 'for an open' do
+      let(:event) { 'opened' }
+      let!(:sent_message) do
+        SentMessage.create(
+          alert_subscriber: subscriber,
+          message_id: message_id,
+        )
+      end
+
+      it 'updates the opened_at timestamp' do
+        expect { subject }
+          .to change { sent_message.reload.opened_at }
+          .from(nil)
+          .to(within(1.second).of(Time.current))
+      end
+    end
+
+    context 'for a click' do
+      let(:event) { 'clicked' }
+      let!(:sent_message) do
+        SentMessage.create(
+          alert_subscriber: subscriber,
+          message_id: message_id,
+        )
+      end
+
+      it 'updates the clicked_at timestamp' do
+        expect { subject }
+          .to change { sent_message.reload.clicked_at }
+          .from(nil)
+          .to(within(1.second).of(Time.current))
+      end
     end
   end
 end

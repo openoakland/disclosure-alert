@@ -92,6 +92,20 @@ RSpec.describe AlertMailer do
       expect(subject.body.encoded).to include('Combination of 2 FPPC Form 496')
     end
 
+    it 'saves a SentMessage record' do
+      expect { @message = subject.deliver_now }
+        .to change(SentMessage, :count)
+        .by(1)
+
+      last_message = SentMessage.last
+      expect(last_message).to have_attributes(
+        subject: /New Campaign Disclosure filings/,
+        message_id: @message.message_id,
+        mailer: 'alert_mailer/daily_alert',
+        sent_at: within(1.second).of(Time.current)
+      )
+    end
+
     context 'when giving a date range instead of a single date' do
       let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
       let(:date) { Date.new(2020, 9, 1)..Date.new(2020, 9, 20) }
