@@ -6,28 +6,55 @@ class WebhooksController < ApplicationController
     data = params[:'event-data']
     recipient = data[:recipient]
     event = data[:event]
+    message = data[:message]
 
     if event == 'unsubscribed' ||
        event == 'complained' ||
        (event == 'failed' && data[:severity] == 'permanent')
-      # Unsubscribe the user
-      subscribers = AlertSubscriber.subscribed.where(email: recipient)
-      # Leave a note in the admin interface
-      subscribers.find_each do |subscriber|
-        comment = ActiveAdmin::Comment.create(
-          resource: subscriber,
-          author: AdminUser.first,
-          namespace: 'admin',
-          body: <<~BODY,
-            Unsubscribed via Mailgun webhook: #{event}
-          BODY
-        )
-      end
-      subscribers.update_all(unsubscribed_at: Time.now)
+      handle_unsubscribe(recipient, event)
+    elsif event == 'opened'
+      handle_opened(message[:headers]['message-id'])
+    elsif event == 'clicked'
+      handle_clicked(message[:headers]['message-id'])
     end
   end
 
   private
+
+  def handle_opened(message_id)
+    message = SentMessage.find_by(message_id: message_id)
+    if message
+      message.touch(:opened_at)
+    else
+      Rails.logger.warn "Got opened event for invalid Message ID: #{message}"
+    end
+  end
+
+  def handle_clicked(message_id)
+    message = SentMessage.find_by(message_id: message_id)
+    if message
+      message.touch(:clicked_at)
+    else
+      Rails.logger.warn "Got clicked event for invalid Message ID: #{message}"
+    end
+  end
+
+  def handle_unsubscribe(recipient, event)
+    # Unsubscribe the user
+    subscribers = AlertSubscriber.subscribed.where(email: recipient)
+    # Leave a note in the admin interface
+    subscribers.find_each do |subscriber|
+      comment = ActiveAdmin::Comment.create(
+        resource: subscriber,
+        author: AdminUser.first,
+        namespace: 'admin',
+        body: <<~BODY,
+          Unsubscribed via Mailgun webhook: #{event}
+        BODY
+      )
+    end
+    subscribers.update_all(unsubscribed_at: Time.now)
+  end
 
   def verify_mailgun_signature
     signature_params = params[:signature]

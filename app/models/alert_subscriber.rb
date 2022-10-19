@@ -19,6 +19,7 @@ class AlertSubscriber < ApplicationRecord
 
   has_many :ahoy_messages, foreign_key: :user_id
   belongs_to :netfile_agency
+  has_many :sent_messages
 
   validates :email, format: /\A[^@]+@[^\.]+\.[\w]+\z/i
 

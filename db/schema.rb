@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_14_195907) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_19_041746) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -134,5 +134,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_14_195907) do
     t.index ["creator_id"], name: "index_notices_on_creator_id"
   end
 
+  create_table "sent_messages", force: :cascade do |t|
+    t.bigint "alert_subscriber_id", null: false
+    t.string "message_id"
+    t.string "mailer"
+    t.string "subject"
+    t.datetime "sent_at"
+    t.datetime "opened_at"
+    t.datetime "clicked_at"
+    t.index ["alert_subscriber_id"], name: "index_sent_messages_on_alert_subscriber_id"
+    t.index ["message_id"], name: "index_sent_messages_on_message_id", unique: true
+  end
+
   add_foreign_key "notices", "admin_users", column: "creator_id"
+  add_foreign_key "sent_messages", "alert_subscribers"
 end

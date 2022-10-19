@@ -23,6 +23,8 @@ module DisclosureAlert
     config.action_mailer.mailgun_settings = {
       api_key: ENV['MAILGUN_API_KEY'],
       domain: 'mailgun.opendisclosure.io',
+      'tracking-opens' => true,
+      'tracking-clicks' => 'htmlonly'
     }
 
     config.action_mailer.default_url_options = {
