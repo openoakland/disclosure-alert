@@ -22,7 +22,7 @@ ActiveAdmin.register AlertSubscriber do
     column(:last_opened_at) { |as| as.last_opened_at ? time_ago_in_words(as.last_opened_at) : 'never' }
     column(:open_rate) { |as| format('%.1f%%', as.open_rate * 100) }
     column(:click_rate) { |as| format('%.1f%%', as.click_rate * 100) }
-    column(:total_emails) { |as| as.ahoy_messages.count }
+    column(:total_emails) { |as| as.sent_messages.count }
     actions
   end
 
@@ -42,7 +42,7 @@ ActiveAdmin.register AlertSubscriber do
     column :last_opened_at
     column :open_rate
     column :click_rate
-    column(:total_emails) { |as| as.ahoy_messages.count }
+    column(:total_emails) { |as| as.sent_messages.count }
   end
 
   action_item :send_yesterdays_email, only: :show do

@@ -3,13 +3,13 @@
 class AlertSubscriber < ApplicationRecord
   scope :active, (lambda do
     subscribed.where([<<~SQL, 30.days.ago, 30.days.ago])
-      id IN (SELECT DISTINCT(user_id) FROM ahoy_messages WHERE opened_at > ?)
+      id IN (SELECT DISTINCT(alert_subscriber_id) FROM sent_messages WHERE opened_at > ?)
       OR created_at > ?
     SQL
   end)
   scope :inactive, (lambda do
     subscribed.where([<<~SQL, 30.days.ago, 30.days.ago])
-      id NOT IN (SELECT DISTINCT(user_id) FROM ahoy_messages WHERE opened_at > ?)
+      id NOT IN (SELECT DISTINCT(alert_subscriber_id) FROM sent_messages WHERE opened_at > ?)
       AND created_at < ?
     SQL
   end)
@@ -32,19 +32,23 @@ class AlertSubscriber < ApplicationRecord
   end
 
   def open_rate
-    recent_messages = ahoy_messages.last(30)
+    recent_messages = sent_messages.last(30).to_a
+    return 0 if recent_messages.none?
+
     recent_messages.count { |m| m.opened_at.present? }.to_f /
       recent_messages.count
   end
 
   def click_rate
-    recent_messages = ahoy_messages.last(30)
+    recent_messages = sent_messages.last(30).to_a
+    return 0 if recent_messages.none?
+
     recent_messages.count { |m| m.clicked_at.present? }.to_f /
       recent_messages.count
   end
 
   def last_opened_at
-    ahoy_messages.opened.last&.opened_at
+    sent_messages.opened.last&.opened_at
   end
 
   def unsubscribe!
