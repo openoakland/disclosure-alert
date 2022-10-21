@@ -65,6 +65,13 @@
               = f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")
 
 %hr
+Was this email useful?
+= link_to 'Yes', 'https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform?usp=pp_url&entry.2039237906=Yes', 'disable-tracking' => true
+\/
+= link_to 'No', 'https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform?usp=pp_url&entry.2039237906=No', 'disable-tracking' => true
+
+%br
+
 Don't want to receive these emails any more?
 = link_to 'Update Delivery Preferences',
   edit_alert_subscriber_url(@alert_subscriber, token: @alert_subscriber.token)
