@@ -24,6 +24,12 @@ body, html {
     background-color: #fff9d7;
     border: 1px solid #ffdd1f;
   }
+
+  &--informational {
+    padding: 20px;
+    background-color: #d4f1ff;
+    border: 1px solid #006ea3;
+  }
 }
 
 .email-title {

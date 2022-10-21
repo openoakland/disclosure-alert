@@ -14,9 +14,13 @@
       - if @email_notice.present?
         %tr
           %td
-            .container.container--notice
-              %strong Notice:
-              = raw(@email_notice.body)
+            - if @email_notice.informational?
+              .container.container--informational
+                = raw(@email_notice.body)
+            - else
+              .container.container--notice
+                %strong Notice:
+                = raw(@email_notice.body)
 
       %tr
         %td

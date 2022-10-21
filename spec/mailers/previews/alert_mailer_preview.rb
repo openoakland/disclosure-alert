@@ -23,6 +23,7 @@ class AlertMailerPreview < ActionMailer::Preview
       creator: AdminUser.first,
       date: Date.yesterday,
       body: text,
+      informational: Random.rand < 0.5
     )
   end
 end
