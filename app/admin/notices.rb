@@ -1,9 +1,10 @@
 ActiveAdmin.register Notice do
-  permit_params :body, :date
+  permit_params :body, :date, :informational
 
   index do
     selectable_column
     column(:date) { |notice| notice.date.strftime('%A, %B %d, %Y') }
+    column(:informational)
     column(:body) { |notice| raw(notice.body) }
     column :creator
     actions
@@ -16,6 +17,7 @@ ActiveAdmin.register Notice do
         min_date: Date.today - 1,
       }, input_html: { autocomplete: 'off' }
       text_node "Note: The date should be the date of the *filings*, not the date of the email. (i.e. this date should match the subject line of the email)"
+      f.input :informational
       f.input :body
     end
     f.actions
