@@ -1,0 +1,24 @@
+- if f.count_contributions_made > 0
+  %strong Total Contributions Made:
+  = amended_value_if_different(f, :amount_contributions_made)
+  %br
+- if f.count_contributions_received > 0
+  %strong Total Contributions Received:
+  = amended_value_if_different(f, :amount_contributions_received)
+  %br
+
+- if f.amount_contributions_made > 250
+  %strong Largest Contributions Made:
+  %ul
+    = format_money_list(f.contributions_made,
+      key: 'calculated_Amount',
+      extra: '%{count} other contributions') do |contribution|
+      #{contribution['tran_NamL']}
+
+- if f.amount_contributions_received > 250
+  %strong Largest Contributions Received:
+  %ul
+    = format_money_list(f.contributions_received,
+      key: 'calculated_Amount',
+      extra: '%{count} other contributions') do |contribution|
+      #{contribution['tran_NamL']}
