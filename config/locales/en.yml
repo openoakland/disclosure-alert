@@ -67,16 +67,11 @@ en:
       name: Campaign Statement
       description_html:
         The California Political Reform Act requires candidates and committees to file campaign statements by specified deadlines disclosing contributions received and expenditures made.
-    497LCR:
-      label: Form 497 LCR
-      name: Late Contributions Received Report
+    497:
+      label: Form 497
+      name: Daily Contributions Report
       description_html:
-        Local candidates receiving contributions totaling $1,000 or more in the 90 days before an election are required to file a Form 497 within 24 hours.
-    497LCM:
-      label: Form 497 LCM
-      name: Late Contributions Made Report
-      description_html:
-        Local committees making contributions totaling $1,000 or more in the 90 days before an election are required to file a Form 497 within 24 hours.
+        Local candidates making or receiving contributions totaling $1,000 or more in the 90 days before an election are required to file a Form 497 within 24 hours.
     496:
       label: Form 496
       name: Late Independent Expenditure Report

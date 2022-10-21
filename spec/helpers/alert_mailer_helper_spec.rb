@@ -15,9 +15,9 @@ RSpec.describe AlertMailerHelper do
       it { expect(subject).to eq('460') }
     end
 
-    describe 'with form type = 497 LCR' do
+    describe 'with form type = 497' do
       let(:form_id) { 39 }
-      it { expect(subject).to eq('497 <sub>LCR</sub>') }
+      it { expect(subject).to eq('497') }
       it { expect(subject).to be_html_safe }
     end
 

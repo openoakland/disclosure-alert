@@ -19,7 +19,18 @@ RSpec.describe AlertMailer do
     ]
   end
 
-  def create_filing(id: 123_123, filer_id: 222_222, contents: fppc_460_contents)
+  def fppc_497_contents
+    [
+      { "form_Type"=>"F497P1", "tran_NamL"=>"One", "calculated_Amount"=>40000.0 },
+      { "form_Type"=>"F497P1", "tran_NamL"=>"Two", "calculated_Amount"=>490.0 },
+      { "form_Type"=>"F497P1", "tran_NamL"=>"Three", "calculated_Amount"=>327.75 },
+      { "form_Type"=>"F497P1", "tran_NamL"=>"Four", "calculated_Amount"=>1805.7 },
+      { "form_Type"=>"F497P2", "tran_NamL"=>"Five", "calculated_Amount"=>5872.64 },
+      { "form_Type"=>"F497P2", "tran_NamL"=>"Six", "calculated_Amount"=>6185.05 }
+    ]
+  end
+
+  def create_filing(id: 123_123, form: 30, filer_id: 222_222, contents: fppc_460_contents)
     Filing.create(
       id: id,
       filer_id: filer_id,
@@ -29,7 +40,7 @@ RSpec.describe AlertMailer do
       amendment_sequence_number: '0',
       amended_filing_id: nil,
       netfile_agency: NetfileAgency.coak,
-      form: 30, # FPPC 460
+      form: form, # Form 30 = FPPC 460
       contents: contents,
     ).tap do |filing|
       ElectionCommittee.create(
@@ -76,6 +87,7 @@ RSpec.describe AlertMailer do
         create_filing(id: 1),
         create_filing(id: 2),
         create_filing(id: 3),
+        create_filing(id: 4, form: 39, contents: fppc_497_contents),
       ] + create_filings_to_combine
     end
     let(:notice) { nil }
