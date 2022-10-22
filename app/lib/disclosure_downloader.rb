@@ -92,7 +92,7 @@ class DisclosureDownloader
         @netfile
           .fetch_summary_contents(filing.id)
           .map { |row| row.slice('form_Type', 'line_Item', 'amount_A') }
-      when '497 LCR', '497 LCM'
+      when '497'
         @netfile
           .fetch_transaction_contents(filing.id)
           .map { |row| row.slice('form_Type', 'tran_NamL', 'calculated_Amount') }
