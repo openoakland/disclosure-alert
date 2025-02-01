@@ -13,40 +13,50 @@ module Netfile
     def initialize; end
 
     def fetch_summary_contents(filing_id)
-      Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
-        with_pagination do |current_page|
-          request = Net::HTTP::Post.new(BASE_URL + 'public/campaign/export/cal201/summary/filing')
-          request['Accept'] = 'application/json'
-          request.body = URI.encode_www_form(
-            FilingId: filing_id,
-            PageSize: 200,
-          )
+      []
+      # TODO: Replace this with a working implementation based on the new
+      # "Query" endpoint (Documented here: https://www.netfile.com/Connect2/api/ui/Query)
+      # once that endpoint allows for querying an arbitrary Filing ID.
+      #
+      # Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
+      #   with_pagination do |current_page|
+      #     request = Net::HTTP::Post.new(BASE_URL + 'public/campaign/export/cal201/summary/filing')
+      #     request['Accept'] = 'application/json'
+      #     request.body = URI.encode_www_form(
+      #       FilingId: filing_id,
+      #       PageSize: 200,
+      #     )
 
-          response = http.request(request)
-          raise "Request Failed: " + request.inspect unless response.code.to_i < 300
+      #     response = http.request(request)
+      #     raise "Request Failed: " + request.inspect unless response.code.to_i < 300
 
-          JSON.parse(response.body).values_at('results', 'totalMatchingPages')
-        end
-      end
+      #     JSON.parse(response.body).values_at('results', 'totalMatchingPages')
+      #   end
+      # end
     end
 
     def fetch_transaction_contents(filing_id)
-      Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
-        with_pagination do |current_page|
-          request = Net::HTTP::Post.new(BASE_URL + 'public/campaign/export/cal201/transaction/filing')
-          request['Accept'] = 'application/json'
-          request.body = URI.encode_www_form(
-            FilingId: filing_id,
-            CurrentPageIndex: current_page,
-            PageSize: 200,
-          )
+      []
+      # TODO: Replace this with a working implementation based on the new
+      # "Query" endpoint (Documented here: https://www.netfile.com/Connect2/api/ui/Query)
+      # once that endpoint allows for querying an arbitrary Filing ID.
+      #
+      # Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
+      #   with_pagination do |current_page|
+      #     request = Net::HTTP::Post.new(BASE_URL + 'public/campaign/export/cal201/transaction/filing')
+      #     request['Accept'] = 'application/json'
+      #     request.body = URI.encode_www_form(
+      #       FilingId: filing_id,
+      #       CurrentPageIndex: current_page,
+      #       PageSize: 200,
+      #     )
 
-          response = http.request(request)
-          raise "Request Failed: " + request.inspect unless response.code.to_i < 300
+      #     response = http.request(request)
+      #     raise "Request Failed: " + request.inspect unless response.code.to_i < 300
 
-          JSON.parse(response.body).values_at('results', 'totalMatchingPages')
-        end
-      end
+      #     JSON.parse(response.body).values_at('results', 'totalMatchingPages')
+      #   end
+      # end
     end
 
     def fetch_calfile(filing_id)

@@ -1,0 +1,96 @@
+HDR,CAL,CA,2.01,NGP,8,
+CVR,F460,1332115,RCP,Oakland Rising Committee sponsored by Center for Empowered Politics,,,,000,20241024,PE,,20240922,20241019,20241105,,,Oakland,CA,94612,(949) 441-5352,,reporting@beavercompliance.com,,,,,,Wang,Ken,,,,,Oakland,CA,94612,(415) 994-0952,,,G,Y,N,N,,,,,,,,,,,,,,,,,,,,,,,,,,
+CVR2,F460,CVR228,ATR,3,,Valdiviezo,Victor,,,,,Oakland,CA,94612-1941,,,,,,,,,,,,,,,,,,
+CVR3,F460,Filer.1,TRE,20241024,,Wang,Ken,,
+SMRY,F460,1,25354.00,195910.00
+SMRY,F460,2,0.00,0.00
+SMRY,F460,3,25354.00,195910.00
+SMRY,F460,4,0.00,0.00
+SMRY,F460,5,25354.00,195910.00
+SMRY,F460,6,30978.03,66236.58
+SMRY,F460,7,0.00,0.00
+SMRY,F460,8,30978.03,66236.58
+SMRY,F460,9,1272.29,1751.99
+SMRY,F460,10,0.00,0.00
+SMRY,F460,11,32250.32,67988.57
+SMRY,F460,12,191026.80
+SMRY,F460,13,25354.00
+SMRY,F460,14,0.00
+SMRY,F460,15,30978.03
+SMRY,F460,16,185402.77
+SMRY,F460,17,0.00
+SMRY,F460,18,0.00
+SMRY,F460,19,1751.99
+SMRY,A,1,25323.00
+SMRY,A,2,31.00
+SMRY,A,3,25354.00
+SMRY,B1,1,0.00
+SMRY,B1,2,0.00
+SMRY,B1,3,0.00
+SMRY,C,1,0.00
+SMRY,C,2,0.00
+SMRY,C,3,0.00
+SMRY,D,1,27200.00
+SMRY,D,2,0.00
+SMRY,D,3,27200.00
+SMRY,E,1,30978.03
+SMRY,E,2,0.00
+SMRY,E,3,0.00
+SMRY,E,4,30978.03
+SMRY,F,1,1272.29
+SMRY,F,2,0.00
+SMRY,F,3,1272.29
+SMRY,H,1,0.00
+SMRY,H,2,0.00
+SMRY,H,3,0.00
+SMRY,I,1,0.00
+SMRY,I,2,0.00
+SMRY,I,3,0.00
+SMRY,I,4,0.00
+RCPT,A,8240943,IND,Bartlett,Joyce,,,,,Silver Spring,MD,20904-1065,Rockwood Leadership Institute,Program Operations Manager,,I,20240927,,25.00,225.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8253551,IND,Delaney,Quinn,,,,,Oakland,CA,94612-2716,Akonadi Foundation,President,,,20241015,,25000.00,25000.00,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240950,IND,Fay,Becka,,,,,San Francisco,CA,94117-2703,MEC,Marketing,,I,20241008,,50.00,500.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240956,IND,Gilje,Kathryn,,,,,Oakland,CA,94618-1036,Ceres Trust,Executive Director,,I,20241017,,50.00,500.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240951,IND,Henry,Gillian,,,,,Alameda,CA,94501-4059,EBASE,Development Manager,,I,20241009,,10.00,150.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240953,IND,Henry,Gillian,,,,,Alameda,CA,94501-4059,EBASE,Development Manager,,I,20241013,,5.00,150.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240954,IND,Irons,Edie,,,,,Oakland,CA,94601-4318,TransForm,Communications Director,,I,20241013,,13.00,130.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240946,IND,Lee,Kimi,,,,,Oakland,CA,94605-1849,Movement Strategy Center,Director,,I,20241002,,50.00,450.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240944,IND,Mascarenhas,Michelle,,,,,Berkeley,CA,94703-2115,Not Employed,N/A,,I,20240927,,20.00,180.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240942,IND,Munson,Zoe,,,,,Oakland,CA,94602-2827,Essence Global,Creative Direction,,I,20240925,,25.00,225.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240949,IND,Newsham,Sarah,,,,,Oakland,CA,94611-4248,Center for California Studies,Fellow,,I,20241007,,25.00,250.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240955,IND,Shor,David,,,,,Oakland,CA,94608-1216,Common Cause California,Money in Politics Program Manager,,I,20241016,,5.00,123.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240952,IND,White,Keith,,,,,Berkeley,CA,94705-1432,La Clinica,Physician,,I,20241009,,20.00,200.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+RCPT,A,8240947,IND,Wong,Alvina,,,,,Oakland,CA,94621-3921,Asian Pacific Environmental Network,Community Organizer,,I,20241002,,25.00,250.00,,,,,,,,,,,,,ActBlue,,,,,,Somerville,MA,02144-3132,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,D,500416177,OTH,,,,,1212 Broadway,Ste 700,Oakland,CA,94612-1941,20241018,3500.00,10000.00,,,MON,,,,,,,,,,,,,,,,Bay Rising Action Committee,,,,,,,,,,,,,,,,,,,
+EXPN,D,500416178,OTH,,,,,1212 Broadway,Ste 700,Oakland,CA,94612-1941,20241018,3500.00,10000.00,,,MON,,,,,,,,,,,,,,,,Bay Rising Action Committee,,,,,,,,,,,,,,,,,,,
+EXPN,D,500416179,OTH,,,,,1212 Broadway,Ste 700,Oakland,CA,94612-1941,20241018,3000.00,10000.00,,,MON,,,,,,,,,,,,,,,,Bay Rising Action Committee,,,,,,,,,,,,,,,,,,,
+EXPN,D,500409143,COM,,,,,371 Lakeport Blvd,# 391,Lakeport,CA,95453-5412,20241008,1200.00,1200.00,,,MON,,,,,,,,,,,,,,,,Fife,Carroll,,,CCM,,CIT,Oakland,3,S,,,,S,,,,,,
+EXPN,D,500409138,COM,,,,,4200 Park Blvd,# 128,Oakland,CA,94602-1312,20241008,10000.00,10000.00,,,MON,,,,,,,,,,,,,,,,Bas,Nikki,,,CSU,,CTY,Alameda,5,S,,,,S,,,,,,
+EXPN,D,500409140,COM,,,,,5734 Claremont Ave,,Oakland,CA,94618-1217,20241008,1200.00,1200.00,,,MON,,,,,,,,,,,,,,,,Latta,Rachel,,,BED,,OTH,Oakland,1,S,,,,S,,,,,,
+EXPN,D,500409144,COM,,,,,312 Clay St,Ste 300,Oakland,CA,94607-3510,20241008,1200.00,1200.00,,,MON,,,,,,,,,,,,,,,,Richarson,Ryan,,,CAT,,CIT,Oakland,,S,,,,S,,,,,,
+EXPN,D,500409142,COM,,,,,3549 Gray St,Apt 1,Oakland,CA,94601-3723,20241008,1200.00,1200.00,,,MON,,,,,,,,,,,,,,,,Ritzie-Hernandez,Sasha,,,BED,,OTH,Oakland,5,S,,,,S,,,,,,
+EXPN,D,500409141,COM,,,,,3042 Harrison St,,Oakland,CA,94611-5524,20241008,1200.00,1200.00,,,MON,,,,,,,,,,,,,,,,Williams,VanCedric,,,BED,,OTH,Oakland,3,S,,,,S,,,,,,
+EXPN,D,500409139,COM,,,,,312 Clay St,Ste 300,Oakland,CA,94607-3510,20241008,1200.00,1200.00,,,MON,,,,,,,,,,,,,,,,Unger,Zac,,,CCM,,CIT,Oakland,1,S,,,,S,,,,,,
+EXPN,E,500416173,OTH,ActBlue,,,,,,Somerville,MA,02144-3132,,4.24,0.00,,,OFC,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416174,OTH,ActBlue,,,,,,Somerville,MA,02144-3132,,3.61,0.00,,,OFC,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416175,OTH,ActBlue,,,,,,Somerville,MA,02144-3132,,3.37,0.00,,,OFC,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416176,OTH,ActBlue,,,,,,Somerville,MA,02144-3132,,4.88,0.00,,,OFC,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416177,OTH,Bay Rising Action Committee,,,,,,Oakland,CA,94612-1941,,3500.00,0.00,,,CTB,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416178,OTH,Bay Rising Action Committee,,,,,,Oakland,CA,94612-1941,,3500.00,0.00,,,CTB,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416179,OTH,Bay Rising Action Committee,,,,,,Oakland,CA,94612-1941,,3000.00,0.00,,,CTB,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416181,OTH,California Calls Action Fund,,,,,,Los Angeles,CA,90016-3911,,1064.84,0.00,,,CNS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500409143,COM,Carroll Fife for City Council 2024,,,,,,Lakeport,CA,95453-5412,,1200.00,0.00,,,CTB,,,,,,1463441,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500409138,COM,Nikki F Bas for Supervisor 2024,,,,,,Oakland,CA,94602-1312,,10000.00,0.00,,,CTB,,,,,,1465054,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500409140,COM,Rachel Latta for Oakland School Board 2024,,,,,,Oakland,CA,94618-1217,,1200.00,0.00,,,CTB,,,,,,1469514,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416183,OTH,Resilient Strategies LLC,,,,,,Oakland,CA,94612-1941,,337.89,0.00,,,SAL,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416184,OTH,Resilient Strategies LLC,,,,,,Oakland,CA,94612-1941,,88.19,0.00,,,PRO,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416185,OTH,Resilient Strategies LLC,,,,,,Oakland,CA,94612-1941,,42.61,0.00,,,OFC,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500409144,COM,Ryan Richardson For Oakland City Attorney,,,,,,Oakland,CA,94607-3510,,1200.00,0.00,,,CTB,,,,,,1462429,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500409142,COM,Sasha Ritzi-Hernandez for Oakland School Board 2024,,,,,,Oakland,CA,94601-3723,,1200.00,0.00,,,CTB,,,,,,1469978,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416180,OTH,The Sherman Company,,,,,,San Diego,CA,92119-2948,,315.90,0.00,,,CNS,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500409141,COM,"VanCedric Williams for OUSD, School Board, Seat 3, 2024",,,,,,Oakland,CA,94611-5524,,1200.00,0.00,,,CTB,,,,,,1427826,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500416182,OTH,Yates Creative,,,,,,Oakland,CA,94612-2124,,1912.50,0.00,,,LIT,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+EXPN,E,500409139,COM,Zac Unger For Oakland City Council 2024,,,,,,Oakland,CA,94607-3510,,1200.00,0.00,,,CTB,,,,,,1462377,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+DEBT,F,1250002011,OTH,Beaver Legal Corporation,,,,,,Sisters,OR,97759-1679,479.70,0.00,0.00,479.70,PRO,,,,,,,,,,,,,,,,
+DEBT,F,1250002247,OTH,Resilient Strategies LLC,,,,,,Oakland,CA,94612-1941,0.00,1156.63,0.00,1156.63,OFC,Operating Expenses,,,,,,,,,,,,,,,
+DEBT,F,1250002248,OTH,Resilient Strategies LLC,,,,,,Oakland,CA,94612-1941,0.00,115.66,0.00,115.66,PRO,Admin Fee,,,,,,,,,,,,,,,
