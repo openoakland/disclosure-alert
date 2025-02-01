@@ -16,7 +16,7 @@ ActiveAdmin.register Notice do
       f.input :date, as: :datepicker, datepicker_options: {
         min_date: Date.today - 1,
       }, input_html: { autocomplete: 'off' }
-      text_node "Note: The date should be the date of the *filings*, not the date of the email. (i.e. this date should match the subject line of the email)"
+      text_node "Note: The date should be the date of the *filings* (i.e. the day before the notice will be sent). This date should match the subject line of the email."
       f.input :informational
       f.input :body
     end
