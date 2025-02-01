@@ -1,0 +1,5 @@
+HDR,CAL,CA,2.01,NetFile,202410231,Supercedes=212298745;
+CVR,F496,1345259,RCP,Oakland Education Association Political Action Committee,,,,001,20241023,,Latta-4,,,,,,Oakland,CA,94606,(916) 706-2677,,Laura@StephenCompany.com,,,Sacramento,CA,95814,,,,,,,,,,,,,,,,,,Amending contribution received,,,Rachel Latta,,,,,,,,,,,,,,,OTH,School Board,OTH,Oakland Unified School District,1,,S
+S496,F496,EDT158,6056.96,20241011,,Mailer,,EDT:S496:158
+TEXT,F496,EDT:S496:158,Cumulative to date total $30399.00
+RCPT,F496P3,INC2381,SCC,California Teachers Association - Association for Better Citizenship,,,,,,Burlingame,CA,94010,,,,,20241010,,86000.00,97000.00,,,741941,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
