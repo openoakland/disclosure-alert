@@ -12,19 +12,15 @@ class CalFileParser
   def parse
     rows = CSV.parse(@body)
     if rows[1][0] == 'CVR' && rows[1][1] == 'F460'
-      puts "Looks like a F460"
+      puts 'Looks like a F460'
     end
 
     rows.map do |row|
-      record_type = row.shift
-      form_type = row.shift
-      
-      if record_type == 'SMRY' && form_type == 'F460'
-        # Do I need to subdivide this into form_type = 'F460'?
-        %w[line_Item amount_A form_Type].zip(row).to_h.tap do |hash|
-          hash['form_Type'] = form_type
-          hash['amount_A'] = hash['amount_A'].to_f
-        end
+      case row
+      in ['SMRY', form_type, *cols]
+        { 'line_Item' => cols[0], 'amount_A' => cols[1].to_f, 'form_Type' => form_type }
+      else
+        # Row format not supported
       end
     end.compact
   end
