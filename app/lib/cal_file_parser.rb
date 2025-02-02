@@ -69,16 +69,14 @@ class CalFileParser
           hash['bal_Num'] = @cover_sheet['bal_Num']
           hash['sup_Opp_Cd'] = @cover_sheet['sup_Opp_Cd']
         end
-      in ['RCPT', form_type, *cols]
+      in ['RCPT', form_type, *cols] # Contributions (460 Schedule A/496P3)
         # TODO: When Tran_Type = X, cols 18 and 19 have different headers.
-        obj = RCPT_HEADERS.zip(cols).to_h
-        obj['form_Type'] = form_type
-        obj
-        # TODO: Add other fields here from the CVR:
-        # cand_NamL
-        # sup_Opp_Cd
-        # bal_Num
-      in ['S497', form_type, *cols]
+        RCPT_HEADERS.zip(cols)
+          .to_h
+          .tap do |hash|
+            hash['form_Type'] = form_type
+          end
+      in ['S497', form_type, *cols] # Late Contributions (F497P1/F497P2)
         S497_HEADERS.zip(cols)
           .to_h
           .tap do |hash|
