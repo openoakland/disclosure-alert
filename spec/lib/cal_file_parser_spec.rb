@@ -38,4 +38,26 @@ RSpec.describe CalFileParser do
       expect(results).to include(hash_including('form_Type' => 'F496', 'tran_Amt1' => 15000.00, 'tran_Dscr' => 'ONLINE VIDEO ADS'))
     end
   end
+
+  describe 'parsing a 497' do
+    let(:fixture) { File.read(Rails.root.join('spec', 'fixtures', 'cal', 'F497-201064086.txt')) }
+
+    it 'parses F497P1 rows (late contribution received)' do
+      results = parser.parse
+      expect(results).to include(hash_including(
+        "form_Type" => "F497P1",
+        "tran_NamL" => "Lee",
+        "calculated_Amount" => 50.0
+      ))
+    end
+
+    it 'parses F497P2 rows (late contribution made)' do
+      results = parser.parse
+      expect(results).to include(hash_including(
+        "form_Type" => "F497P2",
+        "tran_NamL" => "Janani Ramchandran for Assembly 2021",
+        "calculated_Amount" => 1000.0
+      ))
+    end
+  end
 end

@@ -1,4 +1,0 @@
-HDR,CAL,CA,2.01,NetFile,0_11h31m31s,Hash=1664298;
-CVR,F497,1468846,,Rowena Brown at large Oakland City Council 2024,,,,000,20241025,,10252024,,,,,,Oakland,CA,94607,(510) 734-0025,,rowena@rowenaforoakland.com,,,,,,,,,,,,,,,,,,,,,,,,,
-S497,F497P1,EkSo5496hbbq,COM,DRIVE Committee,,,,,,Washington,DC,20001-2198,,,,,20241024,,1000.00,C00032979,,,,,,,,,,,,,,,
-S497,F497P1,NgoDwNgOGYgD,COM,IUPAT Political Action Together Legislative Education Committee,,,,,,Hanover,MD,21076,,,,,20241024,,1200.00,Pending,,,,,,,,,,,,,,,

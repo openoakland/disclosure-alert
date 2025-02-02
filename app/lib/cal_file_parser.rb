@@ -27,6 +27,12 @@ class CalFileParser
   juris_Dscr dist_No off_S_H_Cd bal_Name bal_Num bal_Juris sup_Opp_Cd memo_Code
   memo_RefNo bakRef_TID xRef_SchNm xRef_Match int_Rate int_CmteId]
 
+  S497_HEADERS = %w[tran_ID entity_Cd enty_NamL enty_NamF enty_NamT enty_NamS
+  enty_Adr1 enty_Adr2 enty_City enty_ST enty_ZIP4 ctrib_Emp ctrib_Occ ctrib_Self
+  elec_Date ctrib_Date date_Thru amount cmte_ID cand_NamL cand_NamF cand_NamT
+  cand_NamS office_Cd offic_Dscr juris_Cd juris_Dscr dist_No off_S_H_Cd bal_Name
+  bal_Num bal_Juris memo_Code Memo_RefNo]
+
   def initialize(body)
     @body = body
   end
@@ -68,6 +74,17 @@ class CalFileParser
         # cand_NamL
         # sup_Opp_Cd
         # bal_Num
+      in ['S497', form_type, *cols]
+        S497_HEADERS.zip(cols)
+          .to_h
+          .tap do |hash|
+            hash['form_Type'] = form_type
+            hash['amount'] = hash['amount'].to_f
+
+            # Add backwards-compatible fields:
+            hash['calculated_Amount'] = hash['amount']
+            hash['tran_NamL'] = hash['enty_NamL']
+          end
       else
         # Row format not supported
       end
