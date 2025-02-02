@@ -35,21 +35,24 @@ class CalFileParser
 
   def initialize(body)
     @body = body
+    @cover_sheet = nil
   end
 
   def parse
     rows = CSV.parse(@body)
-    if rows[1][0] == 'CVR' && rows[1][1] == 'F460'
-      puts 'Looks like a F460'
-    end
-
     rows.map do |row|
       case row
       in ['SMRY', form_type, *cols]
-        { 'line_Item' => cols[0], 'amount_A' => cols[1].to_f, 'form_Type' => form_type }
+        {
+          'line_Item' => cols[0],
+          'amount_A' => cols[1].to_f,
+          'form_Type' => form_type
+        }
       in ['CVR', form_type, *cols]
-        obj = CVR_HEADERS.zip(cols).to_h
-        obj
+        raise 'Multiple CVR rows detected!' unless @cover_sheet.nil?
+
+        @cover_sheet = CVR_HEADERS.zip(cols).to_h
+        @cover_sheet
       in ['S496', form_type, *cols] # S496 = Independent Expenditures Made
         {
           'form_Type' => form_type,
@@ -60,11 +63,12 @@ class CalFileParser
           'tran_Dscr' => cols[4], # "expn_Desc" in PDF
           'memo_Code' => cols[5],
           'memo_RefNo' => cols[6],
-          # TODO: Add other fields here from the CVR:
-          # cand_NamL
-          # sup_Opp_Cd
-          # bal_Num
-        }
+        }.tap do |hash|
+          # Add fields from cover sheet for backwards-compatibility:
+          hash['cand_NamL'] = @cover_sheet['cand_NamL']
+          hash['bal_Num'] = @cover_sheet['bal_Num']
+          hash['sup_Opp_Cd'] = @cover_sheet['sup_Opp_Cd']
+        end
       in ['RCPT', form_type, *cols]
         # TODO: When Tran_Type = X, cols 18 and 19 have different headers.
         obj = RCPT_HEADERS.zip(cols).to_h

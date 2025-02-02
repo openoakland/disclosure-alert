@@ -33,6 +33,11 @@ RSpec.describe CalFileParser do
       expect(results).to include(hash_including('form_Type' => 'F496', 'tran_Amt1' => 15000.00, 'tran_Dscr' => 'ONLINE VIDEO ADS'))
     end
 
+    it 'adds fields from the CVR sheet to the S496 rows' do
+      results = parser.parse
+      expect(results).to include(hash_including('tran_Dscr' => 'ELECTRONIC MEDIA ADS', 'sup_Opp_Cd' => 'O', 'cand_NamL' => 'CARROLL FIFE'))
+    end
+
     it 'parses F496P3 rows (contributions >$100 received)' do
       results = parser.parse
       expect(results).to include(hash_including('form_Type' => 'F496', 'tran_Amt1' => 15000.00, 'tran_Dscr' => 'ONLINE VIDEO ADS'))
