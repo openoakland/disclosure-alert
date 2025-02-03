@@ -56,7 +56,19 @@ namespace :disclosure_alert do
   end
 
   desc 'Backfill missing filing contents from already-downloaded filings'
-  task backfill: :with_configuration do
-    DisclosureDownloader.new.backfill_contents
+  task backfill_contents: :with_configuration do
+    NetfileAgency.each_supported_agency do |agency|
+      DisclosureDownloader.new(agency).backfill_contents
+    end
+  end
+
+  # Invoke like:
+  #   bin/rails 'disclosure_alert:backfill_filings[since="2024-01-01"]'
+  desc 'Backfill missing filing contents from already-downloaded filings'
+  task :backfill_filings, [:since] => :with_configuration do |_t, args|
+    since = Date.parse(args[:since])
+    NetfileAgency.each_supported_agency do |agency|
+      DisclosureDownloader.new(agency).backfill_filings(since)
+    end
   end
 end

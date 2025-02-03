@@ -20,12 +20,12 @@ class CalFileParser
   RCPT_HEADERS = %w[tran_ID entity_Cd ctrib_NamL ctrib_NamF ctrib_NamT
   ctrib_NamS ctrib_Adr1 ctrib_Adr2 ctrib_City ctrib_ST ctrib_ZIP4 ctrib_Emp
   ctrib_Occ ctrib_Self tran_Type rcpt_Date date_Thru amount cum_YTD hold_Amount
-  12 ctrib_Dscr cmte_ID tres_NamL tres_NamF tres_NamT tres_NamS tres_Adr1
-  tres_Adr2 tres_City tres_ST tres_ZIP4 intr_NamL intr_NamF intr_NamT intr_NamS
-  intr_Adr1 intr_Adr2 intr_City intr_ST intr_ZIP4 intr_Emp intr_Occ intr_Self
-  cand_NamL cand_NamF cand_NamT cand_NamS office_Cd offic_Dscr juris_Cd
-  juris_Dscr dist_No off_S_H_Cd bal_Name bal_Num bal_Juris sup_Opp_Cd memo_Code
-  memo_RefNo bakRef_TID xRef_SchNm xRef_Match int_Rate int_CmteId]
+  ctrib_Dscr cmte_ID tres_NamL tres_NamF tres_NamT tres_NamS tres_Adr1 tres_Adr2
+  tres_City tres_ST tres_ZIP4 intr_NamL intr_NamF intr_NamT intr_NamS intr_Adr1
+  intr_Adr2 intr_City intr_ST intr_ZIP4 intr_Emp intr_Occ intr_Self cand_NamL
+  cand_NamF cand_NamT cand_NamS office_Cd offic_Dscr juris_Cd juris_Dscr dist_No
+  off_S_H_Cd bal_Name bal_Num bal_Juris sup_Opp_Cd memo_Code memo_RefNo
+  bakRef_TID xRef_SchNm xRef_Match int_Rate int_CmteId]
 
   S497_HEADERS = %w[tran_ID entity_Cd enty_NamL enty_NamF enty_NamT enty_NamS
   enty_Adr1 enty_Adr2 enty_City enty_ST enty_ZIP4 ctrib_Emp ctrib_Occ ctrib_Self
