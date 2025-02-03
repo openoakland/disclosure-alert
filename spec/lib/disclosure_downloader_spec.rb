@@ -64,7 +64,7 @@ RSpec.describe DisclosureDownloader do
       allow(Netfile::Client).to receive(:new).and_return(fake_client)
     end
 
-    xit 'downloads a 496 filing' do
+    it 'downloads a 496 filing' do
       expect { described_class.new.download }
         .to change(Filing, :count)
         .by(1)
