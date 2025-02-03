@@ -1,25 +1,26 @@
 # frozen_string_literal: true
 
 class DisclosureDownloader
-  def initialize(agency = NetfileAgency.coak)
+  def initialize(agency = NetfileAgency.coak, logger = $stdout)
     @netfile = Netfile::Client.new
     @agency = agency
+    @logger = logger
   end
 
   def download
     latest = Filing.where(netfile_agency: @agency).order(filed_at: :desc).first
-    puts '==================================================================='
-    puts "Beginning State for Netfile agency #{@agency.shortcut}:"
-    puts
-    puts "Filings: #{Filing.where(netfile_agency: @agency).count}"
-    puts "Latest: #{latest&.filed_at}"
-    puts '==================================================================='
+    @logger.puts '==================================================================='
+    @logger.puts "Beginning State for Netfile agency #{@agency.shortcut}:"
+    @logger.puts
+    @logger.puts "Filings: #{Filing.where(netfile_agency: @agency).count}"
+    @logger.puts "Latest: #{latest&.filed_at}"
+    @logger.puts '==================================================================='
 
     @netfile.each_filing(agency: @agency) do |json|
       filing = Filing.from_json(json)
 
       if filing.new_record?
-        puts "Syncing new filing: #{filing.inspect}"
+        @logger.puts "Syncing new filing: #{filing.inspect}"
       end
 
       break if latest && latest == filing
@@ -30,32 +31,32 @@ class DisclosureDownloader
     end
 
     latest = Filing.where(netfile_agency: @agency).order(filed_at: :desc).first
-    puts '==================================================================='
-    puts 'Ending State:'
-    puts
-    puts "Filings: #{Filing.where(netfile_agency: @agency).count}"
-    puts "Latest: #{latest&.filed_at}"
-    puts '==================================================================='
+    @logger.puts '==================================================================='
+    @logger.puts 'Ending State:'
+    @logger.puts
+    @logger.puts "Filings: #{Filing.where(netfile_agency: @agency).count}"
+    @logger.puts "Latest: #{latest&.filed_at}"
+    @logger.puts '==================================================================='
   end
 
   # Downloads filings (and contents if necessary) from oldest to newest. Good to
   # use if downloading is broken for an extended period.
   def backfill_filings(since)
-    puts '==================================================================='
-    puts "Fetching filings since #{since}..."
-    puts ''
+    @logger.puts '==================================================================='
+    @logger.puts "Fetching filings since #{since}..."
+    @logger.puts ''
     filings_in_range = @netfile.each_filing(agency: @agency)
       .lazy
       .map { |json| Filing.from_json(json) }
       .take_while { |filing| filing.filed_at >= since }
       .to_a
     filings, already_downloaded_filings = filings_in_range.partition(&:new_record?)
-    puts "Filings to fetch: #{filings.length}"
-    puts "                  (#{already_downloaded_filings.length} already downloaded)"
-    puts '==================================================================='
+    @logger.puts "Filings to fetch: #{filings.length}"
+    @logger.puts "                  (#{already_downloaded_filings.length} already downloaded)"
+    @logger.puts '==================================================================='
 
     filings.reverse.each_with_index do |filing, i|
-      puts "Downloading #{i.to_s.rjust(3)}/#{filings.length}: #{filing.filer_name.truncate(30).ljust(30)} - #{filing.form_name} (Filed: #{filing.filed_at})"
+      @logger.puts "Downloading #{i.to_s.rjust(3)}/#{filings.length}: #{filing.filer_name.truncate(30).ljust(30)} - #{filing.form_name} (Filed: #{filing.filed_at})"
       download_filing(filing)
       download_unamended_version(filing)
     end
@@ -63,11 +64,11 @@ class DisclosureDownloader
 
   # Goes through old Filings and downloads the contents if missing.
   def backfill_contents
-    puts '==================================================================='
-    puts 'Backfilling Filing Contents:'
-    puts
-    puts "Filings: #{Filing.count}"
-    puts '==================================================================='
+    @logger.puts '==================================================================='
+    @logger.puts 'Backfilling Filing Contents:'
+    @logger.puts
+    @logger.puts "Filings: #{Filing.count}"
+    @logger.puts '==================================================================='
 
     num_backfilled_by_name = Hash.new(0)
     Filing.find_each do |filing|
@@ -78,11 +79,11 @@ class DisclosureDownloader
       num_backfilled_by_name[filing.form_name] += 1
     end
 
-    puts '==================================================================='
-    puts 'Backfill Completed:'
-    puts
-    puts "Backfilled: #{num_backfilled_by_name.map { |k, v| "Form #{k}: #{v}" }.join(', ')}"
-    puts '==================================================================='
+    @logger.puts '==================================================================='
+    @logger.puts 'Backfill Completed:'
+    @logger.puts
+    @logger.puts "Backfilled: #{num_backfilled_by_name.map { |k, v| "Form #{k}: #{v}" }.join(', ')}"
+    @logger.puts '==================================================================='
   end
 
   private
@@ -116,7 +117,7 @@ class DisclosureDownloader
   end
 
   def download_unamended_version(filing)
-    return unless filing.amended_filing_id && !Filing.exists?(filing.amended_filing_id)
+    return if !filing.amended_filing_id || Filing.exists?(filing.amended_filing_id)
 
     # If the filing was amended, but we haven't downloaded the original
     # un-amended filing yet, let's grab it now.
@@ -132,15 +133,15 @@ class DisclosureDownloader
     amended_json['title'] = filing.title
     amended_json['form'] = filing.form
     amended_filing = Filing.from_json(amended_json)
-    puts "Syncing un-amended filing: #{amended_filing}"
+    @logger.puts "Syncing un-amended filing: #{amended_filing}"
     download_filing(amended_filing)
   end
 
   def retry?(exception)
-    return unless $stdout.tty?
+    return unless @logger.tty?
 
     puts "Error: #{exception} (#{exception.message})"
-    $stdout.write "Retry? (y = yes; n = no, s = skip): "
+    @logger.write "Retry? (y = yes; n = no, s = skip): "
     {
       'y' => :retry,
       'n' => nil,
