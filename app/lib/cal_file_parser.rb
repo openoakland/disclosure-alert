@@ -75,6 +75,12 @@ class CalFileParser
           .to_h
           .tap do |hash|
             hash['form_Type'] = form_type
+            hash['amount'] = hash['amount'].to_f
+
+            # Add backwards-compatible fields:
+            hash['calculated_Amount'] = hash['amount']
+            hash['tran_NamL'] ||= hash['ctrib_NamL']
+            hash['tran_NamF'] ||= hash['ctrib_NamF']
           end
       in ['S497', form_type, *cols] # Late Contributions (F497P1/F497P2)
         S497_HEADERS.zip(cols)
