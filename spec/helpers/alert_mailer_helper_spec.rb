@@ -105,4 +105,21 @@ RSpec.describe AlertMailerHelper do
       end
     end
   end
+
+  describe '#deduplicate_deadlines' do
+    context 'when there are duplicates (one with netfile_agency_id and one without)' do
+      let(:deadlines) do
+        [
+          FilingDeadline.create(date: '2024-07-31', report_period_end: '2024-03-30', netfile_agency_id: NetfileAgency.coak.netfile_id),
+          FilingDeadline.create(date: '2024-07-31', report_period_end: '2024-06-30')
+        ]
+      end
+
+      it 'removes the FilingDeadline without the netfile_agency_id' do
+        deduplicated = helper.deduplicate_deadlines(deadlines)
+        expect(deduplicated.length).to eq(1)
+        expect(deduplicated).to match_array([deadlines.first])
+      end
+    end
+  end
 end

@@ -105,6 +105,16 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_05_053954) do
     t.date "deadline_semi_annual_post"
   end
 
+  create_table "filing_deadlines", force: :cascade do |t|
+    t.date "date"
+    t.date "report_period_begin"
+    t.date "report_period_end"
+    t.integer "deadline_type"
+    t.integer "netfile_agency_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "filings", force: :cascade do |t|
     t.string "filer_id"
     t.string "filer_name"

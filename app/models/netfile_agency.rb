@@ -12,9 +12,11 @@ class NetfileAgency < ApplicationRecord
     @_sfo ||= find_by(shortcut: 'SFO')
   end
 
-  def self.each_supported_agency(&block)
-    block.call(coak)
-    block.call(sfo)
+  def self.each_supported_agency
+    return to_enum(:each_supported_agency) unless block_given?
+
+    yield coak
+    yield sfo
   end
 
   def self.by_netfile_id(id)
