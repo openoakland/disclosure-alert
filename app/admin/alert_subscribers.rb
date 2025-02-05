@@ -1,11 +1,12 @@
 ActiveAdmin.register AlertSubscriber do
-  permit_params :unsubscribed_at, :email, :netfile_agency_id
+  permit_params :unsubscribed_at, :email, :netfile_agency_id, :subscription_frequency
 
   filter :email
   filter :created_at
   filter :updated_at
   filter :unsubscribed_at
   filter :netfile_agency
+  filter :subscription_frequency, as: :select, collection: AlertSubscriber.subscription_frequencies
 
   scope :all
   scope :active, default: true
@@ -31,6 +32,11 @@ ActiveAdmin.register AlertSubscriber do
     f.inputs do
       f.input :email
       f.input :netfile_agency
+
+      frequencies = AlertSubscriber.subscription_frequencies.map do |name, value|
+        [name.humanize, name]
+      end
+      f.input :subscription_frequency, as: :select, collection: frequencies
     end
     f.actions
   end
