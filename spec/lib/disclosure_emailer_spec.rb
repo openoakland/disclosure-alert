@@ -57,6 +57,18 @@ describe DisclosureEmailer do
       end
     end
 
+    context 'when there is a notice for that date' do
+      let(:admin_user) { AdminUser.create!(email: 'test@example.com', password: 'foobar') }
+      let!(:notice) { Notice.create!(date: yesterday, body: "Test notice please ignore", creator: admin_user) }
+
+      it 'includes the notice' do
+        subject
+        expect(AlertMailer)
+          .to have_received(:daily_alert)
+          .with(subscriber, yesterday, anything, notice)
+      end
+    end
+
     context 'when the subscriber is sent to weekly frequency' do
       before do
         subscriber.update(subscription_frequency: 'weekly')
@@ -78,9 +90,23 @@ describe DisclosureEmailer do
 
         it 'sends an email including filings from the past week' do
           subject
+
           expect(AlertMailer)
             .to have_received(:daily_alert)
-            .with(subscriber, yesterday, include(filing), anything)
+            .with(subscriber, yesterday.all_week, include(filing), anything)
+        end
+
+        context 'when there are notices in the date range' do
+          let(:admin_user) { AdminUser.create!(email: 'test@example.com', password: 'foobar') }
+          let!(:first_notice) { Notice.create!(date: yesterday - 3, body: "First notice please ignore", creator: admin_user) }
+          let!(:second_notice) { Notice.create!(date: yesterday - 2, body: "Second notice please ignore", creator: admin_user) }
+
+          it 'includes the latest notice' do
+            subject
+            expect(AlertMailer)
+              .to have_received(:daily_alert)
+              .with(subscriber, yesterday.all_week, anything, second_notice)
+          end
         end
       end
     end

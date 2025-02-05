@@ -21,7 +21,7 @@ class DisclosureEmailer
         next if filings.none?
 
         AlertMailer
-          .daily_alert(subscriber, @date, filings, notices)
+          .daily_alert(subscriber, date_range_for_subscriber(subscriber), filings, notices)
           .deliver_now
       end
     end
@@ -30,19 +30,25 @@ class DisclosureEmailer
   private
 
   def filings_for_subscriber(alert_subscriber)
-    Filing
-      .where(netfile_agency: alert_subscriber.netfile_agency)
-      .filed_in_date_range(date_range_for_subscriber(alert_subscriber))
+    date_or_range = date_range_for_subscriber(alert_subscriber)
+
+    filings = Filing.where(netfile_agency: alert_subscriber.netfile_agency)
+
+    if date_or_range.is_a?(Date)
+      filings.filed_on_date(date_or_range)
+    else
+      filings.filed_in_date_range(date_or_range)
+    end
   end
 
   def notices_for_subscriber(alert_subscriber)
-    Notice.find_by(date: @date)
+    Notice.where(date: date_range_for_subscriber(alert_subscriber)).order(date: :desc).first
   end
 
   def date_range_for_subscriber(alert_subscriber)
     case alert_subscriber.subscription_frequency
     when 'daily'
-      @date.all_day
+      @date
     when 'weekly'
       return unless @date.sunday?
 
