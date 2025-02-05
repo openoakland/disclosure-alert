@@ -21,6 +21,8 @@ class AlertSubscriber < ApplicationRecord
   belongs_to :netfile_agency
   has_many :sent_messages
 
+  enum subscription_frequency: { daily: 0, weekly: 1 }
+
   validates :email, format: /\A[^@]+@[^\.]+\.[\w]+\z/i
 
   before_save :set_token_if_missing

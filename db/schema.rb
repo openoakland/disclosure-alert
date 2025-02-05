@@ -10,8 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_21_234640) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_05_053954) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "active_admin_comments", force: :cascade do |t|
@@ -61,6 +62,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_21_234640) do
     t.datetime "unsubscribed_at", precision: nil
     t.datetime "confirmed_at", precision: nil
     t.bigint "netfile_agency_id", default: 1
+    t.integer "subscription_frequency", default: 0
     t.index ["netfile_agency_id"], name: "index_alert_subscribers_on_netfile_agency_id"
     t.index ["token"], name: "index_alert_subscribers_on_token"
   end
