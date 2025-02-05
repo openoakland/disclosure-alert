@@ -93,4 +93,18 @@ module AlertMailerHelper
 
     "#{current_value} (amended from #{previous_value})"
   end
+
+  def deduplicate_deadlines(deadlines)
+    deadlines
+      .group_by { |deadline| deadline.date }
+      .transform_values do |deadlines_with_date|
+        # Keep the deduplicated one, unless the one we're looking at
+        # has a netfile_agency_id
+        deadlines_with_date.reduce(deadlines_with_date.first) do |deduplicated, deadline|
+          deadline.netfile_agency_id.present? ? deadline : deduplicated
+        end
+      end
+      .values
+      .flatten
+  end
 end

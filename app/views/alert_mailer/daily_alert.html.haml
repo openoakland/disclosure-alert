@@ -1,13 +1,29 @@
-%h3 In Today's Alert Email:
-- grouped_forms = sort_filing_groups(@forms.group_by { |f| f.i18n_key })
+%table{ style: 'width: 100%' }
+  %thead
+    %tr
+      %th{ style: 'width: 50%' }
+        %h3 In Today's Alert Email:
+      - if @upcoming_deadlines.any?
+        %th{ style: 'width: 50%' }
+          %h3 Upcoming Deadlines:
+  %tr
+    %td
+      - grouped_forms = sort_filing_groups(@forms.group_by { |f| f.i18n_key })
 
-%ul
-- grouped_forms.each do |i18n_key, forms|
-  %li
-    %b= forms.count
-    =t(i18n_key + '.name', count: forms.count)
+      %ul
+      - grouped_forms.each do |i18n_key, forms|
+        %li
+          %b= forms.count
+          =t(i18n_key + '.name', count: forms.count)
 
-%p
+    - if @upcoming_deadlines.any?
+      %td
+        %ul
+          - deduplicate_deadlines(@upcoming_deadlines).each do |deadline|
+            %li
+              %strong= deadline.date.strftime('%B %e, %Y')
+              \-
+              = t("activerecord.filing_deadline.deadline_type.#{deadline.deadline_type}")
 
 %hr
 - grouped_forms.each do |i18n_key, form_group|

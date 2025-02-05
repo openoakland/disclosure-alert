@@ -8,6 +8,7 @@ class AlertMailer < ApplicationMailer
     @alert_subscriber = alert_subscriber
     @forms = Forms.from_filings(filings)
     @email_notice = notice
+    @upcoming_deadlines = FilingDeadline.future.relevant_to_agency(alert_subscriber.netfile_agency)
 
     subject_date =
       if date_or_date_range.is_a?(Date)
