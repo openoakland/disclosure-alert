@@ -137,7 +137,7 @@ RSpec.describe AlertMailer do
 
     context 'when a notice is in effect for the email' do
       let(:notice_creator) { AdminUser.create(email: 'tomdooner@example.com') }
-      let(:notice) { Notice.create(creator: notice_creator, body: notice_body, date: date) }
+      let(:notice) { Notice.create!(creator: notice_creator, body: notice_body, date: date) }
       let(:notice_body) { 'Eat your <strong>fruits</strong> and vegetables!' }
 
       it 'renders the notice in the email' do

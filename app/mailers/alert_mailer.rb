@@ -9,11 +9,15 @@ class AlertMailer < ApplicationMailer
     @forms = Forms.from_filings(filings)
     @email_notice = notice
 
-    subject_date = if date_or_date_range.is_a?(Range)
-                     "between #{date_or_date_range.min} and #{date_or_date_range.max}"
-                   else
-                     "on #{date_or_date_range}"
-                   end
+    subject_date =
+      if date_or_date_range.is_a?(Date)
+        "on #{date_or_date_range}"
+      else
+        start_date = date_or_date_range.min.to_date
+        end_date = date_or_date_range.max.to_date
+
+        "between #{start_date} and #{end_date}"
+      end
 
     mail(
       to: @alert_subscriber.email,
