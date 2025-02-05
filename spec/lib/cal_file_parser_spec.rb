@@ -40,7 +40,12 @@ RSpec.describe CalFileParser do
 
     it 'parses F496P3 rows (contributions >$100 received)' do
       results = parser.parse
-      expect(results).to include(hash_including('form_Type' => 'F496', 'tran_Amt1' => 15000.00, 'tran_Dscr' => 'ONLINE VIDEO ADS'))
+      expect(results).to include(hash_including(
+        'form_Type' => 'F496P3',
+        'amount' => 10000.00,
+        'tran_NamL' => 'REVITALIZE EAST BAY COMMITTEE',
+        'calculated_Amount' => 10000.00
+      ))
     end
   end
 
