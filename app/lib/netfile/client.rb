@@ -10,6 +10,8 @@ module Netfile
   class Client
     BASE_URL = URI('https://netfile.com/Connect2/api/')
 
+    InternalServerError = Class.new(StandardError)
+
     def initialize; end
 
     def fetch_summary_contents(filing_id)
@@ -71,7 +73,7 @@ module Netfile
           return nil
         end
 
-        raise "Request Failed: " + response.inspect unless response.code.to_i < 300
+        raise_error(response) unless response.code.to_i < 300
 
         Zip::InputStream.open(StringIO.new(response.body)) do |zip|
           zip.get_next_entry
@@ -86,7 +88,7 @@ module Netfile
         request['Accept'] = 'application/json'
 
         response = http.request(request)
-        raise 'Error: ' + response.inspect unless response.code.to_i < 300
+        raise_error(response) unless response.code.to_i < 300
 
         return JSON.parse(response.body)
       end
@@ -106,7 +108,7 @@ module Netfile
           )
 
           response = http.request(request)
-          raise 'Error: ' + response.inspect unless response.code.to_i < 300
+          raise_error(response) unless response.code.to_i < 300
 
           filings, num_pages =
             JSON.parse(response.body).values_at('filings', 'totalMatchingPages')
@@ -132,6 +134,14 @@ module Netfile
       end
 
       results
+    end
+
+    def raise_error(response)
+      if response.is_a?(Net::HTTPInternalServerError)
+        raise InternalServerError.new("NetFile Error: #{response.body}")
+      else
+        raise "Error: #{response.body}"
+      end
     end
   end
 end
