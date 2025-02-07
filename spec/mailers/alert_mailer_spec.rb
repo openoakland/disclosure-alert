@@ -135,6 +135,22 @@ RSpec.describe AlertMailer do
       end
     end
 
+    context 'when there is a filing that fails to download' do
+      let(:filings_in_date_range) do
+        [
+          create_filing(id: 1),
+          create_filing(id: 2, contents: { error: "Net::HTTPInternalServerError", message: "Foo" }),
+        ]
+      end
+
+      it 'renders' do
+        expect(subject.subject).to include('filings on 2020-09-01')
+        expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
+        expect(subject.body.encoded).to include(filings_in_date_range.second.filer_name)
+        expect(subject.body.encoded).to include("A NetFile error occurred")
+      end
+    end
+
     context 'when a notice is in effect for the email' do
       let(:notice_creator) { AdminUser.create(email: 'tomdooner@example.com') }
       let(:notice) { Notice.create!(creator: notice_creator, body: notice_body, date: date) }

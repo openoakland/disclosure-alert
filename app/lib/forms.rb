@@ -124,6 +124,10 @@ module Forms
     def can_combine_with?(_other_form)
       false
     end
+
+    def download_error?
+      contents.is_a?(Hash) && contents.key?("error")
+    end
   end
 
   class BaseXMLForm < BaseForm
