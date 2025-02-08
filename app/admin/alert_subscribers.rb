@@ -84,11 +84,15 @@ ActiveAdmin.register AlertSubscriber do
   end
 
   member_action :send_yesterdays_email, method: :put do
-    yesterday = Date.yesterday
+    send_date = Date.yesterday
 
-    AlertMailer
-      .daily_alert(resource, yesterday, Filing.where(netfile_agency: resource.netfile_agency).filed_on_date(yesterday), Notice.find_by(date: yesterday))
-      .deliver_now
+    begin
+      AlertMailer
+        .daily_alert(resource, send_date)
+        .deliver_now
+    rescue AlertMailer::NoFilingsToSend => ex
+      return redirect_to resource_path, alert: "Failed to send: #{ex.message}"
+    end
 
     redirect_to resource_path, notice: 'Email Sent!'
   end

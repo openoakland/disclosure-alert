@@ -3,8 +3,8 @@ require 'haml'
 require 'premailer'
 
 class DisclosureEmailer
-  def initialize(date)
-    @date = date
+  def initialize(send_date)
+    @send_date = send_date
   end
 
   def send_email
@@ -16,45 +16,14 @@ class DisclosureEmailer
       puts '==================================================================='
 
       subscribers.find_each do |subscriber|
-        filings = filings_for_subscriber(subscriber)
-        notices = notices_for_subscriber(subscriber)
-        next if filings.none?
-
-        AlertMailer
-          .daily_alert(subscriber, date_range_for_subscriber(subscriber), filings, notices)
-          .deliver_now
+        begin
+          AlertMailer
+            .daily_alert(subscriber, @send_date)
+            .deliver_now
+        rescue AlertMailer::NoFilingsToSend => ex
+          puts "Failed to send: #{ex.message}"
+        end
       end
-    end
-  end
-
-  private
-
-  def filings_for_subscriber(alert_subscriber)
-    date_or_range = date_range_for_subscriber(alert_subscriber)
-
-    filings = Filing
-      .where(netfile_agency: alert_subscriber.netfile_agency)
-      .includes(:election_candidates, :election_committee, :amended_filing)
-
-    if date_or_range.is_a?(Date)
-      filings.filed_on_date(date_or_range)
-    else
-      filings.filed_in_date_range(date_or_range)
-    end
-  end
-
-  def notices_for_subscriber(alert_subscriber)
-    Notice.where(date: date_range_for_subscriber(alert_subscriber)).order(date: :desc).first
-  end
-
-  def date_range_for_subscriber(alert_subscriber)
-    case alert_subscriber.subscription_frequency
-    when 'daily'
-      @date
-    when 'weekly'
-      return unless @date.sunday?
-
-      @date.all_week
     end
   end
 end
