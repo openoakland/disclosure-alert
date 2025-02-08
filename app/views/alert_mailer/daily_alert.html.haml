@@ -1,11 +1,11 @@
 %table{ style: 'width: 100%' }
   %thead
     %tr
-      %th{ style: 'width: 50%' }
+      %th.overview__th
         %h3 In Today's Alert Email:
       - if @upcoming_deadlines.any?
-        %th{ style: 'width: 50%' }
-          %h3 Upcoming Deadlines:
+        %th.overview__th
+          %h3 Important Upcoming Dates:
   %tr
     %td
       - grouped_forms = sort_filing_groups(@forms.group_by { |f| f.i18n_key })
