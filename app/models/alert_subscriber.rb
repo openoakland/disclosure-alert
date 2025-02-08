@@ -16,6 +16,8 @@ class AlertSubscriber < ApplicationRecord
   scope :subscribed, -> { where(unsubscribed_at: nil).where.not(confirmed_at: nil) }
   scope :unconfirmed, -> { where(confirmed_at: nil) }
   scope :unsubscribed, -> { where.not(unsubscribed_at: nil) }
+  scope :daily, -> { active.where(subscription_frequency: 'daily') }
+  scope :weekly, -> { active.where(subscription_frequency: 'weekly') }
 
   has_many :ahoy_messages, foreign_key: :user_id
   belongs_to :netfile_agency
