@@ -3,6 +3,11 @@ require 'open-uri'
 class ElectionCommittee < ApplicationRecord
   COMMITTEE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZNbqOzI3TlelO3OSh7QGC1Y4rofoRPs0TefWDLJvleFkaXq_6CSWgX89HfxLYrHhy0lr4QqUEryuc/pub?gid=1015408103&single=true&output=csv'
 
+  has_one :election_referendum, -> do
+    joins(:election_committees).
+      where('election_committees.ballot_measure_election = election_referendums.election_name')
+  end, foreign_key: :measure_number, primary_key: :ballot_measure
+
   def self.replace_all_from_csv(committee_csv: COMMITTEE_CSV_URL)
     committee_csv = URI.open(committee_csv).read if committee_csv.start_with?('http')
     committees = CSV.parse(committee_csv, headers: :first_row)

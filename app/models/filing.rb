@@ -11,18 +11,8 @@ class Filing < ApplicationRecord
   has_many :election_candidates, foreign_key: :fppc_id, primary_key: :filer_id
   has_one :election_committee, foreign_key: :fppc_id, primary_key: :filer_id
   has_one :amended_filing, class_name: 'Filing', primary_key: :amended_filing_id, foreign_key: :id
+  has_one :election_referendum, through: :election_committee
   belongs_to :netfile_agency
-
-  def election_referendum
-    ElectionReferendum
-      .where(election_committees: { fppc_id: filer_id })
-      .joins(<<~SQL)
-        INNER JOIN election_committees
-          ON election_committees.ballot_measure_election = election_referendums.election_name
-          AND election_committees.ballot_measure = election_referendums.measure_number
-        SQL
-      .first
-  end
 
   def self.from_json(json)
     find_or_initialize_by(id: json['id']) do |record|
