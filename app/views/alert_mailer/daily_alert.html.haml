@@ -1,13 +1,13 @@
-%table{ style: 'width: 100%' }
+%table.overview
   %thead
     %tr
       %th.overview__th
         %h3 In Today's Alert Email:
       - if @upcoming_deadlines.any?
         %th.overview__th
-          %h3 Important Upcoming Dates:
+          %h3 Upcoming Filing Deadlines:
   %tr
-    %td
+    %td.overview__td
       - grouped_forms = sort_filing_groups(@forms.group_by { |f| f.i18n_key })
 
       %ul
@@ -17,7 +17,7 @@
           =t(i18n_key + '.name', count: forms.count)
 
     - if @upcoming_deadlines.any?
-      %td
+      %td.overview__td
         %ul
           - deduplicate_deadlines(@upcoming_deadlines).each do |deadline|
             %li
@@ -86,13 +86,19 @@
               = f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")
 
 %hr
-Was this email useful?
-= link_to 'Yes', 'https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform?usp=pp_url&entry.2039237906=Yes', 'disable-tracking' => true
-\/
-= link_to 'No', 'https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform?usp=pp_url&entry.2039237906=No', 'disable-tracking' => true
 
-%br
+%p
+  For more information about filing deadlines,
+  = link_to 'consult the California FPPC', 'https://www.fppc.ca.gov/learn/campaign-rules/where-and-when-to-file-campaign-statements/when-to-file-campaign-statements-state-local-filing-schedules.html'
+  or the local campaign finance agency.
 
-Don't want to receive these emails any more?
-= link_to 'Update Delivery Preferences',
-  edit_alert_subscriber_url(@alert_subscriber, token: @alert_subscriber.token)
+%p
+  Was this email useful?
+  = link_to 'Yes', 'https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform?usp=pp_url&entry.2039237906=Yes', 'disable-tracking' => true
+  \/
+  = link_to 'No', 'https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform?usp=pp_url&entry.2039237906=No', 'disable-tracking' => true
+
+%p
+  Don't want to receive these emails any more?
+  = link_to 'Update Delivery Preferences',
+    edit_alert_subscriber_url(@alert_subscriber, token: @alert_subscriber.token)
