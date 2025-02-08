@@ -1,5 +1,6 @@
 ActiveAdmin.register AlertSubscriber do
   permit_params :unsubscribed_at, :email, :netfile_agency_id, :subscription_frequency
+  includes :sent_messages
 
   filter :email
   filter :created_at
@@ -8,22 +9,24 @@ ActiveAdmin.register AlertSubscriber do
   filter :netfile_agency
   filter :subscription_frequency, as: :select, collection: AlertSubscriber.subscription_frequencies
 
-  scope :all
-  scope :active, default: true
-  scope :inactive
-  scope :unsubscribed
-  scope :unconfirmed
+  scope :all, group: :active
+  scope :active, default: true, group: :active
+  scope :inactive, group: :active
+  scope :unsubscribed, group: :active
+  scope :unconfirmed, group: :active
+
+  scope :daily, group: :frequency
+  scope :weekly, group: :frequency
 
   index do
     selectable_column
-    id_column
     column :email
     column :subscribed_at, :created_at
     column :unsubscribed_at
     column(:last_opened_at) { |as| as.last_opened_at ? time_ago_in_words(as.last_opened_at) : 'never' }
     column(:open_rate) { |as| format('%.1f%%', as.open_rate * 100) }
     column(:click_rate) { |as| format('%.1f%%', as.click_rate * 100) }
-    column(:total_emails) { |as| as.sent_messages.count }
+    column(:total_emails) { |as| as.sent_messages_count }
     actions
   end
 
@@ -48,7 +51,7 @@ ActiveAdmin.register AlertSubscriber do
     column :last_opened_at
     column :open_rate
     column :click_rate
-    column(:total_emails) { |as| as.sent_messages.count }
+    column(:total_emails) { |as| as.sent_messages_count }
   end
 
   action_item :send_yesterdays_email, only: :show do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_05_053954) do
+ActiveRecord::Schema[7.0].define(version: 2025_02_08_222753) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_05_053954) do
     t.datetime "confirmed_at", precision: nil
     t.bigint "netfile_agency_id", default: 1
     t.integer "subscription_frequency", default: 0
+    t.integer "sent_messages_count", default: 0, null: false
     t.index ["netfile_agency_id"], name: "index_alert_subscribers_on_netfile_agency_id"
     t.index ["token"], name: "index_alert_subscribers_on_token"
   end
