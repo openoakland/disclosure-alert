@@ -56,7 +56,22 @@ body, html {
   text-decoration: none;
 }
 
+/* ***********
+ * Overview table at the top of the email
+ * *********** */
+.overview {
+  width: 100%;
+}
+
 .overview__th {
   width: 50%;
   text-align: left;
+
+  h3 {
+    margin-bottom: 0;
+  }
+}
+
+.overview__td {
+  vertical-align: top;
 }
