@@ -14,4 +14,39 @@ RSpec.describe Filing do
       end
     end
   end
+
+  describe '#election_referendum association' do
+    let(:filer_id) { '123456' }
+    let(:election_name) { 'oakland-2024' }
+    let!(:filing) { Filing.create!(filer_id: filer_id, filed_at: Date.yesterday) }
+    let!(:election_committee) do
+      ElectionCommittee.create!(
+        fppc_id: filer_id,
+        ballot_measure_election: election_name,
+        ballot_measure: 'OK'
+      )
+    end
+    let!(:election_referendum) do
+      ElectionReferendum.create!(
+        election_name: election_name,
+        measure_number: 'OK'
+      )
+    end
+
+    it 'returns the associated ElectionReferendum' do
+      expect(filing.election_referendum)
+        .to eq(election_referendum)
+    end
+
+    context 'when the committee was contributing for a different election' do
+      before do
+        election_committee.update(ballot_measure_election: 'other-1111')
+      end
+
+      it 'does not return the ElectionReferendum' do
+        expect(filing.election_referendum)
+          .to eq(nil)
+      end
+    end
+  end
 end

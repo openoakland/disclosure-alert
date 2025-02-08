@@ -32,7 +32,9 @@ class DisclosureEmailer
   def filings_for_subscriber(alert_subscriber)
     date_or_range = date_range_for_subscriber(alert_subscriber)
 
-    filings = Filing.where(netfile_agency: alert_subscriber.netfile_agency)
+    filings = Filing
+      .where(netfile_agency: alert_subscriber.netfile_agency)
+      .includes(:election_candidates, :election_committee, :amended_filing)
 
     if date_or_range.is_a?(Date)
       filings.filed_on_date(date_or_range)
