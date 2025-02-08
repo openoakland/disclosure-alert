@@ -30,46 +30,46 @@ RSpec.describe AlertMailer do
     ]
   end
 
-  def create_filing(id: 123_123, form: 30, filer_id: 222_222, contents: fppc_460_contents)
-    Filing.create(
+  def create_filing(id: 123_123, form: 30, filer_id: 222_222, contents: fppc_460_contents, filed_at: 1.day.ago, netfile_agency: NetfileAgency.coak)
+    Filing.create!(
       id: id,
       filer_id: filer_id,
-      filer_name: 'Foo Bar Baz for City Council 2010',
+      filer_name: "Foo Bar Baz #{id} for City Council 2010",
       title: 'FPPC Form 460',
-      filed_at: 1.day.ago,
+      filed_at: filed_at,
       amendment_sequence_number: '0',
       amended_filing_id: nil,
-      netfile_agency: NetfileAgency.coak,
+      netfile_agency: netfile_agency,
       form: form, # Form 30 = FPPC 460
       contents: contents,
     ).tap do |filing|
-      ElectionCommittee.create(
+      ElectionCommittee.create!(
         name: 'Foo Bar for City Council 2010',
         fppc_id: filing.filer_id,
       )
     end
   end
 
-  def create_filings_to_combine(id: 333_333)
+  def create_filings_to_combine(id: 333_333, filed_at: 1.day.ago)
     [
-      Filing.create(
+      Filing.create!(
         id: id,
         filer_id: 333_333,
         filer_name: 'Oakland for better Oaklanders',
         title: 'FPPC Form 496',
-        filed_at: 1.day.ago,
+        filed_at: filed_at,
         amendment_sequence_number: '0',
         amended_filing_id: nil,
         netfile_agency: NetfileAgency.coak,
         form: 36, # FPPC 496
         contents: fppc_496_contents('Candidate A'),
       ),
-      Filing.create(
+      Filing.create!(
         id: id + 1,
         filer_id: 333_333,
         filer_name: 'Oakland for better Oaklanders',
         title: 'FPPC Form 496',
-        filed_at: 1.day.ago,
+        filed_at: filed_at,
         amendment_sequence_number: '0',
         amended_filing_id: nil,
         netfile_agency: NetfileAgency.coak,
@@ -81,18 +81,18 @@ RSpec.describe AlertMailer do
 
   describe '#daily_alert' do
     let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
-    let(:date) { Date.new(2020, 9, 1) }
-    let(:filings_in_date_range) do
+    let(:send_date) { Date.new(2020, 9, 1) } # Tuesday
+    let!(:filings_in_date_range) do
       [
-        create_filing(id: 1),
-        create_filing(id: 2),
-        create_filing(id: 3),
-        create_filing(id: 4, form: 39, contents: fppc_497_contents),
-      ] + create_filings_to_combine
+        create_filing(id: 1, filed_at: send_date.noon),
+        create_filing(id: 2, filed_at: send_date.noon),
+        create_filing(id: 3, filed_at: send_date.noon),
+        create_filing(id: 4, form: 39, contents: fppc_497_contents, filed_at: send_date.noon),
+      ] + create_filings_to_combine(filed_at: send_date.noon)
     end
     let(:notice) { nil }
 
-    subject { described_class.daily_alert(alert_subscriber, date, filings_in_date_range, notice) }
+    subject { described_class.daily_alert(alert_subscriber, send_date) }
 
     it 'renders' do
       expect(subject.subject).to include('filings on 2020-09-01')
@@ -118,28 +118,48 @@ RSpec.describe AlertMailer do
       )
     end
 
-    context 'when giving a date range instead of a single date' do
-      let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
-      let(:date) { Date.new(2020, 9, 1)..Date.new(2020, 9, 20) }
-      let(:filings_in_date_range) do
+    context 'when the subscriber is sent to weekly frequency' do
+      let(:alert_subscriber) do
+        AlertSubscriber.create(
+          email: 'tomdooner+test@gmail.com',
+          netfile_agency: NetfileAgency.coak,
+          subscription_frequency: 'weekly'
+        )
+      end
+      let!(:filings_in_date_range) do
         [
-          create_filing(id: 1),
-          create_filing(id: 2),
-          create_filing(id: 3),
+          create_filing(id: 1, filed_at: send_date - 4.days),
+          create_filing(id: 2, filed_at: send_date - 3.days),
+          create_filing(id: 3, filed_at: send_date - 2.days),
         ]
       end
 
-      it 'renders' do
-        expect(subject.subject).to include('between 2020-09-01 and 2020-09-20')
-        expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
+      context 'on non-Mondays' do
+        it 'returns nothing' do
+          expect { subject.deliver_now }.to raise_error(AlertMailer::NoFilingsToSend)
+        end
+      end
+
+      context 'on Mondays' do
+        let(:send_date) do
+          # A Sunday, because that means the email is going out on Monday:
+          Date.parse('2022-10-02')
+        end
+
+        it 'renders' do
+          expect(subject.subject).to include('between 2022-09-26 and 2022-10-02')
+          expect(subject.body.encoded).to include(filings_in_date_range.first.filer_name)
+          expect(subject.body.encoded).to include(filings_in_date_range.second.filer_name)
+          expect(subject.body.encoded).to include(filings_in_date_range.third.filer_name)
+        end
       end
     end
 
     context 'when there is a filing that fails to download' do
       let(:filings_in_date_range) do
         [
-          create_filing(id: 1),
-          create_filing(id: 2, contents: { error: "Net::HTTPInternalServerError", message: "Foo" }),
+          create_filing(id: 1, filed_at: send_date.noon),
+          create_filing(id: 2, filed_at: send_date.noon, contents: { error: "Net::HTTPInternalServerError", message: "Foo" }),
         ]
       end
 
@@ -153,11 +173,110 @@ RSpec.describe AlertMailer do
 
     context 'when a notice is in effect for the email' do
       let(:notice_creator) { AdminUser.create(email: 'tomdooner@example.com') }
-      let(:notice) { Notice.create!(creator: notice_creator, body: notice_body, date: date) }
+      let!(:notice) { Notice.create!(creator: notice_creator, body: notice_body, date: send_date) }
       let(:notice_body) { 'Eat your <strong>fruits</strong> and vegetables!' }
 
       it 'renders the notice in the email' do
         expect(subject.body.encoded).to include(notice_body)
+      end
+    end
+  end
+
+  describe "#filings_for_subscriber" do
+    let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
+    let(:send_date) { Date.new(2020, 9, 1) }
+    let(:filed_at) { send_date.noon }
+    let!(:filing) { create_filing(filed_at: filed_at, netfile_agency: filing_agency) }
+    let(:filing_agency) { NetfileAgency.coak }
+
+    subject { described_class.new.send(:filings_for_subscriber, alert_subscriber, send_date) }
+
+    it 'returns a filing from the agency within the date range' do
+      expect(subject).to include(filing)
+    end
+
+    context 'when the filing is for a different date' do
+      let(:filed_at) { send_date - 1.day }
+
+      it 'excludes the filing' do
+        expect(subject).not_to include(filing)
+      end
+    end
+
+    context 'when the filing is for a different agency' do
+      let(:filing_agency) { NetfileAgency.sfo }
+
+      it 'excludes the filing' do
+        expect(subject).not_to include(filing)
+      end
+    end
+
+    context 'when the subscriber is sent to weekly frequency' do
+      before do
+        alert_subscriber.update(subscription_frequency: 'weekly')
+      end
+
+      context 'on non-Mondays' do
+        it 'returns nothing' do
+          expect(subject).to be_empty
+        end
+      end
+
+      context 'on Mondays' do
+        let(:send_date) do
+          # A Sunday, because that means the email is going out on Monday:
+          Date.parse('2022-10-02')
+        end
+        let(:filed_at) { send_date - 3.days }
+
+        it 'includes filings from the prior week' do
+          expect(subject).to include(filing)
+        end
+      end
+    end
+  end
+
+  describe "#notices_for_subscriber" do
+    let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
+    let(:send_date) { Date.new(2020, 9, 1) }
+
+    subject { described_class.new.send(:notices_for_subscriber, alert_subscriber, send_date) }
+
+    it 'returns nil when there is no notice for that date' do
+      expect(subject).to eq(nil)
+    end
+
+    context 'when there is a notice for that date' do
+      let(:admin_user) { AdminUser.create!(email: 'test@example.com', password: 'foobar') }
+      let!(:notice) { Notice.create!(date: send_date, body: "Test notice please ignore", creator: admin_user) }
+
+      it 'includes the notice' do
+        expect(subject).to eq(notice)
+      end
+    end
+
+    context 'when the subscriber is sent to weekly frequency' do
+      before do
+        alert_subscriber.update(subscription_frequency: 'weekly')
+      end
+
+      context 'on non-Mondays' do
+        it { expect(subject).to eq(nil) }
+      end
+
+      context 'on Mondays' do
+        let(:send_date) do
+          # A Sunday, because that means the email is going out on Monday:
+          Date.parse('2022-10-02')
+        end
+
+        let(:admin_user) { AdminUser.create!(email: 'test@example.com', password: 'foobar') }
+        let!(:first_notice) { Notice.create!(date: send_date - 3, body: "First notice please ignore", creator: admin_user) }
+        let!(:second_notice) { Notice.create!(date: send_date - 2, body: "Second notice please ignore", creator: admin_user) }
+
+        it 'includes the latest notice' do
+          expect(subject).to eq(second_notice)
+        end
       end
     end
   end

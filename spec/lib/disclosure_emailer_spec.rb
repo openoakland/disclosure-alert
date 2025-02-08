@@ -10,6 +10,7 @@ describe DisclosureEmailer do
         email: 'test@example.com',
         confirmed_at: Time.now,
         netfile_agency: subscribed_agency,
+        subscription_frequency: 'daily'
       )
     end
     let(:filed_at) { yesterday.beginning_of_day.change(hour: 10) }
@@ -28,86 +29,27 @@ describe DisclosureEmailer do
         subject
         expect(AlertMailer)
           .to have_received(:daily_alert)
-          .with(subscriber, yesterday, include(filing), anything)
+          .with(subscriber, yesterday)
       end
     end
 
-    context 'when the filing is for a different date' do
-      let(:filed_at) { yesterday - 1.day }
-
-      it 'excludes the filing' do
-        subject
-        expect(AlertMailer)
-          .to have_received(:daily_alert)
-          .with(subscriber, yesterday, exclude(filing), anything)
-      end
-    end
-
-    context 'when the filing is for a different agency' do
-      let(:filing_agency) { NetfileAgency.sfo }
-
-      it 'excludes the filing' do
-        subject
-        expect(AlertMailer)
-          .to have_received(:daily_alert)
-          .with(subscriber, yesterday, exclude(filing), anything)
-        expect(AlertMailer)
-          .not_to have_received(:daily_alert)
-          .with(subscriber, yesterday, include(filing), anything)
-      end
-    end
-
-    context 'when there is a notice for that date' do
-      let(:admin_user) { AdminUser.create!(email: 'test@example.com', password: 'foobar') }
-      let!(:notice) { Notice.create!(date: yesterday, body: "Test notice please ignore", creator: admin_user) }
-
-      it 'includes the notice' do
-        subject
-        expect(AlertMailer)
-          .to have_received(:daily_alert)
-          .with(subscriber, yesterday, anything, notice)
-      end
-    end
-
-    context 'when the subscriber is sent to weekly frequency' do
+    context 'when the AlertMailer raises NoFilingsToSend' do
       before do
-        subscriber.update(subscription_frequency: 'weekly')
+        allow(AlertMailer).to receive(:daily_alert).and_raise(AlertMailer::NoFilingsToSend)
       end
 
-      context 'on non-Mondays' do
-        it 'does not send an email' do
+      it 'catches the error and outputs a message' do
+        expect_any_instance_of(DisclosureEmailer)
+          .to receive(:puts)
+          .with(/Failed to send:/)
+
+        expect {
           subject
-          expect(AlertMailer)
-            .not_to have_received(:daily_alert)
-            .with(subscriber, anything, anything, anything)
-        end
-      end
+        }.not_to raise_error
 
-      context 'on Monday' do
-        # When sending Monday's email, yesterday was a Sunday:
-        let(:yesterday) { Date.parse('2022-10-02') }
-        let(:filed_at) { yesterday - 3.days }
-
-        it 'sends an email including filings from the past week' do
-          subject
-
-          expect(AlertMailer)
-            .to have_received(:daily_alert)
-            .with(subscriber, yesterday.all_week, include(filing), anything)
-        end
-
-        context 'when there are notices in the date range' do
-          let(:admin_user) { AdminUser.create!(email: 'test@example.com', password: 'foobar') }
-          let!(:first_notice) { Notice.create!(date: yesterday - 3, body: "First notice please ignore", creator: admin_user) }
-          let!(:second_notice) { Notice.create!(date: yesterday - 2, body: "Second notice please ignore", creator: admin_user) }
-
-          it 'includes the latest notice' do
-            subject
-            expect(AlertMailer)
-              .to have_received(:daily_alert)
-              .with(subscriber, yesterday.all_week, anything, second_notice)
-          end
-        end
+        expect(AlertMailer)
+          .to have_received(:daily_alert)
+          .with(subscriber, yesterday)
       end
     end
   end
