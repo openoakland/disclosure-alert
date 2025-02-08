@@ -19,6 +19,14 @@ RSpec.describe Filing do
     let(:filer_id) { '123456' }
     let(:election_name) { 'oakland-2024' }
     let!(:filing) { Filing.create!(filer_id: filer_id, filed_at: Date.yesterday) }
+    let!(:election) do
+      Election.create!(
+        slug: election_name,
+        location: 'City of Oakland',
+        date: Date.new(2024, 11, 5),
+        title: 'Oakland Election November 5, 2024'
+      )
+    end
     let!(:election_committee) do
       ElectionCommittee.create!(
         fppc_id: filer_id,
