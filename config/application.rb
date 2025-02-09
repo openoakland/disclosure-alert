@@ -29,6 +29,7 @@ module DisclosureAlert
 
     config.action_mailer.default_url_options = {
       host: ENV['APP_HOST'],
+      protocol: 'https',
     }
     config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
 
