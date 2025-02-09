@@ -6,13 +6,13 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.1.2-node
+      # Ruby version matching .ruby-version file
+      - image: cimg/ruby:3.4.1-node
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: circleci/postgres:9.6
+      - image: cimg/postgres:14.14
         environment:
           POSTGRES_USER: disclosure-alert
           POSTGRES_DB: disclosure_alert-test
@@ -26,7 +26,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v2-dependencies-{{ checksum "Gemfile.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
