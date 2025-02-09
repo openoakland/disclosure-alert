@@ -40,7 +40,8 @@ RSpec.describe AlertSubscribersController do
         AlertSubscriber.create(
           email: email,
           netfile_agency: NetfileAgency.coak,
-          unsubscribed_at: unsubscribe_date
+          unsubscribed_at: unsubscribe_date,
+          confirmed_at: 11.days.ago
         )
       end
       let!(:admin) { AdminUser.create!(email: 'test@example.com', password: 'superSecur3') }
@@ -51,6 +52,8 @@ RSpec.describe AlertSubscribersController do
           .to change { previous_subscriber.reload.unsubscribed_at }
           .from(within(1.second).of(unsubscribe_date))
           .to(nil)
+
+        expect(previous_subscriber.confirmed_at).to eq(nil)
 
         new_comment = ActiveAdmin::Comment.last
         expect(new_comment).to have_attributes(
