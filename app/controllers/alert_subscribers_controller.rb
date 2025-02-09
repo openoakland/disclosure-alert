@@ -10,6 +10,7 @@ class AlertSubscribersController < ApplicationController
 
     if @alert_subscriber.unsubscribed_at?
       @alert_subscriber.unsubscribed_at = nil
+      @alert_subscriber.confirmed_at = nil
       ActiveAdmin::Comment.create(
         resource: @alert_subscriber,
         author: AdminUser.first,
