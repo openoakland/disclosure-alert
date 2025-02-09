@@ -14,7 +14,7 @@ class AlertMailer < ApplicationMailer
     @alert_subscriber = alert_subscriber
     @forms = Forms.from_filings(filings)
     @email_notice = notices_for_subscriber(alert_subscriber, send_date)
-    @upcoming_deadlines = FilingDeadline.future.relevant_to_agency(alert_subscriber.netfile_agency)
+    @upcoming_deadlines = FilingDeadline.future.but_not_too_future.relevant_to_agency(alert_subscriber.netfile_agency)
 
     mail(
       to: @alert_subscriber.email,
