@@ -102,15 +102,6 @@ GEM
       msgpack (~> 1.2)
     builder (3.3.0)
     byebug (11.1.3)
-    capybara (3.40.0)
-      addressable
-      matrix
-      mini_mime (>= 0.1.3)
-      nokogiri (~> 1.11)
-      rack (>= 1.6.0)
-      rack-test (>= 0.6.3)
-      regexp_parser (>= 1.5, < 3.0)
-      xpath (~> 3.2)
     coderay (1.1.3)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
@@ -220,7 +211,6 @@ GEM
       faraday (~> 2.1)
       mime-types
     marcel (1.0.4)
-    matrix (0.4.2)
     method_source (1.1.0)
     mime-types (3.6.0)
       logger
@@ -326,13 +316,11 @@ GEM
       ffi (~> 1.0)
     rdoc (6.12.0)
       psych (>= 4.0.0)
-    regexp_parser (2.10.0)
     reline (0.6.0)
       io-console (~> 0.5)
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.4.0)
     rspec-core (3.13.3)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.3)
@@ -350,8 +338,6 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.2)
-    rspec_junit_formatter (0.6.0)
-      rspec-core (>= 2, < 4, != 2.12.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.4.1)
     safely_block (0.4.1)
@@ -367,12 +353,6 @@ GEM
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
     securerandom (0.4.1)
-    selenium-webdriver (4.28.0)
-      base64 (~> 0.2)
-      logger (~> 1.4)
-      rexml (~> 3.2, >= 3.2.5)
-      rubyzip (>= 1.2.2, < 3.0)
-      websocket (~> 1.0)
     semantic_range (3.1.0)
     sentry-ruby (5.22.4)
       bigdecimal
@@ -412,23 +392,16 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webdrivers (5.2.0)
-      nokogiri (~> 1.6)
-      rubyzip (>= 1.3.0)
-      selenium-webdriver (~> 4.0)
     webpacker (5.4.4)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
     webrick (1.9.1)
-    websocket (1.2.11)
     websocket-driver (0.7.7)
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    xpath (3.2.0)
-      nokogiri (~> 1.8)
     zeitwerk (2.6.18)
 
 PLATFORMS
@@ -439,7 +412,6 @@ DEPENDENCIES
   ahoy_email (~> 1.1)
   bootsnap (>= 1.1.0)
   byebug
-  capybara (>= 2.15)
   coffee-rails (~> 4.2)
   devise
   dotenv-rails
@@ -454,17 +426,14 @@ DEPENDENCIES
   puma (~> 4.3)
   rails (~> 7.0)
   rspec-rails
-  rspec_junit_formatter
   rubyzip
   sass-rails (~> 5.0)
-  selenium-webdriver
   sentry-ruby
   spring (> 3.0)
   spring-commands-rspec
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)
-  webdrivers
   webpacker
 
 RUBY VERSION
