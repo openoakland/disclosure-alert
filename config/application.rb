@@ -31,7 +31,7 @@ module DisclosureAlert
       host: ENV['APP_HOST'],
       protocol: 'https',
     }
-    config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
+    config.action_mailer.preview_paths << Rails.root.join('spec', 'mailers', 'previews')
 
     config.action_controller.raise_on_open_redirects = false
 
