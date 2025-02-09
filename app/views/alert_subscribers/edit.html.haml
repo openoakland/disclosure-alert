@@ -1,3 +1,31 @@
-%h2 Edit Subscription for #{@alert_subscriber.email}
+.grid
+  .grid-col-12
+    %h2 Update Subscription for #{@alert_subscriber.email}
 
-= button_to 'Unsubscribe', alert_subscriber_path(params[:id], token: @alert_subscriber.token), method: :delete
+  .grid-col-6
+    %h3 Unsubscribe
+    = button_to 'Unsubscribe from all mailings', alert_subscriber_path(params[:id], token: @alert_subscriber.token), method: :delete, class: 'btn'
+    %p
+      If you unsubscribe, you can re-subscribe later by signing back up on
+      = succeed '.' do
+        = link_to 'the homepage', root_url
+
+  .grid-col-6
+    %h3 Change Subscription Frequency
+    %p
+      If you're getting too many emails, you can change the frequency of alert emails.
+
+    = form_for @alert_subscriber do |f|
+      = hidden_field_tag :token, params[:token]
+      .od-input-group
+        %h4 Subscription Frequency:
+        = f.collection_radio_buttons :subscription_frequency, AlertSubscriber.subscription_frequencies_humanized, :last, :first do |b|
+          .od-radio-button
+            = b.radio_button
+            = b.label
+
+      = f.submit 'Update Subscription Frequency', class: 'btn'
+
+    %p
+      = link_to 'Send us feedback', '#'
+      if you would like a different subscription frequency.

@@ -1,3 +1,14 @@
-%h2 Subscription Confirmed!
+.grid
+  .grid-col-12
+    %h2 Subscription Confirmed!
 
-%p Thank you for confirming your subscription. You should receive an email shortly with more information about Open Disclosure alerts.
+  .grid-col-12
+    %p
+      Thank you for confirming your subscription. You should receive an email
+      shortly with more information about Open Disclosure alerts.
+
+    %p
+      By default, you will receive emails daily. You can
+      = link_to 'update your subscription preferences here', edit_alert_subscriber_path(@alert_subscriber, token: @alert_subscriber.token)
+      or by clicking the link in the footer of the email to change how
+      frequently you receive alert emails.

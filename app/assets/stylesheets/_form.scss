@@ -1,0 +1,21 @@
+.btn {
+  cursor: pointer;
+}
+
+.od-input-group {
+  margin: 2rem 0;
+
+  label {
+    @include heading(h4);
+    display: block;
+  }
+}
+
+.od-radio-button {
+  display: flex;
+  margin-bottom: 0.5rem;
+
+  input {
+    margin-right: 1rem;
+  }
+}

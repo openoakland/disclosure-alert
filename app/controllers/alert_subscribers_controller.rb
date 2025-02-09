@@ -1,5 +1,5 @@
 class AlertSubscribersController < ApplicationController
-  before_action :set_alert_subscriber, only: %i[edit destroy confirm]
+  before_action :set_alert_subscriber, only: %i[edit destroy confirm update]
 
   def new
     @alert_subscriber = AlertSubscriber.new
@@ -37,9 +37,36 @@ class AlertSubscribersController < ApplicationController
 
   def edit; end
 
+  def update
+    @alert_subscriber.assign_attributes(alert_subscriber_params)
+
+    AlertSubscriber.transaction do
+      ActiveAdmin::Comment.create(
+        resource: @alert_subscriber,
+        author: AdminUser.first,
+        namespace: 'admin',
+        body: <<~BODY
+          User modified attributes:
+          #{@alert_subscriber.changes.map { |attribute, (old, new)| "* #{attribute} from #{old} to #{new}" }.join("\n")}
+        BODY
+      )
+
+      if @alert_subscriber.save
+        flash[:info] = 'Successfully updated your subscription settings.'
+        redirect_to edit_alert_subscriber_path(@alert_subscriber, token: @alert_subscriber.token)
+      end
+    end
+  end
+
   def destroy
     if @alert_subscriber.unsubscribe!
-      flash[:info] = 'You have been successfully unsubscribed!'
+      flash[:info_html] = <<~EOF
+        You've been successfully unsubscribed! Could you
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform" target="_blank">
+        leave us some quick feedback
+        </a>
+        to improve the service for others?
+      EOF
       return redirect_to :root
     end
   end
@@ -73,6 +100,6 @@ class AlertSubscribersController < ApplicationController
   end
 
   def alert_subscriber_params
-    params.fetch(:alert_subscriber).permit(:email).merge(netfile_agency: NetfileAgency.coak)
+    params.fetch(:alert_subscriber).permit(:email, :subscription_frequency).merge(netfile_agency: NetfileAgency.coak)
   end
 end

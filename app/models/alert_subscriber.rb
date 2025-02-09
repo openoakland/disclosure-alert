@@ -29,6 +29,14 @@ class AlertSubscriber < ApplicationRecord
 
   before_save :set_token_if_missing
 
+  def self.subscription_frequencies_humanized
+    subscription_frequencies.map do |label, value|
+      humanized_label = I18n.t("activerecord.alert_subscriber.subscription_frequency.#{label}")
+
+      [humanized_label, label]
+    end
+  end
+
   def set_token_if_missing
     return if token.present?
 
