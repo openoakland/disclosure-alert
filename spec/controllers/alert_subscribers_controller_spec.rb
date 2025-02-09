@@ -81,6 +81,8 @@ RSpec.describe AlertSubscribersController do
     subject { get :edit, params: { id: alert_subscriber.id, token: request_token } }
 
     describe 'with a valid token' do
+      render_views
+
       let(:request_token) { alert_subscriber.token }
 
       it { expect(subject).to be_successful }
@@ -90,6 +92,29 @@ RSpec.describe AlertSubscribersController do
       let(:request_token) { 'foo bar baz' }
 
       it { expect(subject).to be_redirect }
+    end
+  end
+
+  describe "#update" do
+    let!(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
+    let(:valid_params) do
+      {
+        id: alert_subscriber.id,
+        token: alert_subscriber.token,
+        alert_subscriber: {
+          subscription_frequency: 'weekly'
+        }
+      }
+    end
+
+    subject { post :update, params: valid_params }
+
+    it 'updates the attributes as expected and redirects back' do
+      expect { subject }
+        .to change { alert_subscriber.reload.subscription_frequency }
+        .from('daily').to('weekly')
+
+      expect(response).to redirect_to(edit_alert_subscriber_path(alert_subscriber, token: alert_subscriber.token))
     end
   end
 

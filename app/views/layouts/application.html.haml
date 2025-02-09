@@ -57,9 +57,9 @@
     - if flash[:error]
       .site-message.site-message--error
         = flash[:error]
-    - if flash[:info]
+    - if flash[:info] || flash[:info_html]
       .site-message.site-message--info
-        = flash[:info]
+        = flash[:info] || flash[:info_html].html_safe
 
     = yield
 

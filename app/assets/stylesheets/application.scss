@@ -6,6 +6,8 @@
 @import "odca-jekyll/module";
 @import "odca-jekyll/theme";
 
+@import "form";
+
 body {
   min-width: 400px;
 }
@@ -59,6 +61,11 @@ body {
   width: 100%;
   font-size: 2rem;
   padding: 2rem $gutter--small;
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
 }
 
 .site-message--error {

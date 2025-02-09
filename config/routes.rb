@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   post '/webhooks/mailgun', to: 'webhooks#mailgun'
 
-  resources :alert_subscribers, only: %i[new create edit destroy] do
+  resources :alert_subscribers, only: %i[new create edit destroy update] do
     get 'confirm', on: :member
 
     collection do

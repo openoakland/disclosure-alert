@@ -31,6 +31,10 @@
 
 en:
   activerecord:
+    alert_subscriber:
+      subscription_frequency:
+        daily: Daily
+        weekly: Weekly
     filing_deadline:
       deadline_type:
         late_contribution_window: '24-hour Late Contribution Window (497)'
