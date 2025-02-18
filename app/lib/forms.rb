@@ -36,7 +36,7 @@ module Forms
 
   def self.combine_forms(forms)
     [].tap do |combined|
-      # remove any forms that were later amended on the same day
+      # remove any original forms that have amended versions
       forms.delete_if do |form|
         forms.any? do |other_form|
           next if other_form.id == form.id
@@ -52,9 +52,9 @@ module Forms
         current_form = forms.shift
         can_combine_forms = forms.find_all { |f| current_form.can_combine_with?(f) }
         combined << if can_combine_forms.any?
-                      Forms::Form496Combined.new(
+                      current_form.class.combined_form_class.new(
                         [current_form.filing] + can_combine_forms.map(&:filing),
-                        name: '496 Combined',
+                        name: current_form.class.combined_form_name,
                       )
                     else
                       current_form

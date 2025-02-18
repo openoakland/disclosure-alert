@@ -62,5 +62,13 @@ module Forms
 
       filer_id == other_form.filer_id
     end
+
+    def self.combined_form_class
+      Forms::Form496Combined
+    end
+
+    def self.combined_form_name
+      '496 Combined'
+    end
   end
 end
