@@ -1,14 +1,27 @@
 module Forms
   class Form700 < BaseXMLForm
+    ValueRange = Struct.new(:min, :max)
+
     LEGEND = {
       fair_market_value: [
-        '$2,000-$10,000', '$10,001-$100,000', '$100,001-$1,000,000', 'Over $1,000,000'
+        ValueRange.new(2_000, 10_000),
+        ValueRange.new(10_001, 100_000),
+        ValueRange.new(100_001, 1_000_000),
+        ValueRange.new(1_000_001, Float::INFINITY),
       ].freeze,
       fair_market_value_schedule_a_2: [
-        '$0-$1,999', '$2,000-$10,000', '$10,001-$100,000', '$100,001-$1,000,000', 'Over $1,000,000'
+        ValueRange.new(0, 1_999),
+        ValueRange.new(2_000, 10_000),
+        ValueRange.new(10_001, 100_000),
+        ValueRange.new(100_001, 1_000_000),
+        ValueRange.new(1_000_001, Float::INFINITY)
       ].freeze,
       gross_income_received: [
-        '$0-$499', '$500-$1,000', '$1,001-$10,000', '$10,001-$100,000', 'Over $100,000'
+        ValueRange.new(0, 499),
+        ValueRange.new(500, 1_000),
+        ValueRange.new(1_001, 10_000),
+        ValueRange.new(10_001, 100_000),
+        ValueRange.new(100_001, Float::INFINITY),
       ].freeze,
       nature_of_interest: [
         'Ownership/Deed of Trust', 'Easement', 'Leasehold', 'Other'
@@ -17,7 +30,11 @@ module Forms
         'Partnership', 'Sole Proprietorship', 'Other'
       ],
       gross_income_received_schedule_c_1: [
-        'No Income - Business Position Only', '$500-$1,000', '$1,001-$10,000', '$10,001-$100,000', 'Over $100,000'
+        'No Income - Business Position Only',
+        ValueRange.new(500, 1_000),
+        ValueRange.new(1_001, 10_000),
+        ValueRange.new(10_001, 100_000),
+        ValueRange.new(100_001, Float::INFINITY)
       ].freeze,
       reason_for_income: [
         'Salary', "Spouse's or registered domestic partner's income", 'Partnership',
@@ -169,6 +186,51 @@ module Forms
         @xml.xpath('//schedule_ds/@count'),
         @xml.xpath('//schedule_es/@count'),
       ].map(&:first).map(&:value).map(&:to_i).sum == 0
+    end
+
+    def total_value_range
+      return ValueRange.new(0, 0) if no_reportable_interests?
+
+      total = ValueRange.new(0, 0)
+      schedule_a1.each do |investment|
+        total.min += investment["fair_market_value"].min
+        total.max += investment["fair_market_value"].max
+      end
+
+      schedule_a2.each do |investment|
+        total.min += investment["fair_market_value_schedule_a_2"].min
+        total.max += investment["fair_market_value_schedule_a_2"].max
+      end
+
+      schedule_b.each do |real_property|
+        total.min += real_property["fair_market_value"].min
+        total.max += real_property["fair_market_value"].max
+      end
+
+      schedule_c1.each do |income_or_loan|
+        next if income_or_loan["gross_income_received_schedule_c_1"].is_a?(String)
+
+        total.min += income_or_loan["gross_income_received_schedule_c_1"].min
+        total.max += income_or_loan["gross_income_received_schedule_c_1"].max
+      end
+
+      schedule_d.each do |gift_entry|
+        gift_entry["gifts"].each do |gift|
+          total.min += gift["amount"]
+          total.max += gift["amount"]
+        end
+      end
+
+      schedule_e.each do |travel_gift|
+        total.min += travel_gift["amount"].to_f
+        total.max += travel_gift["amount"].to_f
+      end
+
+      total
+    end
+
+    def minimize?
+      total_value_range.max < 150_000
     end
   end
 end

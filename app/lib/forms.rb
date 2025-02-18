@@ -125,6 +125,10 @@ module Forms
       false
     end
 
+    def minimize?
+      false
+    end
+
     def download_error?
       contents.is_a?(Hash) && contents.key?("error")
     end

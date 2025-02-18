@@ -33,7 +33,8 @@
     = t(i18n_key + '.name')
     %p= t(i18n_key + '.description_html')
 
-  - form_group.each do |f|
+  - minimized, full_size = form_group.partition(&:minimize?)
+  - full_size.each do |f|
     %table.filing
       %tbody
         %tr
@@ -84,6 +85,14 @@
             %p.filing__metadata
               Filed at
               = f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")
+
+  - if minimized.any?
+    Additionally, these #{minimized.length} filings did not appear to contain any significant data:
+    - minimized.sort_by { |f| f.filer_name }.each do |f|
+      = succeed "," do
+        %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.id}", target: "_blank", style: "color: inherit" }<>
+          = f.filer_name
+
 
 %hr
 

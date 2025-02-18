@@ -30,7 +30,8 @@ class AlertMailer < ApplicationMailer
 
     filings = Filing
       .where(netfile_agency: alert_subscriber.netfile_agency)
-      .includes(:election_candidates, :election_committee, :amended_filing)
+      .includes(:election_candidates, :election_committee, :election_referendum, :amended_filing)
+      .without_annoying_sf_forms # TODO: Make this a subscription preference if people really want the firehose.
 
     if date_or_range.is_a?(Date)
       filings.filed_on_date(date_or_range)
