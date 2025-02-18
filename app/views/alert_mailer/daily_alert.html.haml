@@ -8,7 +8,7 @@
           %h3 Upcoming Filing Deadlines:
   %tr
     %td.overview__td
-      - grouped_forms = sort_filing_groups(@forms.group_by { |f| f.i18n_key })
+      - grouped_forms = sort_forms(@forms).group_by { |f| f.i18n_key }
 
       %ul
       - grouped_forms.each do |i18n_key, forms|

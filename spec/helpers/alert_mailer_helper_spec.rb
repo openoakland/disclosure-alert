@@ -53,23 +53,32 @@ RSpec.describe AlertMailerHelper do
     end
   end
 
-  describe '#sort_filing_groups' do
-    let(:filing_groups) do
-      {
-        'Some form' => [],
-        'Other forms' => [],
-        'Foo forms' => [],
-      }
+  describe '#sort_forms' do
+    let(:forms) do
+      Forms.from_filings([
+        Filing.create(form: 23, title: 'Form 410'),
+        Filing.create(form: 30, title: 'Form 460'),
+        Filing.create(form: 23, title: 'Form 410'),
+        Filing.create(form: 39, title: 'Form 497', filer_id: 123),
+        Filing.create(form: 0, title: 'Some Other Form'),
+        Filing.create(form: 215, title: 'Form 700'),
+        Filing.create(form: 36, title: 'Form 496'),
+        Filing.create(form: 39, title: 'Form 497', filer_id: 456),
+        Filing.create(form: 235, title: 'Lobbyist Registration'),
+      ])
     end
 
-    subject { helper.sort_filing_groups(filing_groups) }
-
-    it 'sorts "Other" at the end' do
-      expect(subject).to eq([
-        ['Foo forms', []],
-        ['Some form', []],
-        ['Other forms', []],
-      ])
+    it 'sorts in order of descending interestingness' do
+      sorted = helper.sort_forms(forms)
+      expect(sorted[0]).to have_attributes(form: "39", title: 'Form 497', filer_id: "123")
+      expect(sorted[1]).to have_attributes(form: "39", title: 'Form 497', filer_id: "456")
+      expect(sorted[2]).to have_attributes(form: "36", title: 'Form 496')
+      expect(sorted[3]).to have_attributes(form: "30", title: 'Form 460')
+      expect(sorted[4]).to have_attributes(form: "23", title: 'Form 410')
+      expect(sorted[5]).to have_attributes(form: "23", title: 'Form 410')
+      expect(sorted[6]).to have_attributes(form: "215", title: 'Form 700')
+      expect(sorted[7]).to have_attributes(form: "235", title: 'Lobbyist Registration')
+      expect(sorted[8]).to have_attributes(form: "0", title: 'Some Other Form')
     end
   end
 
