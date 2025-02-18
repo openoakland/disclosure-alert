@@ -92,5 +92,34 @@ RSpec.describe Forms::BaseForm do
         expect(result.first).to have_attributes(amendment_sequence_number: '2')
       end
     end
+
+    context "with two 497's from the same filer" do
+      def load_filings_from_file(fixture_csv)
+        # To create a filings fixture, run in psql:
+        #
+        # \copy (SELECT id, form, title, contents FROM filings WHERE [...])
+        # TO 'spec/fixtures/filing_contents/test_case_filename.csv'
+        # DELIMITER ',' CSV HEADER
+        CSV.open(Rails.root.join("spec", "fixtures", "filing_contents", fixture_csv), "r", headers: :first_row).map do |csv|
+          Filing.create(
+            id: csv["id"],
+            form: csv["form"],
+            title: csv["title"],
+            contents: JSON.parse(csv["contents"])
+          )
+        end
+      end
+
+      let(:filings) { load_filings_from_file("497_combine_same_filer.csv") }
+
+      it "combines the forms together" do
+        result = Forms.combine_forms(Forms.from_filings(filings))
+        expect(result.length).to eq(1)
+        combined_form = result.first
+        expect(combined_form).to be_a(Forms::Form497Combined)
+        expect(combined_form.count_contributions_received).to eq(2)
+        expect(combined_form.amount_contributions_received).to eq(20_555)
+      end
+    end
   end
 end

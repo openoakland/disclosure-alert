@@ -26,5 +26,22 @@ module Forms
     def contributions_made
       contents.find_all { |r| r['form_Type'] == 'F497P2' }
     end
+
+    # Form 497's can be combined if they are different filings from the same
+    # filer, and there is at least one contribution reported on both forms.
+    def can_combine_with?(other_form)
+      return false unless other_form.is_a?(Forms::Form497)
+      return false unless id.nil? || id != other_form.id
+
+      filer_id == other_form.filer_id
+    end
+
+    def self.combined_form_class
+      Forms::Form497Combined
+    end
+
+    def self.combined_form_name
+      '497 Combined'
+    end
   end
 end

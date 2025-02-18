@@ -5,8 +5,13 @@ class AlertMailerPreview < ActionMailer::Preview
     AlertMailer.daily_alert(
       find_or_create_subscriber,
       Date.yesterday,
-      filings,
-      notice('A notice to the user would appear here.'),
+    )
+  end
+
+  def daily_alert_last_week
+    AlertMailer.daily_alert(
+      find_or_create_subscriber,
+      Date.today.last_week.all_week,
     )
   end
 
@@ -16,21 +21,5 @@ class AlertMailerPreview < ActionMailer::Preview
     AlertSubscriber
       .where(email: 'test+preview@example.com')
       .first_or_create
-  end
-
-  def filings
-    Filing
-      .includes(:election_committee, :election_candidates, :election_referendum, :amended_filing)
-      .order(filed_at: :desc)
-      .first(30)
-  end
-
-  def notice(text)
-    Notice.new(
-      creator: AdminUser.first,
-      date: Date.yesterday,
-      body: text,
-      informational: Random.rand < 0.5
-    )
   end
 end
