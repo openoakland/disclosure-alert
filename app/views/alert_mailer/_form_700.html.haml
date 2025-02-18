@@ -6,18 +6,17 @@
 - if f.schedule_a1.any?
   Investments (Schedule A1):
   %ul
-    - f.schedule_a1.each do |investment|
-      %li #{investment['name_of_business_entity']} - #{investment['fair_market_value']}
+    = format_investments_list(f.schedule_a1)
 - if f.schedule_a2.any?
   Trusts/Business Entities (Schedule A2):
   %ul
     - f.schedule_a2.each do |entity|
-      %li #{entity['entity_name']} (#{entity['business_type']}) - Valued #{entity['fair_market_value_schedule_a_2']}
+      %li #{entity['entity_name']} (#{entity['business_type']}) - Valued #{format_value_range(entity['fair_market_value_schedule_a_2'])}
 - if f.schedule_b.any?
   Real Property (Schedule B):
   %ul
     - f.schedule_b.each do |property|
-      %li #{property['parcel_or_address']}, #{property['city']} - #{property['fair_market_value']}
+      %li #{property['parcel_or_address']}, #{property['city']} - #{format_value_range(property['fair_market_value'])}
 - if f.schedule_c1.any?
   Income, Loans, and Business Positions (Schedule C):
   %ul
@@ -26,11 +25,8 @@
         = income['name_of_income_source']
         - if income['business_position'].present? || income['business_activity'].present?
           = surround '(', ')' do
-            %span<>= income['business_position']
-            - if income['business_activity']
-              = precede ', ' do
-                = income['business_activity'].strip
-        \- #{income['gross_income_received_schedule_c_1']}
+            = [income['business_position'], income['business_activity']].map(&:presence).compact.join(", ")
+        \- #{format_value_range(income['gross_income_received_schedule_c_1'])}
 - if f.schedule_d.any?
   Gifts (Schedule D):
   %ul

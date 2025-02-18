@@ -6,6 +6,11 @@ class Filing < ApplicationRecord
   scope :filed_on_date, ->(date) { where(filed_at: date.all_day) }
   scope :filed_in_date_range, ->(range) { where(filed_at: range) }
   scope :for_email, -> { includes(:amended_filing, :election_candidates, :election_committee) }
+  scope :without_annoying_sf_forms, -> do
+    where.not("form = ? AND (title like ? OR title like ?)", "0", "Certificate of Ethics Training Form%", "Sunshine Training Declaration%")
+      .where.not(form: '238') # SFO Lobbyist Registration
+      .where.not(form: '258') # San Francisco Individual Lobbyist Statement 
+  end
 
   # Find spreadsheet entries related to these entities
   has_many :election_candidates, foreign_key: :fppc_id, primary_key: :filer_id

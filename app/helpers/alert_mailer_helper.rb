@@ -120,4 +120,48 @@ module AlertMailerHelper
       .values
       .flatten
   end
+
+  def format_value_range(value_range)
+    if value_range.is_a?(String)
+      value_range
+    elsif value_range.max == Float::INFINITY
+      "Over #{format_money(value_range.min - 1)}"
+    else
+      "#{format_money(value_range.min)}–#{format_money(value_range.max)}"
+    end
+  end
+
+  def format_investments_list(investments)
+    # See format_money_list for inspiration
+    sorted_items = investments.sort_by { |investment| investment["fair_market_value"].max }.reverse
+
+    # Take the top 5 items, or 6 if there are only 6 items (since it doesn't
+    # make sense to say "and 1 other item").
+    top_item_length = sorted_items.length == 6 ? 6 : 5
+    top_items = sorted_items[0...top_item_length]
+    top_items_html = safe_join(top_items.map do |investment|
+      content_tag("li") do
+        investment["name_of_business_entity"] +
+        ": " +
+        format_value_range(investment["fair_market_value"])
+      end
+    end, "\n")
+
+    remaining_items = Array(sorted_items[(top_item_length + 1)..])
+    remaining_item_count = remaining_items.count
+    if remaining_item_count.positive?
+      remaining_items_min, remaining_items_max = remaining_items.reduce([0, 0]) do |(min, max), investment|
+        [min + investment["fair_market_value"].min, max + investment["fair_market_value"].max]
+      end
+      remaining_items_range = Forms::Form700::ValueRange.new(remaining_items_min, remaining_items_max) 
+
+      top_items_html + content_tag(
+        'li',
+        "and #{format_value_range(remaining_items_range)} in " +
+        format("%{count} other items", count: remaining_item_count),
+      )
+    else
+      top_items_html
+    end
+  end
 end
