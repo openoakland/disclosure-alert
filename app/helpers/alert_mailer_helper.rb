@@ -1,6 +1,19 @@
 # frozen_string_literal: true
 
 module AlertMailerHelper
+  # Any forms not in this array will be sorted after all forms listed
+  # here.
+  #
+  # Any forms with "Other" in the name will be listed after those.
+  FORM_SORT_ORDER = [
+    "Forms::Form497Combined",
+    "Forms::Form497",
+    "Forms::Form496Combined",
+    "Forms::Form496",
+    "Forms::Form460",
+    "Forms::Form410",
+  ]
+
   def format_money(amount)
     '$' + amount.round.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
   end
@@ -75,12 +88,12 @@ module AlertMailerHelper
     ].compact.join(', ')
   end
 
-  def sort_filing_groups(filing_groups)
-    filing_groups.sort do |(k1, _), (k2, _)|
-      next 1 if k1.match?(/\bother\b/i)
-      next -1 if k2.match?(/\bother\b/i)
+  def sort_forms(forms)
+    sorted_last = FORM_SORT_ORDER.length - 1
 
-      k1 <=> k2
+    forms.sort_by do |f|
+      (FORM_SORT_ORDER.index(f.class.name) || sorted_last) +
+        (f.form_name.nil? ? 0.5 : 0)
     end
   end
 
