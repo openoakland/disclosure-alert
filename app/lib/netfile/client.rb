@@ -10,7 +10,10 @@ module Netfile
   class Client
     BASE_URL = URI('https://netfile.com/Connect2/api/')
 
-    InternalServerError = Class.new(StandardError)
+    DownloadError = Class.new(StandardError)
+
+    InternalServerError = Class.new(DownloadError)
+    NotFoundError = Class.new(DownloadError)
 
     def initialize; end
 
@@ -139,6 +142,8 @@ module Netfile
     def raise_error(response)
       if response.is_a?(Net::HTTPInternalServerError)
         raise InternalServerError.new("NetFile Error: #{response.body}")
+      elsif response.is_a?(Net::HTTPNotFound)
+        raise NotFoundError.new("NetFile Error: #{response.body}")
       else
         raise "Error: #{response.body}"
       end
