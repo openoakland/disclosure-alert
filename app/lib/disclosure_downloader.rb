@@ -107,7 +107,7 @@ class DisclosureDownloader
       end
 
     filing.update(contents: contents, contents_xml: contents_xml)
-  rescue Netfile::Client::InternalServerError => ex
+  rescue Netfile::Client::DownloadError => ex
     @logger.puts "Error downloading filing #{filing.id}: #{ex}. Marking as failed and continuing."
 
     filing.update(contents: { error: ex, message: ex.message })

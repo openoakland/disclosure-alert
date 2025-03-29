@@ -62,5 +62,39 @@ RSpec.describe DisclosureDownloader do
       expect(last_filing.filer_name).to eq(fake_filing_metadata['filerName'])
       expect(last_filing.netfile_agency).to eq(NetfileAgency.coak)
     end
+
+    context 'when the downloading gives a 500 error' do
+      before do
+        allow(fake_client).to receive(:fetch_calfile)
+          .with(fake_filing_metadata['id'].to_i)
+          .and_raise(Netfile::Client::InternalServerError)
+      end
+
+      it 'saves the error' do
+        expect { downloader.download }
+          .to change(Filing, :count)
+          .by(1)
+
+        last_filing = Filing.last
+        expect(last_filing.contents).to match("error" => "Netfile::Client::InternalServerError", "message" => be_a(String))
+      end
+    end
+
+    context 'when the downloading gives a 404 error' do
+      before do
+        allow(fake_client).to receive(:fetch_calfile)
+          .with(fake_filing_metadata['id'].to_i)
+          .and_raise(Netfile::Client::NotFoundError)
+      end
+
+      it 'saves the error' do
+        expect { downloader.download }
+          .to change(Filing, :count)
+          .by(1)
+
+        last_filing = Filing.last
+        expect(last_filing.contents).to match("error" => "Netfile::Client::NotFoundError", "message" => be_a(String))
+      end
+    end
   end
 end
