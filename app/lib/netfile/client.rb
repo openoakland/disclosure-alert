@@ -66,8 +66,11 @@ module Netfile
 
     def fetch_calfile(filing_id)
       Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
-        request = Net::HTTP::Get.new(BASE_URL + "public/efile/#{filing_id}")
+        request = Net::HTTP::Post.new(BASE_URL + "api/json/reply/efile")
         request['Accept'] = 'application/zip'
+        request.body = URI.encode_www_form(
+          filingId: filing_id
+        )
 
         response = http.request(request)
 
@@ -87,8 +90,11 @@ module Netfile
 
     def get_filing(filing_id)
       Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
-        request = Net::HTTP::Get.new(BASE_URL + "public/filing/info/#{filing_id}")
+        request = Net::HTTP::Post.new(BASE_URL + "api/json/reply/FilingInfo")
         request['Accept'] = 'application/json'
+        request.body = URI.encode_www_form(
+          filingId: filing_id
+        )
 
         response = http.request(request)
         raise_error(response) unless response.code.to_i < 300
@@ -102,13 +108,13 @@ module Netfile
 
       Net::HTTP.start(BASE_URL.host, BASE_URL.port, use_ssl: true) do |http|
         with_pagination do |current_page|
-          request = Net::HTTP::Post.new(BASE_URL + 'public/list/filing')
+          request = Net::HTTP::Post.new(BASE_URL + 'api/json/reply/FilingList')
           request['Accept'] = 'application/json'
-          request.body = URI.encode_www_form(
+          request.body = URI.encode_www_form({
             AID: agency.shortcut,
             CurrentPageIndex: current_page,
             Form: form,
-          )
+          }.compact)
 
           response = http.request(request)
           raise_error(response) unless response.code.to_i < 300
