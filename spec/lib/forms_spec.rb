@@ -1,6 +1,25 @@
 require 'rails_helper'
 
 RSpec.describe Forms::BaseForm do
+  def load_filings_from_file(fixture_csv)
+    # To create a filings fixture, run in psql:
+    #
+    # \copy (SELECT id, form, title, amendment_sequence_number, amended_filing_id, contents
+    # FROM filings WHERE id IN (...))
+    # TO 'spec/fixtures/filing_contents/test_case_filename.csv'
+    # DELIMITER ',' CSV HEADER
+    CSV.open(Rails.root.join("spec", "fixtures", "filing_contents", fixture_csv), "r", headers: :first_row).map do |csv|
+      Filing.create(
+        id: csv["id"],
+        form: csv["form"],
+        title: csv["title"],
+        amendment_sequence_number: csv["amendment_sequence_number"],
+        amended_filing_id: csv["amended_filing_id"],
+        contents: JSON.parse(csv["contents"])
+      )
+    end
+  end
+
   describe '#i18n_key' do
     context 'for a known form' do
       let(:filing) { Filing.new(form: 23, title: 'FPPC Form 410') }
@@ -55,17 +74,16 @@ RSpec.describe Forms::BaseForm do
       JSON
 
       before do
-        filing2.amendment_sequence_number = '1'
-        filing2.amended_filing_id = original_filing.id
+        filing2.update(amendment_sequence_number: '1', amended_filing_id: original_filing.id)
       end
 
-      it 'merges the forms together' do
-        result = Forms.combine_forms(Forms.from_filings([filing1, filing2]))
-        expect(result.length).to eq(1)
-        combined_form = result.first
-        expect(combined_form).to be_a(Forms::Form496Combined)
-        expect(combined_form.contributions.length).to eq(1)
-        expect(combined_form.expenditures.length).to eq(2)
+      it 'does not merge the forms together' do
+        forms = Forms.combine_forms(Forms.from_filings([filing1, filing2]))
+        expect(forms.length).to eq(2)
+        expect(forms.first).to be_a(Forms::Form496)
+        expect(forms.first).not_to be_amendment
+        expect(forms.second).to be_a(Forms::Form496)
+        expect(forms.second).to be_amendment
       end
     end
 
@@ -94,22 +112,6 @@ RSpec.describe Forms::BaseForm do
     end
 
     context "with two 497's from the same filer" do
-      def load_filings_from_file(fixture_csv)
-        # To create a filings fixture, run in psql:
-        #
-        # \copy (SELECT id, form, title, contents FROM filings WHERE [...])
-        # TO 'spec/fixtures/filing_contents/test_case_filename.csv'
-        # DELIMITER ',' CSV HEADER
-        CSV.open(Rails.root.join("spec", "fixtures", "filing_contents", fixture_csv), "r", headers: :first_row).map do |csv|
-          Filing.create(
-            id: csv["id"],
-            form: csv["form"],
-            title: csv["title"],
-            contents: JSON.parse(csv["contents"])
-          )
-        end
-      end
-
       let(:filings) { load_filings_from_file("497_combine_same_filer.csv") }
 
       it "combines the forms together" do
@@ -119,6 +121,19 @@ RSpec.describe Forms::BaseForm do
         expect(combined_form).to be_a(Forms::Form497Combined)
         expect(combined_form.count_contributions_received).to eq(2)
         expect(combined_form.amount_contributions_received).to eq(20_555)
+      end
+
+      context 'when one of the forms is amended and the other is not' do
+        let(:filings) { load_filings_from_file("497_combine_with_one_amended.csv") }
+
+        it 'does not combine the forms' do
+          forms = Forms.combine_forms(Forms.from_filings(filings))
+          expect(forms.length).to eq(2)
+          expect(forms.first).to be_a(Forms::Form497)
+          expect(forms.first).to be_amendment
+          expect(forms.second).to be_a(Forms::Form497)
+          expect(forms.second).not_to be_amendment
+        end
       end
     end
   end
