@@ -56,9 +56,14 @@ module Forms
 
     # Form 496's can be combined if they are different filings from the same
     # filer, and there is at least one contribution reported on both forms.
+    #
+    # Amended filings cannot be combined with non-amended filings for UX
+    # reasons. The display of amended returns intends to highlight the
+    # *differences* whereas the original forms highlight the initial amounts.
     def can_combine_with?(other_form)
       return false unless other_form.is_a?(Forms::Form496)
       return false unless id.nil? || id != other_form.id
+      return false unless amendment? == other_form.amendment?
 
       filer_id == other_form.filer_id
     end

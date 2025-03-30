@@ -17,5 +17,15 @@ module Forms
     def contents
       @filings.flat_map(&:contents).uniq
     end
+
+    def amendment?
+      @filings.all? { |f| f.amended_filing_id? }
+    end
+
+    def amended_filing
+      return unless amendment?
+
+      self.class.new(@filings.map(&:amended_filing), name: @filings.first.form_name)
+    end
   end
 end
