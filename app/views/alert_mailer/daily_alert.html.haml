@@ -45,12 +45,12 @@
               = f.title
               - if f.amended_filing_id
                 &middot;
-                %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.amended_filing_id}" } View Previous Filing
+                %a{ href: view_filing_netfile_url(f.amended_filing_id) } View Previous Filing
               - if f.uncombined_filing_ids.present?
                 &middot;
                 View Originals:
                 - f.uncombined_filing_ids.each do |filing_id|
-                  %a{ href: "https://netfile.com/Connect2/api/public/image/#{filing_id}" } ##{filing_id}
+                  %a{ href: view_filing_netfile_url(filing_id) } ##{filing_id}
 
             %h3.filing__filer-name= f.filer_name
             - if f.filer_title
@@ -78,7 +78,7 @@
             - if (committee = f.spreadsheet_committee)
               %a.btn{ href: "https://www.opendisclosure.io/committee/#{f.filer_id}", target: "_blank" } View Contributions to this Committee
 
-            %a.btn{ href: "https://netfile.com/Connect2/api/public/image/#{f.id}", target: '_blank' }
+            %a.btn{ href: view_filing_netfile_url(f.id), target: '_blank' }
               View Filing
         %tr
           %td
@@ -90,7 +90,7 @@
     Additionally, these #{minimized.length} filings did not appear to contain any significant data:
     - minimized.sort_by { |f| f.filer_name }.each do |f|
       = succeed "," do
-        %a{ href: "https://netfile.com/Connect2/api/public/image/#{f.id}", target: "_blank", style: "color: inherit" }<>
+        %a{ href: view_filing_netfile_url(f.id), target: "_blank", style: "color: inherit" }<>
           = f.filer_name
 
 

@@ -164,4 +164,8 @@ module AlertMailerHelper
       top_items_html
     end
   end
+
+  def view_filing_netfile_url(filing_id)
+    "https://www.netfile.com/Connect2/api/json/reply/Image?filingId=#{filing_id}"
+  end
 end
