@@ -22,3 +22,16 @@
             %li Donations to campaign committees and lobbyists' activity
             %li Spending by Political Action Committees (PACs) and third-parties (Independent Expenditures)
             %li Economic interests of, and requests to contribute to charities by city officials
+
+      .grid-col-12
+        %p
+          We'll never share your email or send you unwanted junk.
+          - if @can_preview_today || @can_preview_yesterday
+            See
+            - if @can_preview_today
+              = link_to "today's email", alert_preview_path("today"), style: 'color: inherit; text-decoration: underline;'
+            - if @can_preview_yesterday && @can_preview_today
+              or
+            - if @can_preview_yesterday
+              = link_to "yesterday's email", alert_preview_path("yesterday"), style: 'color: inherit; text-decoration: underline;'
+            for examples of the types of information included in the email.

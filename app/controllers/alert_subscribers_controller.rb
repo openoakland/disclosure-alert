@@ -3,6 +3,9 @@ class AlertSubscribersController < ApplicationController
 
   def new
     @alert_subscriber = AlertSubscriber.new
+
+    @can_preview_today = Filing.filed_on_date(Date.yesterday).where(netfile_agency: NetfileAgency.coak).any?
+    @can_preview_yesterday = Filing.filed_on_date(Date.yesterday - 1).where(netfile_agency: NetfileAgency.coak).any?
   end
 
   def create

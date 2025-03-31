@@ -31,7 +31,7 @@
     %span.filing-group__form-number
       = t(i18n_key + '.label')
     = t(i18n_key + '.name')
-    %p= t(i18n_key + '.description_html')
+  %p= t(i18n_key + '.description_html')
 
   - minimized, full_size = form_group.partition(&:minimize?)
   - full_size.each do |f|
@@ -61,13 +61,13 @@
                 NetFile or the local agency to receive a copy of this filing.
             - else
               - if f.form_name == '460'
-                = render 'form_460', f: f
+                = render 'alert_mailer/form_460', f: f
               - if f.form_name == '496' || f.form_name == '496 Combined'
-                = render 'form_496', f: f
+                = render 'alert_mailer/form_496', f: f
               - if f.form_name == '497' || f.form_name == '497 Combined'
-                = render 'form_497', f: f
+                = render 'alert_mailer/form_497', f: f
               - if f.form_name == '700'
-                = render 'form_700', f: f
+                = render 'alert_mailer/form_700', f: f
 
         %tr
           %td.filing__actions
@@ -100,14 +100,3 @@
   For more information about filing deadlines,
   = link_to 'consult the California FPPC', 'https://www.fppc.ca.gov/learn/campaign-rules/where-and-when-to-file-campaign-statements/when-to-file-campaign-statements-state-local-filing-schedules.html'
   or the local campaign finance agency.
-
-%p
-  Was this email useful?
-  = link_to 'Yes', 'https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform?usp=pp_url&entry.2039237906=Yes', 'disable-tracking' => true
-  \/
-  = link_to 'No', 'https://docs.google.com/forms/d/e/1FAIpQLSeRo2RUDjd9rbv1azDsiYezliKr0JbxbTfWvWgEBbKrUsklZA/viewform?usp=pp_url&entry.2039237906=No', 'disable-tracking' => true
-
-%p
-  Want to unsubscribe or receive fewer emails?
-  = link_to 'Update Delivery Preferences',
-    edit_alert_subscriber_url(@alert_subscriber, token: @alert_subscriber.token)
