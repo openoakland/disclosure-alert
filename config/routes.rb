@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   post '/webhooks/mailgun', to: 'webhooks#mailgun'
 
+  get '/alert_preview/:date', to: 'alert_previews#show', as: :alert_preview
+
   resources :alert_subscribers, only: %i[new create edit destroy update] do
     get 'confirm', on: :member
 

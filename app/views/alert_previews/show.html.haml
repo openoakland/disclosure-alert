@@ -1,0 +1,25 @@
+= stylesheet_link_tag 'email'
+
+-# Override some stylings to make this preview not ugly:
+:css
+  .filing {
+    display: block;
+  }
+  .email-preview-container {
+    font-size: 1.6rem;
+  }
+
+%main.main{"aria-label" => "Content"}
+  .container.container--informational
+    .grid
+      .grid-col-12
+        %strong Note:
+        This is a preview of the email sent on #{@email_date.strftime("%B %d, %Y")}.
+
+        = link_to "Subscribe to alert emails", new_alert_subscriber_path
+        to ensure you won't miss an email like this in the future.
+
+  .container.email-preview-container
+    .grid
+      .grid-col-12
+        = render template: "alert_mailer/daily_alert"

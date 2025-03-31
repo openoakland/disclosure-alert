@@ -7,6 +7,47 @@ RSpec.describe AlertSubscribersController do
 
   describe '#new' do
     it { expect(get(:new)).to be_successful }
+
+    it "does not include links to preview alert emails when there are no filings" do
+      get :new
+      expect(response.body).not_to include(/See.*for examples/)
+    end
+
+    context "when there are filings yesterday" do
+      before do
+        Filing.create(netfile_agency: NetfileAgency.coak, filed_at: Date.yesterday)
+      end
+
+      it "allows previewing today's email" do
+        get :new
+        expect(response.body).to include(/See.*today&#39;s.*for examples/m)
+        expect(response.body).not_to include(/See.*yesterday&#39;s.*for examples/m)
+      end
+    end
+
+    context "when there are filings two days ago" do
+      before do
+        Filing.create(netfile_agency: NetfileAgency.coak, filed_at: Date.yesterday - 1)
+      end
+
+      it "allows previewing yesterday's email" do
+        get :new
+        expect(response.body).to include(/See.*yesterday&#39;s.*for examples/m)
+        expect(response.body).not_to include(/See.*today&#39;s.*for examples/m)
+      end
+    end
+
+    context "when there are filings from yesterday and two days ago" do
+      before do
+        Filing.create(netfile_agency: NetfileAgency.coak, filed_at: Date.yesterday)
+        Filing.create(netfile_agency: NetfileAgency.coak, filed_at: Date.yesterday - 1)
+      end
+
+      it "allows previewing both today's and yesterday's email" do
+        get :new
+        expect(response.body).to include(/See.*today&#39;s.*yesterday&#39;s.*for examples/m)
+      end
+    end
   end
 
   describe '#create' do
