@@ -87,9 +87,8 @@
               = f.filed_at.strftime("%A %B %e, %Y at %I:%M %P")
 
   - if minimized.any?
-    Additionally, these #{minimized.length} filings did not appear to contain any significant data:
+    Additionally, #{t(".filings", count: minimized.length)} did not appear to contain any significant data:
     = filer_name_list(minimized)
-
 
 %hr
 

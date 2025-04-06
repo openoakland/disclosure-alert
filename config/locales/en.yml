@@ -40,6 +40,11 @@ en:
         late_contribution_window: '24-hour Late Contribution Window (497)'
         semi_annual: 'Semi-Annual (460)'
         pre_election: 'Pre-Election (460)'
+  alert_mailer:
+    daily_alert:
+      filings:
+        one: this filing
+        other: these %{count} filings
   forms:
     unknown:
       label: Other
