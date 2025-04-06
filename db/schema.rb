@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_02_09_062839) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_06_230332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -44,19 +44,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_062839) do
     t.inet "last_sign_in_ip"
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
-  end
-
-  create_table "ahoy_messages", force: :cascade do |t|
-    t.string "user_type"
-    t.bigint "user_id"
-    t.text "to"
-    t.string "mailer"
-    t.text "subject"
-    t.string "token"
-    t.datetime "sent_at", precision: nil
-    t.datetime "opened_at", precision: nil
-    t.datetime "clicked_at", precision: nil
-    t.index ["user_type", "user_id"], name: "index_ahoy_messages_on_user_type_and_user_id"
   end
 
   create_table "alert_subscribers", force: :cascade do |t|
