@@ -30,7 +30,15 @@ RSpec.describe AlertMailer do
     ]
   end
 
-  def create_filing(id: 123_123, form: 30, filer_id: 222_222, contents: fppc_460_contents, filed_at: 1.day.ago, netfile_agency: NetfileAgency.coak)
+  def create_filing(
+    id: 123_123,
+    form: 30,
+    filer_id: 222_222,
+    contents: fppc_460_contents,
+    contents_xml: nil,
+    filed_at: 1.day.ago,
+    netfile_agency: NetfileAgency.coak
+  )
     Filing.create!(
       id: id,
       filer_id: filer_id,
@@ -178,6 +186,27 @@ RSpec.describe AlertMailer do
 
       it 'renders the notice in the email' do
         expect(subject.body.encoded).to include(notice_body)
+      end
+    end
+
+    context "when there are filings to minimize" do
+      let(:minimizable_filings) do
+        [
+          create_filing(id: 10, form: 7, filed_at: send_date.noon, contents: nil, contents_xml: nil),
+          create_filing(id: 11, form: 7, filed_at: send_date.noon, contents: nil, contents_xml: nil),
+        ]
+      end
+      let!(:filings_in_date_range) do
+        [
+          create_filing(id: 1, filed_at: send_date.noon),
+          create_filing(id: 2, filed_at: send_date.noon),
+        ] + minimizable_filings
+      end
+
+      it "minimizes the filings" do
+        expect(subject.body.encoded).to match(
+          %r{Additionally, these 2 filings did not appear to contain any significant data:.*#{minimizable_filings.first.filer_name}.*#{minimizable_filings.second.filer_name}}m
+        )
       end
     end
   end

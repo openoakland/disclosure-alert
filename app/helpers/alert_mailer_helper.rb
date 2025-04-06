@@ -168,4 +168,13 @@ module AlertMailerHelper
   def view_filing_netfile_url(filing_id)
     "https://www.netfile.com/Connect2/api/json/reply/Image?filingId=#{filing_id}"
   end
+
+  def filer_name_list(filings)
+    safe_join(
+      filings.sort_by { |f| f.filer_name }.map do |f|
+        link_to f.filer_name, view_filing_netfile_url(f.id), target: "_blank", style: "color: inherit;"
+      end,
+      ", "
+    )
+  end
 end
