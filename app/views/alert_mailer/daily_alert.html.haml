@@ -88,10 +88,7 @@
 
   - if minimized.any?
     Additionally, these #{minimized.length} filings did not appear to contain any significant data:
-    - minimized.sort_by { |f| f.filer_name }.each do |f|
-      = succeed "," do
-        %a{ href: view_filing_netfile_url(f.id), target: "_blank", style: "color: inherit" }<>
-          = f.filer_name
+    = filer_name_list(minimized)
 
 
 %hr
