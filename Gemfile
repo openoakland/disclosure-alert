@@ -27,7 +27,6 @@ gem 'jbuilder', '~> 2.5'
 
 # Other disclosure-alert application dependencies:
 gem 'activeadmin'
-gem 'ahoy_email', '~> 1.1'
 gem 'devise'
 gem 'haml'
 gem 'mailgun-ruby'

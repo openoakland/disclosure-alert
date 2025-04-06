@@ -84,11 +84,6 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    ahoy_email (1.1.1)
-      actionmailer (>= 5)
-      addressable (>= 2.3.2)
-      nokogiri
-      safely_block (>= 0.1.1)
     arbre (1.7.0)
       activesupport (>= 3.0.0)
       ruby2_keywords (>= 0.0.2)
@@ -342,7 +337,6 @@ GEM
       rspec-core (>= 2, < 4, != 2.12.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.4.1)
-    safely_block (0.4.1)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -411,7 +405,6 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin
-  ahoy_email (~> 1.1)
   bootsnap (>= 1.1.0)
   byebug
   coffee-rails (~> 4.2)

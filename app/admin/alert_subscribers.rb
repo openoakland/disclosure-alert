@@ -10,6 +10,7 @@ ActiveAdmin.register AlertSubscriber do
   filter :subscription_frequency, as: :select, collection: AlertSubscriber.subscription_frequencies
 
   scope :all, group: :active
+  scope :subscribed, group: :active
   scope :active, default: true, group: :active
   scope :inactive, group: :active
   scope :unsubscribed, group: :active

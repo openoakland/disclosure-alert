@@ -19,7 +19,6 @@ class AlertSubscriber < ApplicationRecord
   scope :daily, -> { active.where(subscription_frequency: 'daily') }
   scope :weekly, -> { active.where(subscription_frequency: 'weekly') }
 
-  has_many :ahoy_messages, foreign_key: :user_id
   belongs_to :netfile_agency
   has_many :sent_messages
 

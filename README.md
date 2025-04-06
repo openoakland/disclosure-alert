@@ -68,5 +68,4 @@ heroku run bin/rails disclosure_alert:download_and_email_daily
 ```
 dropdb disclosure-alert && heroku pg:pull DATABASE_URL $DATABASE_URL
 echo "update alert_subscribers set email = concat('tomdooner+', id, '@gmail.com')" | psql disclosure-alert
-echo "update ahoy_messages set \"to\" = concat('tomdooner+', user_id, '@gmail.com')" | psql disclosure-alert
 ```
