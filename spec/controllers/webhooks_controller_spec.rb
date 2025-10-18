@@ -102,7 +102,39 @@ RSpec.describe WebhooksController do
     context 'for a permanent failure' do
       let(:event) { 'failed' }
       let(:severity) { 'permanent' }
-      it_behaves_like 'unsubscribing the user'
+
+      it "does not unsubscribe the user" do
+        expect { subject }
+          .not_to(change { subscriber.reload.unsubscribed_at })
+      end
+
+      context "when there were two bounces" do
+        before do
+          bounced_message_timestamps.each_with_index do |sent_at, message_id|
+            SentMessage.create!(
+              alert_subscriber: subscriber,
+              message_id: message_id,
+              sent_at: sent_at,
+              bounced_at: sent_at + 1.second
+            )
+          end
+        end
+
+        context "but they were more than a month ago" do
+          let(:bounced_message_timestamps) { [ (1.month + 3.days).ago, (1.month + 2.days).ago ] }
+
+          it "does not unsubscribe the user" do
+            expect { subject }
+              .not_to(change { subscriber.reload.unsubscribed_at })
+          end
+        end
+
+        context "and the bounces were within the last month" do
+          let(:bounced_message_timestamps) { [ (1.month - 3.days).ago, (1.month - 2.days).ago ] }
+
+          it_behaves_like 'unsubscribing the user'
+        end
+      end
     end
 
     context 'for an open' do

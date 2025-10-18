@@ -2,16 +2,20 @@ class WebhooksController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :verify_mailgun_signature
 
+  UNSUBSCRIBE_THRESHOLD = 2 # messages, within...
+  UNSUBSCRIBE_LOOKBACK = 1.month
+
   def mailgun
     data = params[:'event-data']
     recipient = data[:recipient]
     event = data[:event]
     message = data[:message]
 
-    if event == 'unsubscribed' ||
-       event == 'complained' ||
-       (event == 'failed' && data[:severity] == 'permanent')
+    if event == 'unsubscribed' || event == 'complained'
       handle_unsubscribe(recipient, event)
+    elsif event == 'failed' && data[:severity] == 'permanent'
+      handle_bounced(message[:headers]['message-id'])
+      possibly_unsubscribe_recipient(recipient, event)
     elsif event == 'opened'
       handle_opened(message[:headers]['message-id'])
     elsif event == 'clicked'
@@ -39,6 +43,15 @@ class WebhooksController < ApplicationController
     end
   end
 
+  def handle_bounced(message_id)
+    message = SentMessage.find_by(message_id: message_id)
+    if message
+      message.touch(:bounced_at)
+    else
+      Rails.logger.warn "Got permanent failure event for invalid Message ID: #{message}"
+    end
+  end
+
   def handle_unsubscribe(recipient, event)
     # Unsubscribe the user
     subscribers = AlertSubscriber.subscribed.where(email: recipient)
@@ -54,6 +67,24 @@ class WebhooksController < ApplicationController
       )
     end
     subscribers.update_all(unsubscribed_at: Time.now)
+  end
+
+  def possibly_unsubscribe_recipient(recipient, event)
+    subscribers = AlertSubscriber.subscribed.where(email: recipient)
+    subscribers.find_each do |subscriber|
+      previous_failure_count = subscriber.sent_messages.bounced.where('sent_at > ?', UNSUBSCRIBE_LOOKBACK.ago).count
+      if previous_failure_count >= UNSUBSCRIBE_THRESHOLD
+        ActiveAdmin::Comment.create(
+          resource: subscriber,
+          author: AdminUser.first,
+          namespace: 'admin',
+          body: <<~BODY,
+            Unsubscribed for #{UNSUBSCRIBE_THRESHOLD} failures (event: #{event}) within lookback period.
+          BODY
+        )
+        subscriber.touch(:unsubscribed_at)
+      end
+    end
   end
 
   def verify_mailgun_signature
