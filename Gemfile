@@ -6,7 +6,7 @@ ruby File.read(File.expand_path('../.ruby-version', __FILE__))
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.0'
 # Use Puma as the app server
-gem 'puma', '~> 5.6'
+gem 'puma', '~> 7.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 gem 'webpacker'
