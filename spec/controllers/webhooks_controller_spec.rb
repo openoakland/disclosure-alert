@@ -6,8 +6,10 @@ RSpec.describe WebhooksController do
   describe '#mailgun' do
     subject { post :mailgun, params: params }
 
+    let(:subscriber_id) { Random.rand(1000) }
     let(:subscriber) do
       AlertSubscriber.create(
+        id: subscriber_id,
         email: 'test@example.com',
         confirmed_at: Time.now,
         netfile_agency: NetfileAgency.coak,
@@ -108,7 +110,7 @@ RSpec.describe WebhooksController do
           .not_to(change { subscriber.reload.unsubscribed_at })
       end
 
-      context "when there were two bounces" do
+      context "when there were enough bounces" do
         before do
           bounced_message_timestamps.each_with_index do |sent_at, message_id|
             SentMessage.create!(
@@ -121,7 +123,11 @@ RSpec.describe WebhooksController do
         end
 
         context "but they were more than a month ago" do
-          let(:bounced_message_timestamps) { [ (1.month + 3.days).ago, (1.month + 2.days).ago ] }
+          let(:bounced_message_timestamps) do
+            WebhooksController::UNSUBSCRIBE_THRESHOLD.times.map do |i|
+              (1.month + (i + 1).days).ago
+            end
+          end
 
           it "does not unsubscribe the user" do
             expect { subject }
@@ -130,9 +136,22 @@ RSpec.describe WebhooksController do
         end
 
         context "and the bounces were within the last month" do
-          let(:bounced_message_timestamps) { [ (1.month - 3.days).ago, (1.month - 2.days).ago ] }
+          let(:bounced_message_timestamps) do
+            WebhooksController::UNSUBSCRIBE_THRESHOLD.times.map do |i|
+              (1.month - (i + 1).days).ago
+            end
+          end
 
           it_behaves_like 'unsubscribing the user'
+
+          context "when the user is in the NEVER_UNSUBCRIBE_SUBSCRIBER_IDS" do
+            let(:subscriber_id) { WebhooksController::NEVER_UNSUBCRIBE_SUBSCRIBER_IDS.sample }
+
+            it "does not unsubscribe the user" do
+              expect { subject }
+                .not_to(change { subscriber.reload.unsubscribed_at })
+            end
+          end
         end
       end
     end
