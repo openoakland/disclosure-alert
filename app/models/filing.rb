@@ -21,14 +21,12 @@ class Filing < ApplicationRecord
 
   def self.from_json(json)
     find_or_initialize_by(id: json['id']) do |record|
-      record.filer_id = json['filerStateId']
       record.filer_name = json['filerName']
-      record.title = json['title']
+      record.title = json['formName']
       record.netfile_agency = NetfileAgency.by_netfile_id(json['agency'])
       record.filed_at = DateTime.parse(json['filingDate'])
-      record.amendment_sequence_number = json['amendmentSequenceNumber']
-      record.amended_filing_id = json['amendedFilingId']
-      record.form = json['form']
+      record.amendment_sequence_number = json['sequenceNumber']
+      record.form = '0'
     end
   end
 
