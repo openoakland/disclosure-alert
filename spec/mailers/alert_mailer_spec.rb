@@ -87,6 +87,21 @@ RSpec.describe AlertMailer do
     ]
   end
 
+  # Simulates a filing created via Filing.from_json using the new public portal API,
+  # where numeric form IDs and structured contents are unavailable.
+  def create_filing_from_portal(id: 999_999, form_name: 'FPPC 460', filed_at: 1.day.ago, netfile_agency: NetfileAgency.coak)
+    Filing.create(
+      id: id,
+      filer_name: 'New Committee via Public API',
+      title: form_name,
+      filed_at: filed_at,
+      amendment_sequence_number: '0',
+      form: '0',
+      contents: nil,
+      netfile_agency: netfile_agency,
+    )
+  end
+
   describe '#daily_alert' do
     let(:alert_subscriber) { AlertSubscriber.create(email: 'tomdooner+test@gmail.com', netfile_agency: NetfileAgency.coak) }
     let(:send_date) { Date.new(2020, 9, 1) } # Tuesday
@@ -207,6 +222,28 @@ RSpec.describe AlertMailer do
         expect(subject.body.encoded).to match(
           %r{Additionally, these 2 filings did not appear to contain any significant data:.*#{minimizable_filings.first.filer_name}.*#{minimizable_filings.second.filer_name}}m
         )
+      end
+    end
+
+    context 'with filings from the public portal API (no structured contents)' do
+      let!(:filings_in_date_range) do
+        [
+          create_filing_from_portal(id: 1, form_name: 'FPPC 460', filed_at: send_date.noon),
+          create_filing_from_portal(id: 2, form_name: 'FPPC Form 497', filed_at: send_date.noon),
+          create_filing_from_portal(id: 3, form_name: 'FPPC 803', filed_at: send_date.noon),
+        ]
+      end
+
+      it 'renders without raising' do
+        expect { subject.body.encoded }.not_to raise_error
+      end
+
+      it 'includes filer names' do
+        expect(subject.body.encoded).to include('New Committee via Public API')
+      end
+
+      it 'includes the filing date' do
+        expect(subject.body.encoded).to include(send_date.strftime('%B'))
       end
     end
   end
