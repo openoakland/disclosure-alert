@@ -11,11 +11,18 @@ module Netfile
 
     def initialize; end
 
-    # TODO: Content fetching (fetch_summary_contents, fetch_transaction_contents,
-    # fetch_calfile_xml, get_filing) was removed when the Connect2 API was shut down.
-    # The structured data (Form 460 totals, 497 transaction details, 700 XML) is no
-    # longer available without authenticated v2 API credentials. See git history and
-    # DisclosureDownloader#download_filing for the original implementation.
+    CONNECT2_IMAGE_URL = 'https://netfile.com/Connect2/api/public/image'
+
+    # Downloads the original PDF for a filing. The Connect2 image endpoint
+    # remains live even though the structured-data endpoints are gone.
+    def fetch_pdf(filing_id)
+      uri = URI("#{CONNECT2_IMAGE_URL}/#{filing_id}")
+      response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+        http.get(uri.request_uri)
+      end
+      raise "PDF fetch failed: #{response.code} #{response.message}" unless response.code.to_i < 300
+      response.body
+    end
 
     # Fetches filings filed between start_date and end_date (inclusive).
     # No credentials required.

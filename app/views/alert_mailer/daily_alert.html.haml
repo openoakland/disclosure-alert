@@ -60,13 +60,13 @@
                 A NetFile error occurred while downloading this filing. Check
                 NetFile or the local agency to receive a copy of this filing.
             - else
-              - if f.form_name == '460'
+              - if f.form_name == '460' && f.contents.present?
                 = render 'alert_mailer/form_460', f: f
-              - if f.form_name == '496' || f.form_name == '496 Combined'
+              - if (f.form_name == '496' || f.form_name == '496 Combined') && f.contents.present?
                 = render 'alert_mailer/form_496', f: f
-              - if f.form_name == '497' || f.form_name == '497 Combined'
+              - if (f.form_name == '497' || f.form_name == '497 Combined') && f.contents.present?
                 = render 'alert_mailer/form_497', f: f
-              - if f.form_name == '700'
+              - if f.form_name == '700' && f.contents_xml.present?
                 = render 'alert_mailer/form_700', f: f
 
         %tr

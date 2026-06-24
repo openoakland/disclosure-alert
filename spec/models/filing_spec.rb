@@ -20,7 +20,7 @@ RSpec.describe Filing do
       filing = Filing.from_json(portal_json)
       expect(filing).to be_new_record
       filing.save!
-      expect(filing.id).to eq('216861492')
+      expect(filing.id.to_s).to eq('216861492')
       expect(filing.filer_name).to eq('Test Committee')
       expect(filing.title).to eq('FPPC Form 497')
       expect(filing.filed_at).to be_within(1.second).of(DateTime.parse('2026-06-04T17:16:23.22+00:00'))
