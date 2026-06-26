@@ -23,7 +23,7 @@ class Filing < ApplicationRecord
     find_or_initialize_by(id: json['id']) do |record|
       record.filer_name = json['filerName']
       record.title = json['formName']
-      record.netfile_agency = NetfileAgency.by_netfile_id(json['agency'])
+      record.netfile_agency = NetfileAgency.by_netfile_id(json['agency']) if json['agency'].present?
       record.filed_at = DateTime.parse(json['filingDate'])
       record.amendment_sequence_number = json['sequenceNumber']
       record.form = '0'
