@@ -82,9 +82,19 @@ en:
       name: Campaign Statement
       description_html:
         The California Political Reform Act requires candidates and committees to file campaign statements by specified deadlines disclosing contributions received and expenditures made.
+    461:
+      label: Form 461
+      name: Major Donor and Independent Expenditure Committee Campaign Statement
+      description_html:
+        Major donors who make $10,000 or more in contributions to candidates or measures, and committees that make independent expenditures, are required to file this form.
     497:
       label: Form 497
-      name: Daily Contributions Report
+      name: Late Contribution Report
+      description_html:
+        Local candidates and committees filing within 90 days of an election must report contributions or expenditures totaling more than $1000 within 24 hours using this form.
+    497LCR:
+      label: Form 497 LCR
+      name: Late Contributions Received Report
       description_html:
         Local candidates making or receiving contributions totaling $1,000 or more in the 90 days before an election are required to file a Form 497 within 24 hours.
     496:
@@ -92,6 +102,11 @@ en:
       name: Late Independent Expenditure Report
       description_html:
         Independent expenditures totaling $1,000 or more in support (or opposition) of a candidate or ballot measure within 90 days of an election must be reported within 24 hours using this form. For more information on reporting requirements, consult the <a href="http://www.fppc.ca.gov/content/dam/fppc/NS-Documents/TAD/Campaign%20Forms/496.pdf" target="_blank">official California FPPC instructions</a>.
+    501:
+      label: Form 501
+      name: Candidate Intention Statement
+      description_html:
+        A candidate must file this form before soliciting or receiving any contributions or making any expenditures. It declares the candidate's intent to seek election to a specific office.
     410:
       label: Form 410
       name: Statement of Organization

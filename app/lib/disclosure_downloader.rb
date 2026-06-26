@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_dependency 'netfile/form_460_pdf_parser'
+require_dependency 'netfile/form_497_pdf_parser'
+
 class DisclosureDownloader
   def initialize(agency = NetfileAgency.coak, logger = $stdout)
     @netfile = Netfile::Client.new
@@ -8,150 +11,105 @@ class DisclosureDownloader
   end
 
   def download
-    latest = Filing.where(netfile_agency: @agency).order(filed_at: :desc).first
+    # Overlap by 1 day to catch filings that arrived after the last run
+    # on their filing date. find_or_initialize_by ensures no duplicates.
+    start_date = (Filing.where(netfile_agency: @agency).maximum(:filed_at)&.to_date || Date.today - 14) - 1
+    end_date = Date.today
+
     @logger.puts '==================================================================='
     @logger.puts "Beginning State for Netfile agency #{@agency.shortcut}:"
     @logger.puts
     @logger.puts "Filings: #{Filing.where(netfile_agency: @agency).count}"
-    @logger.puts "Latest: #{latest&.filed_at}"
+    @logger.puts "Fetching: #{start_date} to #{end_date}"
     @logger.puts '==================================================================='
 
-    @netfile.each_filing(agency: @agency) do |json|
+    @netfile.filings_by_date(start_date, end_date).each do |json|
       filing = Filing.from_json(json)
 
       if filing.new_record?
         @logger.puts "Syncing new filing: #{filing.inspect}"
+        filing.save!
+        download_filing(filing)
       end
-
-      break if latest && latest == filing
-      break if Date.today - filing.filed_at.to_date > 14
-
-      download_filing(filing)
-      download_unamended_version(filing)
     end
 
-    latest = Filing.where(netfile_agency: @agency).order(filed_at: :desc).first
     @logger.puts '==================================================================='
     @logger.puts 'Ending State:'
     @logger.puts
     @logger.puts "Filings: #{Filing.where(netfile_agency: @agency).count}"
-    @logger.puts "Latest: #{latest&.filed_at}"
+    @logger.puts "Latest: #{Filing.where(netfile_agency: @agency).maximum(:filed_at)}"
     @logger.puts '==================================================================='
   end
 
-  # Downloads filings (and contents if necessary) from oldest to newest. Good to
-  # use if downloading is broken for an extended period.
-  def backfill_filings(since)
-    @logger.puts '==================================================================='
-    @logger.puts "Fetching filings since #{since}..."
-    @logger.puts ''
-    filings_in_range = @netfile.each_filing(agency: @agency)
-      .lazy
-      .map { |json| Filing.from_json(json) }
-      .take_while { |filing| filing.filed_at >= since }
-      .to_a
-    filings, already_downloaded_filings = filings_in_range.partition(&:new_record?)
-    @logger.puts "Filings to fetch: #{filings.length}"
-    @logger.puts "                  (#{already_downloaded_filings.length} already downloaded)"
-    @logger.puts '==================================================================='
+  def download_range(start_date, end_date)
+    puts "Fetching filings from #{start_date} to #{end_date}..."
 
-    filings.reverse.each_with_index do |filing, i|
-      @logger.puts "Downloading #{i.to_s.rjust(3)}/#{filings.length}: #{filing.filer_name.truncate(30).ljust(30)} - #{filing.form_name} (Filed: #{filing.filed_at})"
-      download_filing(filing)
-      download_unamended_version(filing)
+    @netfile.filings_by_date(start_date, end_date).each do |json|
+      filing = Filing.from_json(json)
+
+      if filing.new_record?
+        puts "Syncing new filing: #{filing.inspect}"
+        filing.save!
+      end
+
+      download_filing(filing) if filing.contents.nil?
     end
+
+    puts "Done. Total filings: #{Filing.count}"
   end
 
-  # Goes through old Filings and downloads the contents if missing.
   def backfill_contents
-    @logger.puts '==================================================================='
-    @logger.puts 'Backfilling Filing Contents:'
-    @logger.puts
-    @logger.puts "Filings: #{Filing.count}"
-    @logger.puts '==================================================================='
+    filings = Filing.where(contents: nil)
+    puts "Backfilling contents for #{filings.count} filings..."
 
-    num_backfilled_by_name = Hash.new(0)
-    Filing.find_each do |filing|
-      next unless ['410'].include?(filing.form_name)
-      next if filing.contents.present?
-
+    filings.each do |filing|
       download_filing(filing)
-      num_backfilled_by_name[filing.form_name] += 1
     end
 
-    @logger.puts '==================================================================='
-    @logger.puts 'Backfill Completed:'
-    @logger.puts
-    @logger.puts "Backfilled: #{num_backfilled_by_name.map { |k, v| "Form #{k}: #{v}" }.join(', ')}"
-    @logger.puts '==================================================================='
+    puts 'Done.'
   end
 
   private
 
   def download_filing(filing)
-    contents =
-      case filing.form_name
-      when '410'
-        raw = @netfile.fetch_calfile(filing.id)
-        raw.present? ? raw.lines : nil
-      when '460', '496', '497'
-        raw = @netfile.fetch_calfile(filing.id)
-        raw.present? ? CalFileParser.new(raw).parse : nil
-      end
-
-    contents_xml =
-      case filing.form_name
-      when '700'
-        @netfile
-          .fetch_calfile(filing.id)
-      end
-
-    filing.update(contents: contents, contents_xml: contents_xml)
-  rescue Netfile::Client::DownloadError => ex
-    @logger.puts "Error downloading filing #{filing.id}: #{ex}. Marking as failed and continuing."
-
-    filing.update(contents: { error: ex, message: ex.message })
+    case filing.form_name
+    when '460'
+      download_460(filing)
+    when '497'
+      download_497(filing)
+    end
   rescue StandardError => ex
-    user_input = retry?(ex)
-    retry if user_input == :retry
+    puts "  Error downloading filing #{filing.id}: #{ex.message}. Skipping."
+  end
 
-    unless user_input == :skip
-      raise FilingDownloadError, "Error downloading filing #{filing.id}: #{ex.message}"
+  def download_460(filing)
+    puts "  Downloading PDF for filing #{filing.id} (460)..."
+    pdf_bytes = @netfile.fetch_pdf(filing.id)
+    contents = Netfile::Form460PdfParser.new(pdf_bytes).parse
+    filing.update!(contents: contents)
+    puts "  Parsed summary: contributions=#{contents.find { |r| r['line_Item'] == '5' }&.dig('amount_A')} expenditures=#{contents.find { |r| r['line_Item'] == '11' }&.dig('amount_A')}"
+  end
+
+  def download_497(filing)
+    puts "  Downloading PDF for filing #{filing.id} (497)..."
+    pdf_bytes = @netfile.fetch_pdf(filing.id)
+    sections = Netfile::Form497PdfParser.new(pdf_bytes).parse
+
+    if sections.empty?
+      puts "  Warning: no transactions parsed from Form 497 PDF for filing #{filing.id}."
+      return
+    end
+
+    # A 497 filing almost always has only one section. If both exist, create
+    # a second filing record for the other section — but for now just handle
+    # the primary (first) section.
+    primary = sections.first
+    form_code = primary[:type] == 'LCR' ? '39' : '38'
+    filing.update!(form: form_code, contents: primary[:contents])
+    puts "  Parsed 497 #{primary[:type]} with #{primary[:contents].length} transaction(s)."
+
+    if sections.length > 1
+      puts "  Note: filing #{filing.id} has both LCR and LCM sections; only LCR stored."
     end
   end
-
-  def download_unamended_version(filing)
-    return if !filing.amended_filing_id || Filing.exists?(filing.amended_filing_id)
-
-    # If the filing was amended, but we haven't downloaded the original
-    # un-amended filing yet, let's grab it now.
-    amended_json = @netfile.get_filing(filing.amended_filing_id)
-    # Netfile bug: Some fields have different names in the GET
-    # /public/filing/info/{FilingId} endpoint than in the filing list
-    # endpoint.
-    amended_json['id'] = amended_json['filingId']
-    amended_json['filerStateId'] = amended_json['sosFilerId']
-    amended_json['amendedFilingId'] = amended_json['amends']
-    # And some fields are missing.
-    amended_json['agency'] = filing.netfile_agency.netfile_id
-    amended_json['title'] = filing.title
-    amended_json['form'] = filing.form
-    amended_filing = Filing.from_json(amended_json)
-    @logger.puts "Syncing un-amended filing: #{amended_filing}"
-    download_filing(amended_filing)
-  end
-
-  def retry?(exception)
-    return unless @logger.tty?
-
-    puts "Error: #{exception} (#{exception.message})"
-    @logger.write "Retry? (y = yes; n = no, s = skip): "
-    {
-      'y' => :retry,
-      'n' => nil,
-      's' => :skip
-    }[gets.chomp.downcase]
-  end
-
-  class FilingDownloadError < StandardError; end
 end

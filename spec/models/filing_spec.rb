@@ -3,6 +3,36 @@
 require 'rails_helper'
 
 RSpec.describe Filing do
+  describe '.from_json' do
+    let(:portal_json) do
+      {
+        'id'             => '216861492',
+        'formName'       => 'FPPC Form 497',
+        'filerName'      => 'Test Committee',
+        'filingDate'     => '2026-06-04T17:16:23.22+00:00',
+        'sequenceNumber' => '0',
+        'obfuscatedId'   => 'abc123',
+        'hasAttachment'  => false,
+      }
+    end
+
+    it 'creates a new filing from portal API JSON' do
+      filing = Filing.from_json(portal_json)
+      expect(filing).to be_new_record
+      filing.save!
+      expect(filing.id.to_s).to eq('216861492')
+      expect(filing.filer_name).to eq('Test Committee')
+      expect(filing.title).to eq('FPPC Form 497')
+      expect(filing.filed_at).to be_within(1.second).of(DateTime.parse('2026-06-04T17:16:23.22+00:00'))
+      expect(filing.amendment_sequence_number).to eq('0')
+    end
+
+    it 'returns the existing record without updating if already saved' do
+      Filing.from_json(portal_json).save!
+      expect { Filing.from_json(portal_json) }.not_to change(Filing, :count)
+    end
+  end
+
   describe '.filed_on_date scope' do
     context 'with filings late in the day' do
       let(:filing_date) { Date.yesterday }

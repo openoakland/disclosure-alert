@@ -23,10 +23,15 @@ module Forms
       when 235 # LBR = Oakland Lobbyist Registration
         Forms::BaseForm.new(filing, name: 'LBR')
       else
-        guessed_form_name = filing.title.match(/FPPC Form (\d+)/) ? $~[1] : nil
+        # Matches both "FPPC Form 460" and "FPPC 460" style titles from the v2 public API
+        guessed_form_name = filing.title&.match(/FPPC (?:Form )?(\d+)/)&.[](1)
 
-        if filing.form.to_i == 0 && guessed_form_name == '700'
+        if guessed_form_name == '700'
           Forms::Form700.new(filing, name: guessed_form_name)
+        elsif guessed_form_name == '410'
+          Forms::Form410.new(filing, name: guessed_form_name)
+        elsif guessed_form_name == '460'
+          Forms::Form460.new(filing, name: guessed_form_name)
         else
           Forms::BaseForm.new(filing, name: guessed_form_name)
         end

@@ -32,6 +32,7 @@ gem 'haml'
 gem 'mailgun-ruby'
 gem 'pg'
 gem 'premailer-rails'
+gem 'pdf-reader'
 gem 'rubyzip'
 gem 'sentry-ruby'
 

@@ -37,6 +37,34 @@ namespace :disclosure_alert do
     puts 'Subscribed!'
   end
 
+  desc 'Send a test alert email to a specific address, e.g. rake disclosure_alert:send_test_email[you@example.com]'
+  task :send_test_email, [:email] => :with_configuration do |_t, args|
+    email = args[:email] || ENV['EMAIL']
+    raise 'Provide an email: rake disclosure_alert:send_test_email[you@example.com]' if email.blank?
+
+    today = TZInfo::Timezone.get('America/Los_Angeles').now.to_date
+    days_ago = 0
+
+    filings = loop do
+      found = Filing.filed_on_date(today - days_ago)
+      break found if found.any?
+      days_ago += 1
+      raise 'No filings found in the database' if days_ago > 30
+    end
+
+    subscriber = AlertSubscriber.where(email: email).first_or_create!
+    puts "Sending test alert to #{email} with #{filings.count} filings from #{today - days_ago}..."
+    AlertMailer.daily_alert(subscriber, today - days_ago, filings).deliver_now
+    puts 'Done.'
+  end
+
+  desc 'Download filings for a specific date range, e.g. rake disclosure_alert:download_range[2026-01-01,2026-01-31]'
+  task :download_range, [:start_date, :end_date] => :with_configuration do |_t, args|
+    start_date = Date.parse(args[:start_date])
+    end_date   = Date.parse(args[:end_date])
+    DisclosureDownloader.new.download_range(start_date, end_date)
+  end
+
   desc 'Backfill missing filing contents from already-downloaded filings'
   task backfill_contents: :with_configuration do
     NetfileAgency.each_supported_agency do |agency|
