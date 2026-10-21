@@ -6,7 +6,7 @@ RSpec.describe DisclosureDownloader do
       @filings = Array(fake_filings)
     end
 
-    def filings_by_date(start_date, end_date)
+    def filings_by_date(start_date, end_date, agency = nil)
       @filings.map(&:metadata)
     end
 

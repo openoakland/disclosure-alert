@@ -23,7 +23,7 @@ class DisclosureDownloader
     @logger.puts "Fetching: #{start_date} to #{end_date}"
     @logger.puts '==================================================================='
 
-    @netfile.filings_by_date(start_date, end_date).each do |json|
+    @netfile.filings_by_date(start_date, end_date, @agency).each do |json|
       filing = Filing.from_json(json)
 
       if filing.new_record?
@@ -44,7 +44,7 @@ class DisclosureDownloader
   def download_range(start_date, end_date)
     puts "Fetching filings from #{start_date} to #{end_date}..."
 
-    @netfile.filings_by_date(start_date, end_date).each do |json|
+    @netfile.filings_by_date(start_date, end_date, @agency).each do |json|
       filing = Filing.from_json(json)
 
       if filing.new_record?

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="/content/rss.xslt"?>
+<rss version="2.0">
+  <channel xmlns:atom="http://www.w3.org/2005/Atom">
+    <title>NetFile Filing Log for Campaign / Oakland, City</title>
+    <link>https://netfile.com/connect2/api/public/list/filing/rss/coak/campaign.xml</link>
+    <description>Real-time filing log (maximum history of 15 days or 1000 items).  Includes e-filings and paper-only filings</description>
+    <language>en-us</language>
+    <item>
+      <guid isPermaLink="false">a5b0254a-c5dc-4401-97fc-b4ea012d58df</guid>
+      <link>https://netfile.com/Connect2/api/public/image/217685109</link>
+      <title>BRINGING OAKLAND TOGETHER YES ON MEASURE EE, SPONSORED BY POWERPAC.ORG</title>
+      <description>FPPC Form 460 (9/20/2026 - 10/17/2026)</description>
+    </item>
+    <item>
+      <guid isPermaLink="false">f36050bc-1693-47ca-9688-b4ea003b36b1</guid>
+      <link>https://netfile.com/Connect2/api/public/image/217680684</link>
+      <title>Committee for A Strong, Accountable Oakland: Yes on EE</title>
+      <description>FPPC Form 497 (10/20/2026)</description>
+    </item>
+    <item>
+      <guid isPermaLink="false">c1d7a90e-2f1b-4b0a-9a01-b4ea003b1111</guid>
+      <link>https://netfile.com/Connect2/api/public/image/217680490</link>
+      <title>Oakland Parents for Quality Education PAC</title>
+      <description>FPPC Form 496 (10/20/2026)</description>
+    </item>
+  </channel>
+</rss>

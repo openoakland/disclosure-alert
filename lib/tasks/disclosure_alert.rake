@@ -1,4 +1,17 @@
 namespace :disclosure_alert do
+  # Downloads every supported agency, keeping one agency's failure from
+  # stopping the others. Returns the exceptions that were swallowed, so a
+  # caller can still fail the run once the rest of its work is done.
+  def download_all_agencies
+    NetfileAgency.each_supported_agency.filter_map do |agency|
+      DisclosureDownloader.new(agency).download
+      nil
+    rescue StandardError => ex
+      warn "Download failed for #{agency.shortcut}: #{ex.class}: #{ex.message}"
+      ex
+    end
+  end
+
   task with_configuration: :environment do
     if ENV['MAILGUN_API_KEY'].empty?
       warn '======================================================'
@@ -13,18 +26,19 @@ namespace :disclosure_alert do
 
   desc 'Download latest records'
   task download: :environment do
-    NetfileAgency.each_supported_agency do |agency|
-      DisclosureDownloader.new(agency).download
-    end
+    failures = download_all_agencies
+    raise failures.first unless failures.empty?
   end
 
   desc 'Download latest records and send email'
   task download_and_email_daily: :with_configuration do
     today = TZInfo::Timezone.get('America/Los_Angeles').now.to_date
-    NetfileAgency.each_supported_agency do |agency|
-      DisclosureDownloader.new(agency).download
-    end
+    failures = download_all_agencies
+
+    # The email still goes out for whatever did download, then the task fails
+    # so the download breakage is still reported.
     DisclosureEmailer.new(today - 1).send_email
+    raise failures.first unless failures.empty?
   end
 
   desc 'Add subscriber to the daily email'
