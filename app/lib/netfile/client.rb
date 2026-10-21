@@ -114,7 +114,7 @@ module Netfile
         return nil
       end
 
-      {
+      filing = {
         'id' => info.fetch('filingId'),
         'filerName' => info['filerName'],
         'formName' => entry['formName'],
@@ -122,7 +122,15 @@ module Netfile
         'filingDate' => info.fetch('filingDate'),
         'sequenceNumber' => info['amendmentSequenceNumber'],
       }
-    rescue Error, JSON::ParserError, KeyError => ex
+
+      # Parsed here only to reject an unusable date, so that a bad one is
+      # skipped along with every other unreadable filing instead of raising
+      # out of the range check in filings_by_date. A null date arrives as nil,
+      # which DateTime.parse answers with TypeError rather than Date::Error.
+      DateTime.parse(filing['filingDate'])
+
+      filing
+    rescue Error, JSON::ParserError, KeyError, Date::Error, TypeError => ex
       # JSON::ParserError quotes the whole response body, which is an entire
       # error page when Connect2 is unwell, so the reason is truncated.
       reason = ex.message.tr("\n", ' ').slice(0, 200)

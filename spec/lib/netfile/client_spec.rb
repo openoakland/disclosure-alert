@@ -90,6 +90,32 @@ RSpec.describe Netfile::Client do
       expect(filings.map { |filing| filing['id'] }).to eq(%w[217685109 217680490])
     end
 
+    it 'skips a filing whose filing date cannot be parsed' do
+      undated = JSON.parse(fixture('filing_info_217680684.json')).merge('filingDate' => 'not a date')
+      stub_netfile(infos: {
+        '217685109' => fixture('filing_info_217685109.json'),
+        '217680684' => undated.to_json,
+        '217680490' => fixture('filing_info_217680490.json'),
+      })
+
+      filings = client.filings_by_date(today - 7, today, agency)
+
+      expect(filings.map { |filing| filing['id'] }).to eq(%w[217685109 217680490])
+    end
+
+    it 'skips a filing whose filing date is null' do
+      undated = JSON.parse(fixture('filing_info_217680684.json')).merge('filingDate' => nil)
+      stub_netfile(infos: {
+        '217685109' => fixture('filing_info_217685109.json'),
+        '217680684' => undated.to_json,
+        '217680490' => fixture('filing_info_217680490.json'),
+      })
+
+      filings = client.filings_by_date(today - 7, today, agency)
+
+      expect(filings.map { |filing| filing['id'] }).to eq(%w[217685109 217680490])
+    end
+
     it 'skips a filing that belongs to a different agency' do
       other_agency = JSON.parse(fixture('filing_info_217680684.json')).merge('agency' => 'SFO')
       stub_netfile(infos: {
