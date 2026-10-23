@@ -16,6 +16,19 @@ class DisclosureDownloader
     start_date = (Filing.where(netfile_agency: @agency).maximum(:filed_at)&.to_date || Date.today - 14) - 1
     end_date = Date.today
 
+    # The feed cannot reach back further than its own history window. For the
+    # nightly run that is a gap to report, not a reason to fail: an agency
+    # whose newest filing predates the window would otherwise raise every
+    # night forever, since nothing can land to move the date forward.
+    # download_range keeps the strict behaviour, because there the caller
+    # asked for specific dates and should be told they are unavailable.
+    earliest = Date.today - Netfile::Client::FEED_HISTORY_DAYS
+    if start_date < earliest
+      @logger.puts "Gap: newest #{@agency.shortcut} filing is #{start_date + 1}, but the feed only " \
+                   "reaches #{earliest}. Filings in between cannot be fetched from this source."
+      start_date = earliest
+    end
+
     @logger.puts '==================================================================='
     @logger.puts "Beginning State for Netfile agency #{@agency.shortcut}:"
     @logger.puts
