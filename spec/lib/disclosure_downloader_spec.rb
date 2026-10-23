@@ -2,11 +2,14 @@ require 'rails_helper'
 
 RSpec.describe DisclosureDownloader do
   class FakeNetfileClient
+    attr_reader :requested_range
+
     def initialize(fake_filings)
       @filings = Array(fake_filings)
     end
 
     def filings_by_date(start_date, end_date, agency = nil)
+      @requested_range = [start_date, end_date]
       @filings.map(&:metadata)
     end
 
@@ -55,6 +58,59 @@ RSpec.describe DisclosureDownloader do
       last_filing = Filing.last
       expect(last_filing.filer_name).to eq(fake_filing_metadata['filerName'])
       expect(last_filing.netfile_agency).to eq(NetfileAgency.coak)
+    end
+
+    context 'when the agency has no filings newer than the feed window' do
+      # An agency left behind, as SFO was: its newest filing predates the feed's
+      # history, so an unclamped start date raises FeedWindowExceeded every
+      # night and can never recover, because nothing lands to move it forward.
+      let!(:stale_filing) do
+        Filing.create!(
+          id: 999_001,
+          filer_name: 'Long Ago Committee',
+          title: 'FPPC Form 460',
+          form: '0',
+          netfile_agency: NetfileAgency.coak,
+          filed_at: Date.today - 120,
+          amendment_sequence_number: 0,
+        )
+      end
+
+      it 'asks only for the window the feed can serve' do
+        downloader.download
+
+        start_date, end_date = fake_client.requested_range
+        expect(start_date).to eq(Date.today - Netfile::Client::FEED_HISTORY_DAYS)
+        expect(end_date).to eq(Date.today)
+      end
+
+      it 'reports the gap it cannot fetch' do
+        downloader.download
+
+        expect(log.tap(&:rewind).read)
+          .to match(/Gap: newest COAK filing is #{Date.today - 120}.*only reaches/)
+      end
+    end
+
+    context 'when the agency is up to date' do
+      let!(:recent_filing) do
+        Filing.create!(
+          id: 999_002,
+          filer_name: 'Recent Committee',
+          title: 'FPPC Form 460',
+          form: '0',
+          netfile_agency: NetfileAgency.coak,
+          filed_at: Date.today - 2,
+          amendment_sequence_number: 0,
+        )
+      end
+
+      it 'keeps the one-day overlap and does not clamp' do
+        downloader.download
+
+        start_date, = fake_client.requested_range
+        expect(start_date).to eq(Date.today - 3)
+      end
     end
   end
 end

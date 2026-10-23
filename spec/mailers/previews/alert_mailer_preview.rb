@@ -15,13 +15,6 @@ class AlertMailerPreview < ActionMailer::Preview
     )
   end
 
-  def daily_alert_last_week_sfo
-    AlertMailer.daily_alert(
-      find_or_create_subscriber(NetfileAgency.sfo),
-      Date.today.last_week.all_week,
-    )
-  end
-
   private
 
   def find_or_create_subscriber(agency = NetfileAgency.coak)

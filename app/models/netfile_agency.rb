@@ -1,22 +1,21 @@
 class NetfileAgency < ApplicationRecord
+  # San Francisco (SFO, netfile_id 52) was dropped. Its NetfileAgency row is
+  # left in the database on purpose: existing Filing, FilingDeadline and
+  # AlertSubscriber rows still reference it, and AlertSubscriber requires a
+  # netfile_agency. Nothing fetches or emails it now that it is not yielded
+  # below.
   def self.create_supported_agencies
     find_or_create_by(netfile_id: 13, shortcut: 'COAK', name: 'Oakland, City of')
-    find_or_create_by(netfile_id: 52, shortcut: 'SFO', name: 'San Francisco Ethics Commission')
   end
 
   def self.coak
     @_coak ||= find_by(shortcut: 'COAK')
   end
 
-  def self.sfo
-    @_sfo ||= find_by(shortcut: 'SFO')
-  end
-
   def self.each_supported_agency
     return to_enum(:each_supported_agency) unless block_given?
 
     yield coak
-    yield sfo
   end
 
   def self.by_netfile_id(id)
