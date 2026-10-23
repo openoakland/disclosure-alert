@@ -270,7 +270,9 @@ RSpec.describe AlertMailer do
     end
 
     context 'when the filing is for a different agency' do
-      let(:filing_agency) { NetfileAgency.sfo }
+      let(:filing_agency) do
+        NetfileAgency.find_or_create_by(netfile_id: 99, shortcut: 'OTHER', name: 'Another Agency')
+      end
 
       it 'excludes the filing' do
         expect(subject).not_to include(filing)
